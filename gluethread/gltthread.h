@@ -53,5 +53,16 @@ void glthread_add_last(glthread_t *base_glthread, glthread_t *new_glthread);
     return (structure_name *)((char *)(glthreadptr) - (char *)&(((structure_name *)0)->field_name)) ; \
   }
 
+#define BASE(glthreadptr) ((glthreadptr)->right)
 
+
+#define ITERATE_GLTHREAD_BEGIN(glthreadptrstart, glthreadptr)                                      \
+{                                                                                                  \
+    glthread_t *_glthread_ptr = NULL;                                                              \
+    glthreadptr = BASE(glthreadptrstart);                                                          \
+    for(; glthreadptr!= NULL; glthreadptr = _glthread_ptr){                                        \
+        _glthread_ptr = (glthreadptr)->right;
+
+#define ITERATE_GLTHREAD_END(glthreadptrstart, glthreadptr)                                        \
+        }}
 #endif /* __GLUETHREAD__ */
