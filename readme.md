@@ -1,3 +1,3 @@
-# C 
+# TCP-IP Stack in C 
 
-###  low level networking 
+###  Building my own tcp-ip stack from scratch in C :)
