@@ -26,4 +26,10 @@ curr_glthread->left = new_glthread;
 new_glthread->right = curr_glthread;
 return; 
 }
+glthread_t *temp = curr_glthread->left;
+temp->right = new_glthread; 
+new_glthread->left = temp; 
+new_glthread->right = curr_glthread ; 
+curr_glthread->left=new_glthread; 
+
 }
