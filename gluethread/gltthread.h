@@ -87,6 +87,17 @@ void
 glthread_priority_insert(glthread_t *base_glthread,glthread_t *glthread, int (*comp_fn)(void *, void *),int offset);
 
 
+
+/*
+ *
+ * #if 0 #endif this is a preprocessor directive in c.It disables the code between #if 0 and #endif, effectively commenting it out.
+ * The code is ignored during compilation, so the function declaration here is not active.
+ *
+ *   Searching for a specific item. So we are pointing to the ll, then inside a large struct finding the actual value we care about, the key that u are looking for 
+ *   in the list, and last the comparison_fn that will compare and return void since anthing can be returned. 
+ *
+ */
+
 #if 0
 void *
 gl_thread_search(glthread_t *base_glthread,
