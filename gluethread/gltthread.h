@@ -65,4 +65,20 @@ void glthread_add_last(glthread_t *base_glthread, glthread_t *new_glthread);
 
 #define ITERATE_GLTHREAD_END(glthreadptrstart, glthreadptr)                                        \
         }}
+
+/*
+ *
+ *The glthreadptr points to the start of the metadata (not the data).
+ *The offset tells you how far back the actual data is located relative to the glthreadptr.The macro uses 
+ * this distance (offset) to calculate the address of the data.
+ *
+ *
+ */
+
+
+#define GLTHREAD_GET_USER_DATA_FROM_OFFSET(glthreadptr,offset) \
+  (void *)((char *)(glthreadptr)-offset)
+
+
+
 #endif /* __GLUETHREAD__ */
