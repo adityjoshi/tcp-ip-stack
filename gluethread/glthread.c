@@ -18,3 +18,12 @@ new_glthread->left = curr_glthread;
 new_glthread->right = temp; 
 temp->left=new_glthread; 
 }
+
+void glthread_add_before(glthread_t *curr_glthread, glthread_t *new_glthread) {
+if (!curr_glthread->left) {
+new_glthread->left=NULL;
+curr_glthread->left = new_glthread; 
+new_glthread->right = curr_glthread;
+return; 
+}
+}
