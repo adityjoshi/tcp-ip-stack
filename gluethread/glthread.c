@@ -33,3 +33,11 @@ new_glthread->right = curr_glthread ;
 curr_glthread->left=new_glthread; 
 
 }
+
+void remove_glthread(glthread_t *curr_glthread) {
+if (!curr_glthread->left) {
+curr_glthread->right->left = NULL;
+curr_glthread->right = 0 ; 
+return;
+}
+}
