@@ -80,3 +80,70 @@ count++;
 } ITERATE_GLTHREAD_END(base_glthread, glthreadptr)
 return count ; 
 }
+
+void
+glthread_priority_insert(glthread_t *base_glthread, 
+                         glthread_t *glthread,
+                         int (*comp_fn)(void *, void *),
+                         int offset){
+
+
+    glthread_t *curr = NULL,
+               *prev = NULL;
+
+    init_glthread(glthread);
+
+    if(IS_GLTHREAD_LIST_EMPTY(base_glthread)){
+        glthread_add_next(base_glthread, glthread);
+        return;
+    }
+
+    /* Only one node*/
+    if(base_glthread->right && !base_glthread->right->right){
+        if(comp_fn(GLTHREAD_GET_USER_DATA_FROM_OFFSET(base_glthread->right, offset), 
+                GLTHREAD_GET_USER_DATA_FROM_OFFSET(glthread, offset)) == -1){
+            glthread_add_next(base_glthread->right, glthread);
+        }
+        else{
+            glthread_add_next(base_glthread, glthread);
+        }
+        return;
+    }
+
+    if(comp_fn(GLTHREAD_GET_USER_DATA_FROM_OFFSET(glthread, offset), 
+            GLTHREAD_GET_USER_DATA_FROM_OFFSET(base_glthread->right, offset)) == -1){
+        glthread_add_next(base_glthread, glthread);
+        return;
+    }
+
+    ITERATE_GLTHREAD_BEGIN(base_glthread, curr){
+
+        if(comp_fn(GLTHREAD_GET_USER_DATA_FROM_OFFSET(glthread, offset), 
+                GLTHREAD_GET_USER_DATA_FROM_OFFSET(curr, offset)) != -1){
+            prev = curr;
+            continue;
+        }
+
+        if(!prev)
+            glthread_add_next(base_glthread, glthread);
+        else
+            glthread_add_next(prev, glthread);
+        
+		return;
+
+    }ITERATE_GLTHREAD_END(base_glthread, curr);
+
+    /*Add in the end*/
+    glthread_add_next(prev, glthread);
+} 
+
+#if 0
+void *
+gl_thread_search(glthread_t *base_glthread, 
+                 void *(*thread_to_struct_fn)(glthread_t *), 
+                 void *key, 
+                 int (*comparison_fn)(void *, void *)){
+
+    return NULL;
+}
+#endif
