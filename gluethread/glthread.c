@@ -40,4 +40,13 @@ curr_glthread->right->left = NULL;
 curr_glthread->right = 0 ; 
 return;
 }
+if(!curr_glthread->right) {
+curr_glthread->left->right = NULL;
+curr_glthread->left = 0 ; 
+return ; 
+}
+curr_glthread->left->right = curr_glthread->right;
+curr_glthread->right->left = curr_glthread->left;
+curr_glthread->left = 0 ; 
+curr_glthread->right = 0 ;
 }
