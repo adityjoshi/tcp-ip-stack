@@ -23,3 +23,5 @@ return - 1;
     (unsigned int)&(((struct_name *)0)->fld_name)
 
 GLTHREAD_TO_STRUCT(thread_to_person, person_t, glthread);
+
+
