@@ -13,3 +13,9 @@ An interface has a:
 - Name(eg. eth0/0)
 - Node(Node to which it is connected)
 - Wire(a wire or link through which two nodes are connected)
+
+### What are the properties of a node:
+- A node has a name
+- A node has an empty slot to which an link or wire will be connected.
+
+These properties of interface and node will help us to create our struct logic 
