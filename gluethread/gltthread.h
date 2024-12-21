@@ -84,7 +84,10 @@ void delete_glthread_list(glthread_t *base_glthread);
 unsigned int get_glthread_list_count(glthread_t *base_glthread);
 
 void
-glthread_priority_insert(glthread_t *base_glthread,glthread_t *glthread, int (*comp_fn)(void *, void *),int offset);
+glthread_priority_insert(glthread_t *base_glthread,     
+                         glthread_t *glthread,
+                         int (*comp_fn)(void *, void *),
+                         int offset);
 
 
 
