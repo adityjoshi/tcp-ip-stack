@@ -32,11 +32,12 @@ struct node_ {
   glthread_t graph_glue;
 
 }
-typedef struct graph_ {
-  char topology_name[32];
-  glthread_t node_list;
-} graph_t;
 
+typedef struct graph_{
+
+    char topology_name[32];
+    glthread_t node_list; 
+} graph_t;
 
 
 #endif // /* __NW_GRAPH_ */
