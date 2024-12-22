@@ -5,6 +5,13 @@
 #include "gluethread/gltthread.h"
 
 
+#define IF_NAME_SIZE 16
+#define NODE_NAME_SIZE 16
+#define MAX_INTF_PER_NODE 10 
+
+// forwarad declaration 
+typedef struct node_ node_t ;
+typedef struct link_ link_t;
 
 typedef struct interface_ {
   char if_name[IF_NAME_SIZE];
@@ -25,7 +32,7 @@ struct node_ {
   glthread_t graph_glue;
 
 }
-typedef struct graph_{
+typedef struct graph_ {
   char topology_name[32];
   glthread_t node_list;
 } graph_t;
