@@ -40,5 +40,25 @@ typedef struct graph_{
 } graph_t;
 
 
+static inline node_t *get_nbr_node(interface_t *interface) {
+
+  assert(interface->att_node);
+  assert(interface->link);
+  /*
+   * there will be two cases either it will point to the interface one or the interface 2 
+   */
+  link_t *link = interface->link;
+  if(&link->intf1 == interface) {
+    return link->intf1.att_node;
+  } else {
+    return link->intf2.att_node;
+  }
+}
+
+
+/*
+ * Helper functions 
+ */
+
 #endif // /* __NW_GRAPH_ */
 
