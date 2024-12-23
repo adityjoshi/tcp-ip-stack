@@ -31,7 +31,7 @@ struct node_ {
   interface_t *intf[MAX_INTF_PER_NODE];
   glthread_t graph_glue;
 
-}
+};
 
 typedef struct graph_{
 
