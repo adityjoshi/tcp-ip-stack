@@ -49,9 +49,9 @@ static inline node_t *get_nbr_node(interface_t *interface) {
    */
   link_t *link = interface->link;
   if(&link->intf1 == interface) {
-    return link->intf1.att_node;
-  } else {
     return link->intf2.att_node;
+  } else {
+    return link->intf1.att_node;
   }
 }
 
