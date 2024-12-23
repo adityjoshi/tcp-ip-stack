@@ -25,7 +25,7 @@ struct link_ {
   interface_t intf2; 
   unsigned int cost; 
 };
-
+ 
 struct node_ {
   char node_name[NODE_NAME_SIZE];
   interface_t *intf[MAX_INTF_PER_NODE];
@@ -70,6 +70,8 @@ static inline int get_node_intf_available_slot(node_t *node) {
   }
   return -1;
 }
+
+
 
 #endif // /* __NW_GRAPH_ */
 
