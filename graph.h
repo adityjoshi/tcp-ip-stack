@@ -28,7 +28,7 @@ struct link_ {
 
 struct node_ {
   char node_name[NODE_NAME_SIZE];
-  interface_t *int_f[MAX_INTF_PER_NODE];
+  interface_t *intf[MAX_INTF_PER_NODE];
   glthread_t graph_glue;
 
 }
@@ -40,12 +40,17 @@ typedef struct graph_{
 } graph_t;
 
 
+
+
+/*
+ * Helper functions 
+ */
 static inline node_t *get_nbr_node(interface_t *interface) {
 
   assert(interface->att_node);
   assert(interface->link);
   /*
-   * there will be two cases either it will point to the interface one or the interface 2 
+   * there will be two cases either it will point to the interface 1 or the interface 2 
    */
   link_t *link = interface->link;
   if(&link->intf1 == interface) {
@@ -56,9 +61,15 @@ static inline node_t *get_nbr_node(interface_t *interface) {
 }
 
 
-/*
- * Helper functions 
- */
+static inline int get_node_intf_available_slot(node_t *node) {
+  for (int i = 0 ; i < MAX_INTF_PER_NODE; i++) {
+    if(node -> intf[i]) {
+      continue;
+      return i;
+    }
+  }
+  return -1;
+}
 
 #endif // /* __NW_GRAPH_ */
 
