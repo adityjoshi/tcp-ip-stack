@@ -33,6 +33,8 @@ struct node_ {
 
 };
 
+GLTHREAD_TO_STRUCT(graph_glue_to_node, node_t, graph_glue);
+
 typedef struct graph_{
 
     char topology_name[32];
@@ -40,6 +42,18 @@ typedef struct graph_{
 } graph_t;
 
 
+node_t *
+create_new_node(graph_t *graph, char *node_name);
+
+graph_t *
+create_new_graph(char *topology_name);
+
+void
+insert_link_between_node(node_t *node1, 
+                             node_t *node2,
+                             char *from_if_name, 
+                             char *to_if_name, 
+                             unsigned int cost);
 
 
 /*
@@ -63,15 +77,16 @@ static inline node_t *get_nbr_node(interface_t *interface) {
 
 static inline int get_node_intf_available_slot(node_t *node) {
   for (int i = 0 ; i < MAX_INTF_PER_NODE; i++) {
-    if(node -> intf[i]) {
-      continue;
-      return i;
+    if(!node -> intf[i]) {
+           return i;
     }
   }
   return -1;
 }
 
-
+void dump_graph(graph_t *graph);
+void dump_node(node_t *node);
+void dump_interface(interface_t *interface);
 
 #endif // /* __NW_GRAPH_ */
 

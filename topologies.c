@@ -1,6 +1,5 @@
 #include "gluethread/gltthread.h"
 #include "graph.h"
-#include "graph.c"
 
 graph_t * build_first_topo() {
 
