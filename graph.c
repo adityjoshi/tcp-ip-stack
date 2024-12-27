@@ -26,6 +26,13 @@ link->intf2.if_name[IF_NAME_SIZE-1] = '\0';
 * */
 link->intf1.link = link ;
 link->intf2.link = link ;
+
+/*
+* Add connection for the node to which the link is connected i.e the attached node 
+*/
+link->intf1.att_node=node1;
+link->intf2.att_node=node2;
+link->cost= cost;
 };
 
 
