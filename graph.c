@@ -13,4 +13,11 @@ return graph ;
 }
 
 
-graph_t *crea
+ node_t *create_new_node(graph_t * graph, char *node_name) {
+ node_t *node = calloc(1, sizeof(node_t));
+strncpy(node->node_name,node_name,NODE_NAME_SIZE);
+node->node_name[NODE_NAME_SIZE]='\0';
+init_glthread(&node->graph_glue);
+glthread_add_next(&graph->node_list,&node->graph_glue);
+return node ; 
+}
