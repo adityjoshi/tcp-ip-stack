@@ -16,7 +16,7 @@ void remove_glthread(glthread_t *glthread);
 
 /*
  it basically resets the right and left node to the null ; 
- */
+ */ 
 void init_glthread(glthread_t *glthread);
 
 

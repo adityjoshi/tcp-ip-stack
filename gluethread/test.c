@@ -1,4 +1,4 @@
-#include "gltthread.h"
+#include "glthread.h"
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>

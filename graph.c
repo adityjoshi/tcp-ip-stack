@@ -2,7 +2,7 @@
 #include <malloc/_malloc.h>
 #include <stdio.h>
 #include <string.h>
-#include "gluethread/gltthread.h"
+#include "gluethread/glthread.h"
 
 
 graph_t *create_new_graph(char *topology_name) {
@@ -44,7 +44,7 @@ int empty_inf_slot ;
 empty_inf_slot = get_node_intf_available_slot(node1);
 node1->intf[empty_inf_slot] = &link->intf1;
 empty_inf_slot = get_node_intf_available_slot(node2);
-node1->intf[empty_inf_slot] = &link->intf2;
+node2->intf[empty_inf_slot] = &link->intf2;
 
 }
 
@@ -97,6 +97,4 @@ void dump_interface(interface_t *interface){
             interface->att_node->node_name, 
             link->cost);
 }
-
-
 

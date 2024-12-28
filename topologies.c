@@ -1,4 +1,4 @@
-#include "gluethread/gltthread.h"
+#include "gluethread/glthread.h"
 #include "graph.h"
 
 graph_t * build_first_topo() {
