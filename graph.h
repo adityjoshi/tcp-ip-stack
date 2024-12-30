@@ -115,6 +115,7 @@ get_node_by_node_name(graph_t *topo, char *node_name) {
       return node ; 
      ITERATE_GLTHREAD_END(&topo->node_list, curr);
     return NULL ; 
+    
   }
 }
 
