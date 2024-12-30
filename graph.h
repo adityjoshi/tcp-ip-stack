@@ -86,37 +86,37 @@ static inline int get_node_intf_available_slot(node_t *node) {
 }
 
 
-static inline interface_t *
-get_node_if_by_name(node_t *node, char *if_name){
+/*
+Fucntion which returns pointer to the local interface of a node, searched searched by if_name.
 
-    int i ;
-    interface_t *intf;
-
-    for( i = 0 ; i < MAX_INTF_PER_NODE; i++){
-        intf = node->intf[i];
-        if(!intf) return NULL;
-        if(strncmp(intf->if_name, if_name, IF_NAME_SIZE) == 0){
-            return intf;
-        }
-    }
-    return NULL;
+*/
+static inline interface_t * get_node_if_by_name(node_t *node, char *if_name) {
+  interface_t *interface;
+  for (int i = 0; i<MAX_INTF_PER_NODE; i++) {
+    interface = node->intf[i];
+    if(!interface) continue ; 
+    if(strncmp(interface->if_name,if_name,IF_NAME_SIZE)==0) {
+      return interface; 
+    } 
+    return NULL; 
+  }
 }
 
+/*
+This function returns pointer to the node present in a graph list, searched by node name.
+*/
 static inline node_t *
-get_node_by_node_name(graph_t *topo, char *node_name){
-
-    node_t *node;
-    glthread_t *curr;    
-
-    ITERATE_GLTHREAD_BEGIN(&topo->node_list, curr){
-
-        node = graph_glue_to_node(curr);
-        if(strncmp(node->node_name, node_name, strlen(node_name)) == 0)
-            return node;
-    } ITERATE_GLTHREAD_END(&topo->node_list, curr);
-    return NULL;
+get_node_by_node_name(graph_t *topo, char *node_name) {
+  node_t *node;
+  glthread_t *glthread;
+  ITERATE_GLTHREAD_BEGIN(&topo->node_list,glthread) {
+    node = graph_glue_to_node(glthread);
+    if(strncmp(node->node_name, node_name, strlen(node_name)) == 0)
+      return node ; 
+     ITERATE_GLTHREAD_END(&topo->node_list, curr);
+    return NULL ; 
+  }
 }
-
 
 void dump_graph(graph_t *graph);
 void dump_node(node_t *node);
