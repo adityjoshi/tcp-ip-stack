@@ -6,6 +6,7 @@ The GlueThread implementation provides a set of functions for managing a doubly 
 
 ## Functions
 
+
 ### 1. **`void init_glthread(glthread_t *glthread)`**
    - Initializes the `glthread` by setting its `left` and `right` pointers to `NULL`.
    
