@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <string.h>
+#include "gluethread/glthread.h"
 #include "graph.h"
 #include "net.h"
 #include <stdio.h>
@@ -55,4 +56,11 @@ glthread_t *curr;
 interface_t *interface;
 unsigned int i ; 
 printf("Topology Name = %s\n", graph->topology_name);
+
+ITERATE_GLTHREAD_BEGIN(&graph->node_list, curr) {
+node = graph_glue_to_node(curr);
+dump_node_nw_graph(node) ; 
+for (i = 0 ; i<)
+}
+
 } 
