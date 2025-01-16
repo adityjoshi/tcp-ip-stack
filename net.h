@@ -57,7 +57,7 @@ init_interface_nw_properties_(interface_nw_properties_ *interface_nw_prop) {
 
 #define INTERFACE_MAC(intf_ptr) ((intf_ptr)->interface_nw_props.mac_add.mac_address)
 #define INTERFACE_IP(intf_ptr) ((intf_ptr)->interface_nw_props.ip_add.ip_address)
-#define NODE_LOOPBACKADDRESS(node_ptr) ((node_ptr->ptr)->node_network_prop.loopback_addr.ip_address)
+#define NODE_LOOPBACKADDRESS(node_ptr) ((node_ptr)->node_network_prop.loopback_addr.ip_address)
 
 
 /*
