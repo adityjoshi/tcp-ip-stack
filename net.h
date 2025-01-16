@@ -3,6 +3,7 @@
 #include <memory.h>
 #include <_string.h>
 
+typedef struct graph_ graph_t;
 typedef struct node_ node_t ; 
 
 /**
@@ -69,4 +70,14 @@ bool_t node_set_loopback_address(node_t *node, char*ip_addr );
 bool_t node_set_interface_ip_address(node_t *node,char*local_if, char*ip_addr, char mask );
 bool_t node_unset_interface_ip_address(node_t *node, char*local_if );
 
+
+
+/*
+ *
+ * Display apis
+ *
+ *
+ * */
+
+void dump_nw_graph(graph_t *graph);
 #endif /* __NET__ */
