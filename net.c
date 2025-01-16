@@ -29,7 +29,7 @@ unsigned int hashVal = 0 ;
     memset(INTERFACE_MAC(interface), 0, sizeof(INTERFACE_MAC(interface)));
     memcpy(INTERFACE_MAC(interface), (char *)&hashVal, sizeof(unsigned int));
 
-
+}
 
 
 bool_t node_set_loopback_address(node_t *node, char*ip_addr ) {
