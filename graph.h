@@ -33,7 +33,7 @@ struct node_ {
   char node_name[NODE_NAME_SIZE];
   interface_t *intf[MAX_INTF_PER_NODE];
   glthread_t graph_glue;
-   node_nw_properties_ node_network_prop ; 
+  node_nw_properties_ node_network_prop ; 
 
 };
 
