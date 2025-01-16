@@ -2,7 +2,7 @@
 #include <string.h>
 #include "graph.h"
 #include "net.h"
-
+#include <stdio.h>
 
 static unsigned int
 hash_code(void *ptr, unsigned int size){
@@ -49,4 +49,10 @@ interface->interface_nw_props.is_ip_address_config = TRUE ;
 return TRUE ; 
 }
 
- 
+void dump_nw_graph(graph_t *graph) {
+node_t *node;
+glthread_t *curr;
+interface_t *interface;
+unsigned int i ; 
+printf("Topology Name = %s\n", graph->topology_name);
+} 

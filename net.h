@@ -80,4 +80,5 @@ bool_t node_unset_interface_ip_address(node_t *node, char*local_if );
  * */
 
 void dump_nw_graph(graph_t *graph);
+
 #endif /* __NET__ */
