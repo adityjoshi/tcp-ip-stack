@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include "gluethread/glthread.h"
+#include "net.h"
 # include "string.h"
 
 
@@ -18,7 +19,7 @@ typedef struct interface_ {
   char if_name[IF_NAME_SIZE];
   struct node_ *att_node;
   struct link_ *link;
-  intf_network_properties_t intf_network_prop ; 
+  interface_nw_properties_t interface_nw_props ; 
 
 } interface_t;
 
@@ -32,7 +33,7 @@ struct node_ {
   char node_name[NODE_NAME_SIZE];
   interface_t *intf[MAX_INTF_PER_NODE];
   glthread_t graph_glue;
-  node_network_properties_t node_network_prop ; 
+   node_nw_properties_ node_network_prop ; 
 
 };
 
