@@ -60,7 +60,11 @@ printf("Topology Name = %s\n", graph->topology_name);
 ITERATE_GLTHREAD_BEGIN(&graph->node_list, curr) {
 node = graph_glue_to_node(curr);
 dump_node_nw_graph(node) ; 
-for (i = 0 ; i<)
+for (i = 0 ; i<MAX_INTF_PER_NODE; i++) {
+interface = node->intf[i];
+if (!interface) break;
+dump_intf_props(interface);
 }
+}ITERATE_GLTHREAD_END(&graph->node_list, curr);
 
 } 
