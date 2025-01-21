@@ -2,6 +2,7 @@
 #define __NET__
 #include <memory.h>
 #include <_string.h>
+#include "utils.h"
 
 typedef struct graph_ graph_t;
 typedef struct node_ node_t ; 
