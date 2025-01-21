@@ -17,7 +17,7 @@ typedef struct link_ link_t;
 
 typedef struct interface_ {
   char if_name[IF_NAME_SIZE];
-  struct node_ *att_node;
+  struct node_ *att_node; // att_node -> attached node 
   struct link_ *link;
   interface_nw_properties_t interface_nw_props ; 
 
