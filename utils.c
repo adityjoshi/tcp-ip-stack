@@ -27,6 +27,10 @@ binary_prefix = htonl(binary_prefix);
 subnetMask = subnetMask << (32-mask);
 binary_prefix = binary_prefix & subnetMask ; 
 
+/*
+* conversion of the binary prefix in big endian format to the normal form using the inet_top 
+*
+* */
 binary_prefix = htonl(binary_prefix);
 inet_ntop(AF_INET, &binary_prefix, str_prefix, 16);
 str_prefix[0] = '\0';
