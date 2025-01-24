@@ -38,7 +38,10 @@ str_prefix[0] = '\0';
 
 
 void layer2_add_broadcast_address(char *mac_array) {
-for (int i = 0 ; i < 6 ; i++) {
-mac_array[i] = 0xFF;
-}
+mac_array[0] = 0xFF;
+mac_array[1] = 0xFF;
+mac_array[2] = 0xFF;
+mac_array[3] = 0xFF;
+mac_array[4] = 0xFF;
+mac_array[5] = 0xFF;
 }
