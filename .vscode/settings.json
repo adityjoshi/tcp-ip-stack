@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "graph.h": "c",
-        "glthread.h": "c"
-    }
-}
