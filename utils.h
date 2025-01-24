@@ -15,7 +15,7 @@ TRUE
 void apply_mask(char *prefix, char mask, char *str_max) ;
 
 
-void layer2_fill_with_broadcast_mac(char *mac_array);
+void layer2_add_broadcast_address(char *mac_array);
 
 
 #endif /* __UTILS__ */
