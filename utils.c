@@ -21,4 +21,7 @@ return ;
 
 inet_pton(AF_INET, prefix, &binary_prefix);
 binary_prefix = htonl(binary_prefix);
+
+subnetMask = subnetMask << (32-mask);
+binary_prefix = binary_prefix & subnetMask ; 
 }
