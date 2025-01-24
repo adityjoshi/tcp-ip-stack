@@ -96,5 +96,6 @@ void dump_interface(interface_t *interface){
             nbr_node->node_name, 
             interface->att_node->node_name, 
             link->cost);
+           
 }
 

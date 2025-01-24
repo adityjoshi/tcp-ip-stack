@@ -4,7 +4,7 @@
 #include <assert.h>
 #include "gluethread/glthread.h"
 #include "net.h"
-# include "string.h"
+#include "string.h"
 
 
 #define IF_NAME_SIZE 16
@@ -33,7 +33,7 @@ struct node_ {
   char node_name[NODE_NAME_SIZE];
   interface_t *intf[MAX_INTF_PER_NODE];
   glthread_t graph_glue;
-  node_nw_properties_ node_network_prop ; 
+  node_nw_properties_t node_network_prop ; 
 
 };
 

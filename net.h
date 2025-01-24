@@ -4,7 +4,9 @@
 #include <_string.h>
 #include "utils.h"
 
+
 typedef struct graph_ graph_t;
+typedef struct interface_ interface_t;
 typedef struct node_ node_t ; 
 
 /**
@@ -45,10 +47,10 @@ typedef struct interface_nw_properties_ {
 
 
 static inline void 
-init_interface_nw_properties_(interface_nw_properties_ *interface_nw_prop) {
-  memset(interface_nw_prop->mac_add, 0, 48);
+init_interface_nw_properties_(interface_nw_properties_t *interface_nw_prop) {
+  memset(&interface_nw_prop->mac_add, 0, 48);
   interface_nw_prop->is_ip_address_config = FALSE ; 
-  memset(interface_nw_prop->ip_add, 0, 16);
+  memset(&interface_nw_prop->ip_add, 0, 16);
   interface_nw_prop->mask = 0 ; 
 };
 
@@ -93,5 +95,7 @@ bool_t node_unset_interface_ip_address(node_t *node, char*local_if );
  * */
 
 void dump_nw_graph(graph_t *graph);
+void dump_node_nw_props(node_t *node);
+void dump_intf_props(interface_t *interface);
 
 #endif /* __NET__ */

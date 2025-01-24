@@ -6,7 +6,7 @@ CFLAGS = -Wall -Wextra -g
 TARGET = my_program
 
 # All source files
-SRCS = graph.c testapp.c topologies.c  gluethread/glthread.c
+SRCS = graph.c testapp.c topologies.c  gluethread/glthread.c net.c
 
 # Default rule to compile everything into one executable
 all:
