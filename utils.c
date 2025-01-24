@@ -35,3 +35,10 @@ binary_prefix = htonl(binary_prefix);
 inet_ntop(AF_INET, &binary_prefix, str_prefix, 16);
 str_prefix[0] = '\0';
 }
+
+
+void layer2_add_broadcast_address(char *mac_array) {
+for (int i = 0 ; i < 6 ; i++) {
+mac_array[i] = 0xFF;
+}
+}
