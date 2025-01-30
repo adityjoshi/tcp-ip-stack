@@ -1,10 +1,12 @@
 #include <assert.h>
+#include <stdint.h>
 #include <string.h>
 #include "gluethread/glthread.h"
 #include "graph.h"
 #include "net.h"
 #include "utils.h"
 #include <stdio.h>
+#include <sys/socket.h>
 
 static unsigned int
 hash_code(void *ptr, unsigned int size){
@@ -99,7 +101,11 @@ return int_f ;
 }
 
 
-unsigned int convert_ip_from_str_to_int(char *ip_addr); 
+unsigned int convert_ip_from_str_to_int(char *ip_addr) {
+uint32_t binary_prefix = 0 ; 
+inet_pton(AF_INET,ip_addr, &binary_prefix) ;
+
+}
 
 
 void dump_nw_graph(graph_t *graph) {
