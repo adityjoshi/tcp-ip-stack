@@ -3,6 +3,7 @@
 #include "gluethread/glthread.h"
 #include "graph.h"
 #include "net.h"
+#include "utils.h"
 #include <stdio.h>
 
 static unsigned int
@@ -55,6 +56,36 @@ bool_t node_unset_intf_ip_address(node_t *node, char *local_if){
 
     return TRUE;
 }
+
+
+
+/*
+ *
+ * return the pointer to local interface 
+ *
+ *
+ * */
+
+interface_t *node_get_matching_subnet_interface(node_t *node, char *ip_addr)  {
+
+unsigned int i = 0 ; 
+interface_t *int_f;
+
+char *intf_addr = NULL ; 
+char mask ; 
+char intf_subnet[16];
+char subnet2[16];
+
+for ( ; MAX_INTF_PER_NODE; i++) {
+int_f = node->intf[i];
+
+if (int_f->interface_nw_props.is_ip_address_config == FALSE) {
+continue ; 
+}
+intf_addr = INTERFACE_IP(int_f);
+}
+}
+
 
 void dump_nw_graph(graph_t *graph) {
 node_t *node;
