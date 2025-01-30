@@ -99,6 +99,9 @@ return int_f ;
 }
 
 
+unsigned int convert_ip_from_str_to_int(char *ip_addr); 
+
+
 void dump_nw_graph(graph_t *graph) {
 node_t *node;
 glthread_t *curr;
