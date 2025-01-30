@@ -87,6 +87,12 @@ mask = int_f->interface_nw_props.mask ;
 
 memset(intf_subnet, 0, 16);
 memset(subnet2, 0, 16);
+apply_mask(intf_addr, mask, intf_subnet);
+apply_mask(ip_addr,mask,subnet2);
+
+if (strncmp(intf_subnet,subnet2,16) == 0) {
+return int_f ; 
+}
 }
 }
 
