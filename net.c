@@ -83,6 +83,10 @@ if (int_f->interface_nw_props.is_ip_address_config == FALSE) {
 continue ; 
 }
 intf_addr = INTERFACE_IP(int_f);
+mask = int_f->interface_nw_props.mask ; 
+
+memset(intf_subnet, 0, 16);
+memset(subnet2, 0, 16);
 }
 }
 
