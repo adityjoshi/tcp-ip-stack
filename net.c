@@ -62,7 +62,9 @@ bool_t node_unset_intf_ip_address(node_t *node, char *local_if){
 /*
  *
  * return the pointer to local interface 
- *
+ * For node R0 containing two local interfaces with ip/mask configured as : 40.1.1.1/24 on eth0/4 and 20.1.1.1/24 on eth0/0,  this API must return :
+ * pointer to eth0/4 if ip_addr passed is 40.1.1.x, for all x [0-255]
+ * pointer to eth0/0 if ip_addr passed is 20.1.1.x, for all x [0-255]
  *
  * */
 
