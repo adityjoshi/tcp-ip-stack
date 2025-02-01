@@ -10,7 +10,7 @@ typedef struct interface_ interface_t;
 typedef struct node_ node_t ; 
 
 /**
- *    TO DO 
+ *    TO DO : done 
  *     add interface network properties and node network properties in graph.h 
  */ 
 typedef struct ip_address_ {
