@@ -6,6 +6,8 @@
 #include "net.h"
 #include "utils.h"
 #include <stdio.h>
+#include <arpa/inet.h> 
+#include <sys/_endian.h>
 #include <sys/socket.h>
 
 static unsigned int
@@ -104,6 +106,8 @@ return int_f ;
 unsigned int convert_ip_from_str_to_int(char *ip_addr) {
 uint32_t binary_prefix = 0 ; 
 inet_pton(AF_INET,ip_addr, &binary_prefix) ;
+binary_prefix = htonl(binary_prefix);
+return binary_prefix ; 
 
 }
 
