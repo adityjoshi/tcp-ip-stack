@@ -59,4 +59,5 @@ graph_t * build_first_topo() {
 
    
     return topo;
+// new topo
 }
