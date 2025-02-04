@@ -56,6 +56,7 @@ node->node_name[NODE_NAME_SIZE-1]='\0';
 init_glthread(&node->graph_glue);
 glthread_add_next(&graph->node_list,&node->graph_glue);
 return node ; 
+
 }
 
 

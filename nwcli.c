@@ -26,8 +26,7 @@ show_nw_topology_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_
 }
 
 
-void 
-nw_init_cli() {
+void nw_init_cli() {
     init_libcli();
 
     param_t *show   = libcli_get_show_hook();

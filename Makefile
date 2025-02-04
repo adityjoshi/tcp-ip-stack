@@ -1,58 +1,96 @@
-# # Compiler and flags
+
+
 # CC = gcc
-# CFLAGS = -Wall -Wextra -g
-# LIBS=-lpthread -L ./CommandParser -lcli
+# CFLAGS = -arch arm64 -g
+# TARGET = test.exe
+# LIBS = -lpthread -L ./CommandParser -lcli
+# OBJS = gluethread/glthread.o \
+#        graph.o \
+#        topologies.o \
+#        net.o
 
-# # Target executable
-# TARGET = my_program
+# $(TARGET): testapp.o $(OBJS) CommandParser/libcli.a
+# 	$(CC) $(CFLAGS) testapp.o $(OBJS) -o $(TARGET) $(LIBS)
 
-# # All source files
-# SRCS = graph.c testapp.c topologies.c  gluethread/glthread.c net.c
+# testapp.o: testapp.c
+# 	$(CC) $(CFLAGS) -c testapp.c -o testapp.o
 
-# # Default rule to compile everything into one executable
-# all:
-# 	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
+# gluethread/glthread.o: gluethread/glthread.c
+# 	$(CC) $(CFLAGS) -c -I gluethread gluethread/glthread.c -o gluethread/glthread.o
 
-# # Clean rule to remove the executable
+# graph.o: graph.c
+# 	$(CC) $(CFLAGS) -c -I . graph.c -o graph.o
+
+# topologies.o: topologies.c
+# 	$(CC) $(CFLAGS) -c -I . topologies.c -o topologies.o
+
+# net.o: net.c
+# 	$(CC) $(CFLAGS) -c -I . net.c -o net.o
+
+# CommandParser/libcli.a:
+# 	(cd CommandParser; $(MAKE))
+
 # clean:
+# 	rm -f *.o
+# 	rm -f gluethread/glthread.o
 # 	rm -f $(TARGET)
+# 	(cd CommandParser; $(MAKE) clean)
 
-CC = gcc
-CFLAGS = -g
-TARGET = test.exe
-LIBS = -lpthread -L ./CommandParser -lcli
-OBJS = gluethread/glthread.o \
-       graph.o \
-       topologies.o \
-       net.o
+# all:
+# 	$(MAKE)
+# 	(cd CommandParser; $(MAKE))
 
-$(TARGET): testapp.o $(OBJS) CommandParser/libcli.a
-	$(CC) $(CFLAGS) testapp.o $(OBJS) -o $(TARGET) $(LIBS)
 
-testapp.o: testapp.c
-	$(CC) $(CFLAGS) -c testapp.c -o testapp.o
 
-gluethread/glthread.o: gluethread/glthread.c
-	$(CC) $(CFLAGS) -c -I gluethread gluethread/glthread.c -o gluethread/glthread.o
+CC=gcc
+CFLAGS=-g
+TARGET:test.exe CommandParser/libcli.a 
+LIBS=-lpthread -L ./CommandParser -lcli
+OBJS=gluethread/glthread.o \
+		  graph.o 		   \
+		  topologies.o	   \
+		  net.o			   \
+		  nwcli.o		   \
+		  utils.o		   
+		  
 
-graph.o: graph.c
-	$(CC) $(CFLAGS) -c -I . graph.c -o graph.o
+test.exe:testapp.o ${OBJS} CommandParser/libcli.a
+	${CC} ${CFLAGS} testapp.o ${OBJS} -o test.exe ${LIBS}
 
-topologies.o: topologies.c
-	$(CC) $(CFLAGS) -c -I . topologies.c -o topologies.o
+testapp.o:testapp.c
+	${CC} ${CFLAGS} -c testapp.c -o testapp.o
 
-net.o: net.c
-	$(CC) $(CFLAGS) -c -I . net.c -o net.o
+gluethread/glthread.o:gluethread/glthread.c
+	${CC} ${CFLAGS} -c -I gluethread gluethread/glthread.c -o gluethread/glthread.o
+
+graph.o:graph.c
+	${CC} ${CFLAGS} -c -I . graph.c -o graph.o
+
+topologies.o:topologies.c
+	${CC} ${CFLAGS} -c -I . topologies.c -o topologies.o
+
+net.o:net.c
+	${CC} ${CFLAGS} -c -I . net.c -o net.o
+
+
+
+nwcli.o:nwcli.c
+	${CC} ${CFLAGS} -c -I . nwcli.c  -o nwcli.o
+
+utils.o:utils.c
+	${CC} ${CFLAGS} -c -I . utils.c -o utils.o
 
 CommandParser/libcli.a:
-	(cd CommandParser; $(MAKE))
-
+	(cd CommandParser; make)
 clean:
 	rm -f *.o
 	rm -f gluethread/glthread.o
-	rm -f $(TARGET)
-	(cd CommandParser; $(MAKE) clean)
-
+	rm -f *exe
+	
 all:
-	$(MAKE)
-	(cd CommandParser; $(MAKE))
+	make
+
+cleanall:
+	make clean
+	(cd CommandParser; make clean)
+	

@@ -48,14 +48,19 @@ return TRUE ;
 
 
 bool_t node_set_interface_ip_address(node_t *node,char *local_if, char *ip_addr, char mask ) {
-interface_t *interface = get_node_if_by_name(node, local_if);
- if(!interface) assert(0);
- strncpy(INTERFACE_IP(interface),ip_addr,16);
-INTERFACE_IP(interface)[15] = '\0';
-interface-> interface_nw_props.mask = mask; 
-interface->interface_nw_props.is_ip_address_config = TRUE ;
-return TRUE ; 
+
+    interface_t *interface = get_node_if_by_name(node, local_if);
+    if(!interface) assert(0);
+
+    strncpy(INTERFACE_IP(interface), ip_addr, 16);
+    INTERFACE_IP(interface)[15] = '\0';
+    interface->interface_nw_props.mask = mask; 
+    interface->interface_nw_props.is_ip_address_config = TRUE;
+
+    return TRUE;
 }
+
+
 bool_t node_unset_intf_ip_address(node_t *node, char *local_if){
 
     return TRUE;

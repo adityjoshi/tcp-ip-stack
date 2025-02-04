@@ -14,7 +14,7 @@ typedef struct node_ node_t ;
  *     add interface network properties and node network properties in graph.h 
  */ 
 typedef struct ip_address_ {
-  char ip_address[16];
+  unsigned char ip_address[16];
 } ip_address_t ; 
 
 typedef struct mac_address_ {

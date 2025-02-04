@@ -81,9 +81,9 @@ static inline node_t *get_nbr_node(interface_t *interface) {
 
 static inline int get_node_intf_available_slot(node_t *node) {
   for (int i = 0 ; i < MAX_INTF_PER_NODE; i++) {
-    if(!node -> intf[i]) {
-           return i;
-    }
+    if(node->intf[i])
+            continue;
+        return i;
   }
   return -1;
 }
@@ -101,8 +101,9 @@ static inline interface_t * get_node_if_by_name(node_t *node, char *if_name) {
     if(strncmp(interface->if_name,if_name,IF_NAME_SIZE)==0) {
       return interface; 
     } 
-    return NULL; 
+   
   }
+   return NULL; 
 }
 
 /*
