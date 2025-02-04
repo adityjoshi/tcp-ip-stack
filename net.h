@@ -101,6 +101,7 @@ void dump_intf_props(interface_t *interface);
 
 interface_t *node_get_matching_subnet_interface(node_t *node, char *ip_addr) ;
 unsigned int convert_ip_from_str_to_int(char *ip_addr);
+char *convert_ip_from_int_to_str(unsigned int ip_addr, char *output_buffer);
 
 
 #endif /* __NET__ */

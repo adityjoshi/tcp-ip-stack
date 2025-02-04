@@ -102,6 +102,16 @@ return int_f ;
 }
 }
 
+char *convert_ip_from_int_to_str(unsigned int ip_addr, char *output_buffer) {
+char *out = NULL ; 
+static char str_ip[16];
+out = !output_buffer ? str_ip:output_buffer;
+memset(out , 0, 16);
+ip_addr = htonl(ip_addr);
+inet_ntop(AF_INET,&ip_addr,out,16);
+out[15] = '\0';
+return out ; 
+}
 
 unsigned int convert_ip_from_str_to_int(char *ip_addr) {
 uint32_t binary_prefix = 0 ; 
