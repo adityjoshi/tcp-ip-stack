@@ -25,6 +25,7 @@ show_nw_topology_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_
     return 0;
 }
 
+
 void 
 nw_init_cli() {
     init_libcli();
