@@ -78,6 +78,10 @@ void nw_init_cli() {
              init_param(&node_name, LEAF, 0, 0,valid_node_existence, INVALID, 0, "Node Name");
              libcli_register_param(&node, &node_name);
 
+             {
+                
+             }
+
         }
      }
      
