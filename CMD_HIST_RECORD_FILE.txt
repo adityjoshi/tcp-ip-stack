@@ -1,2 +1,4 @@
 .
 show topology
+.
+show topology

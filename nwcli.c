@@ -6,6 +6,28 @@
 
 extern graph_t *topo;
 
+/* node dumping*/
+void dump_nw_node(param_t *param, ser_buff_t *tlv_buf) {
+    node_t *node ;
+    glthread_t *curr;
+    ITERATE_GLTHREAD_BEGIN(&topo->node_list,curr) {
+        node = graph_glue_to_node(curr);
+        printf("Node Name = %s\n",node->node_name);
+    } ITERATE_GLTHREAD_END(&topo->node_list,curr);
+}
+
+
+
+
+/*General validations and checks */
+int valid_node_existence(char *node_name) {
+    node_t *node = get_node_by_node_name(topo,node_name);
+    if(node) 
+    return VALIDATION_SUCCESS;
+    printf("Error : Node %s does not exist\n",node_name);
+    return VALIDATION_FAILED;
+}
+
 
 /*Generic Topology Commands*/
 static int
@@ -43,4 +65,20 @@ void nw_init_cli() {
          libcli_register_param(show, &topology);
          set_param_cmd_code(&topology, CMDCODE_SHOW_NW_TOPOLOGY);
      }
+
+     {
+        /* run node*/
+        static param_t node;
+        init_param(&node, CMD, "node", NULL, 0, INVALID, 0, "\"node\" keyword"); 
+        libcli_register_param(run, &node);
+        libcli_register_display_callback(&node, dump_nw_node);
+        {
+             /*run node name*/
+             static param_t node_name;
+             init_param(&node_name, LEAF, 0, 0,valid_node_existence, INVALID, 0, "Node Name");
+             libcli_register_param(&node, &node_name);
+
+        }
+     }
+     
 }
