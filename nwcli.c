@@ -79,7 +79,8 @@ void nw_init_cli() {
              libcli_register_param(&node, &node_name);
 
              {
-                
+                static param_t resolve_arp;
+                init_param(&resolve_arp, CMD, "resolve-arp", NULL, 0, INVALID, 0, "Resolve ARP for this node");
              }
 
         }
