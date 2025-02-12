@@ -18,6 +18,21 @@ void dump_nw_node(param_t *param, ser_buff_t *tlv_buf) {
 
 
 
+/*
+arp_handler
+*/
+
+static int arp_handler(param_t *param, ser_buff_t *tlv_buf,
+    op_mode enable_or_disable) {
+        node_t *node;
+        char *node_name;
+        char *ip_addr;
+        tlv_struct_t *tlv = NULL;
+        
+    }
+
+
+
 
 /*General validations and checks */
 int valid_node_existence(char *node_name) {
@@ -81,6 +96,14 @@ void nw_init_cli() {
              {
                 static param_t resolve_arp;
                 init_param(&resolve_arp, CMD, "resolve-arp", NULL, 0, INVALID, 0, "Resolve ARP for this node");
+                libcli_register_param(&node_name, &resolve_arp);
+
+                {
+                    // run node <node-name> resolve-arp <ip-address>
+                    static param_t ip_addr;
+                    init_param(&ip_addr, LEAF, 0, arp_handler, 0, INVALID, 0, "IP Address");
+                    set_param_cmd_code(&ip_addr, CMDCODE_RUN_ARP);
+                }
              }
 
         }
