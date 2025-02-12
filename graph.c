@@ -53,6 +53,7 @@ node2->intf[empty_inf_slot] = &link->intf2;
  node_t *node = calloc(1, sizeof(node_t));
 strncpy(node->node_name,node_name,NODE_NAME_SIZE);
 node->node_name[NODE_NAME_SIZE-1]='\0';
+init_udp_socket(node);
 init_glthread(&node->graph_glue);
 glthread_add_next(&graph->node_list,&node->graph_glue);
 return node ; 
