@@ -28,6 +28,14 @@ static int arp_handler(param_t *param, ser_buff_t *tlv_buf,
         char *node_name;
         char *ip_addr;
         tlv_struct_t *tlv = NULL;
+
+
+        TLV_LOOP_BEGIN(tlv_buf, tlv) {
+            if(strncmp(tlv->leaf_id, "node-name", strlen("node-name")) ==0)
+            node_name = tlv->value;
+        } TLV_LOOP_END;
+        node = get_node_by_node_name(topo, node_name);
+        // todo: write a function to dump_arp_table ; 
         
     }
 
