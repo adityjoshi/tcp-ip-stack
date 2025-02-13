@@ -37,7 +37,18 @@ void init_udp_socket(node_t *node) {
 }
 
 static void *  _network_start_pkt_receiver_thread(void *arg) {
+    node_t *node ; 
+    glthread_t *curr;
+
+    fd_set active_fd_set, back_fd_set;
+    int sock_max_fd  = 0 ;
+    int bytes_recvd = 0;
     
+    graph_t *topo = (void *)arg;
+    int addr_len = sizeof(struct sockaddr);
+
+    FD_ZERO(&active_fd_set);
+    FD_ZERO(&back_fd_set);
 }
 
 void network_start_packet_receiver_thread(graph_t *topo) {
