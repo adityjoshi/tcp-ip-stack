@@ -2,6 +2,7 @@
 #include "graph.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <pthread/pthread.h>
 
 static unsigned int udp_num = 40000;
 
@@ -35,6 +36,18 @@ void init_udp_socket(node_t *node) {
     return ;
 }
 
-int send_packet_out(char *pkt, unsigned int pkt_size, interface_t *original_intf) {
+static void *  _network_start_pkt_receiver_thread(void *arg) {
+    
+}
 
+void network_start_packet_receiver_thread(graph_t *topo) {
+    pthread_attr_t attr;
+    pthread_t recv_packet_thread;
+
+    pthread_attr_t_init(&attr);
+    pthread_attr_t_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+
+    pthread_create(&recv_packet_thread, &attr, 
+        _network_start_pkt_receiver_thread, 
+        (void *)topo);
 }
