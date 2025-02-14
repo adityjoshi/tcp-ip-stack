@@ -48,6 +48,7 @@ static void *  _network_start_pkt_receiver_thread(void *arg) {
     int addr_len = sizeof(struct sockaddr);
 
     FD_ZERO(&active_fd_set);
+    
     FD_ZERO(&back_fd_set);
 }
 
