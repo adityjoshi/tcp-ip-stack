@@ -66,6 +66,11 @@ static void *  _network_start_pkt_receiver_thread(void *arg) {
         FD_SET(node->udp_socket_fd, &back_fd_set);
             
     } ITERATE_GLTHREAD_END(&topo->node_list, curr);
+    while(1) {
+        memcpy(&active_fd_set, &back_fd_set, sizeof(fd_set));
+        select(sock_max_fd+1, &active_fd_set, NULL, NULL, NULL);
+
+    }
 }
 
 void network_start_packet_receiver_thread(graph_t *topo) {
