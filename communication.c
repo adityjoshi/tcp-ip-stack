@@ -69,8 +69,16 @@ static void *  _network_start_pkt_receiver_thread(void *arg) {
     while(1) {
         memcpy(&active_fd_set, &back_fd_set, sizeof(fd_set));
         select(sock_max_fd+1, &active_fd_set, NULL, NULL, NULL);
+        ITERATE_GLTHREAD_BEGIN(&topo->node_list,curr) {
+            node = graph_glue_to_node(curr);
+            memset(recv_buffer, 0, MAX_PACKET_BUFFER_SIZE);
+            bytes_recvd = recvfrom(node->udp_socket_fd, (char *)recv_buffer, 
+                    MAX_PACKET_BUFFER_SIZE, 0, (struct sockaddr *)&sender_addr, &addr_len);
+            
+            _pkt_receive(node, recv_buffer, bytes_recvd);
+        }
 
-    }
+    } ITERATE_GLTHREAD_END(&topo->node_list, curr);
 }
 
 void network_start_packet_receiver_thread(graph_t *topo) {

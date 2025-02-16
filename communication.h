@@ -2,6 +2,12 @@
 #define __COMMUNICATION__
 #include "graph.h"
 
+
+#define MAX_PACKET_BUFFER_SIZE 2048
+
+
+
+
 /*
 *
 * the api is used to send the packet to the neighbour node
