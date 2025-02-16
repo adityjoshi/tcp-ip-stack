@@ -73,6 +73,12 @@ static void *  _network_start_pkt_receiver_thread(void *arg) {
         select(sock_max_fd+1, &active_fd_set, NULL, NULL, NULL);
         ITERATE_GLTHREAD_BEGIN(&topo->node_list,curr) {
             node = graph_glue_to_node(curr);
+            /*
+            * here we are first resetting the buffer to 0 so that no garbage value is present in the buffer
+            * then bytes_recvd is used to store the number of bytes received from the sender
+            * _pkt_receive is used to receive the packet and process it
+            * 
+            */
             memset(recv_buffer, 0, MAX_PACKET_BUFFER_SIZE);
             bytes_recvd = recvfrom(node->udp_socket_fd, (char *)recv_buffer, 
                     MAX_PACKET_BUFFER_SIZE, 0, (struct sockaddr *)&sender_addr, &addr_len);
