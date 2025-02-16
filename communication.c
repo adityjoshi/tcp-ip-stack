@@ -48,8 +48,24 @@ static void *  _network_start_pkt_receiver_thread(void *arg) {
     int addr_len = sizeof(struct sockaddr);
 
     FD_ZERO(&active_fd_set);
-    
     FD_ZERO(&back_fd_set);
+
+     
+    struct sockaddr_in sender_addr;
+
+    ITERATE_GLTHREAD_BEGIN(&topo->node_list, curr){
+
+        node = graph_glue_to_node(curr);
+        
+        if(!node->udp_socket_fd) 
+            continue;
+
+        if(node->udp_socket_fd > sock_max_fd)
+            sock_max_fd = node->udp_socket_fd;
+
+        FD_SET(node->udp_socket_fd, &back_fd_set);
+            
+    } ITERATE_GLTHREAD_END(&topo->node_list, curr);
 }
 
 void network_start_packet_receiver_thread(graph_t *topo) {
