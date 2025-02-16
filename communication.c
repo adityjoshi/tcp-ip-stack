@@ -4,6 +4,8 @@
 #include <netinet/in.h>
 #include <pthread/pthread.h>
 
+
+static char recv_buffer[MAX_PACKET_BUFFER_SIZE];
 static unsigned int udp_num = 40000;
 
 static unsigned int get_udp_port() {
