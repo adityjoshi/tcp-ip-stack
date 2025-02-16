@@ -38,6 +38,10 @@ void init_udp_socket(node_t *node) {
     return ;
 }
 
+
+static void _pkt_receive(node_t *receiver_data,char *pkt_with_auxillary_data, unsigned int pkt_size) {}
+
+
 static void *  _network_start_pkt_receiver_thread(void *arg) {
     node_t *node ; 
     glthread_t *curr;
