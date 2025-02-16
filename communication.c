@@ -41,7 +41,15 @@ void init_udp_socket(node_t *node) {
 
 static void _pkt_receive(node_t *receiver_node,char *pkt_with_auxillary_data, unsigned int pkt_size) {
     char *receiver_interface_name = pkt_with_auxillary_data;
-    interface_t *rec
+    interface_t *recv_intf = get_node_if_by_name(receiver_node,receiver_interface_name);
+
+    if(!recv_intf){
+        printf("Error : Pkt recvd on unknown interface %s on node %s\n", 
+                    recv_intf->if_name, receiver_node->node_name);
+        return;
+    }
+    pkt_receive(receiver_node, recv_intf, pkt_with_auxillary_data + IF_NAME_SIZE, 
+        pkt_size - IF_NAME_SIZE);
 }
 
 
