@@ -5,6 +5,8 @@
 #include <pthread/pthread.h>
 #include <errno.h>
 #include <Kernel/string.h>
+#include <netdb.h>
+
 
 
 static char recv_buffer[MAX_PACKET_BUFFER_SIZE];
@@ -15,7 +17,21 @@ static unsigned int get_udp_port() {
     return udp_num++;
 }
 
-
+static int _send_pkt_out(int sock_fd, char *pkt_data, unsigned int pkt_size, 
+    unsigned int dst_udp_port_no) {
+        int rc ; 
+        struct sockaddr_in dest_addr;
+   
+        struct hostent *host = (struct hostent *) gethostbyname("127.0.0.1"); 
+        dest_addr.sin_family = AF_INET;
+        dest_addr.sin_port = dst_udp_port_no;
+        dest_addr.sin_addr = *((struct in_addr *)host->h_addr);
+    
+        rc = sendto(sock_fd, pkt_data, pkt_size, 0, 
+                (struct sockaddr *)&dest_addr, sizeof(struct sockaddr));
+        
+        return rc;
+    }
 
 void init_udp_socket(node_t *node) {
     if (node->udp_port_number) {
