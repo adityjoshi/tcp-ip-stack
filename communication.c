@@ -115,3 +115,17 @@ void network_start_packet_receiver_thread(graph_t *topo) {
         _network_start_pkt_receiver_thread, 
         (void *)topo);
 }
+
+
+
+
+
+/*
+*
+* PUBLIC APIs 
+* 
+*/
+
+int send_packet_out(char *pkt, unsigned int pkt_size, interface_t *original_intf) {
+    
+}
