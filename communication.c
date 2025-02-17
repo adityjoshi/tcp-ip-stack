@@ -58,6 +58,9 @@ void init_udp_socket(node_t *node) {
 }
 
 
+
+
+
 static void _pkt_receive(node_t *receiver_node,char *pkt_with_auxillary_data, unsigned int pkt_size) {
     char *receiver_interface_name = pkt_with_auxillary_data;
     interface_t *recv_intf = get_node_if_by_name(receiver_node,receiver_interface_name);
@@ -185,3 +188,13 @@ int send_packet_out(char *pkt, unsigned int pkt_size, interface_t *original_intf
     return rc; 
 
 }
+
+
+int
+pkt_receive(node_t *node, interface_t *interface,
+            char *pkt, unsigned int pkt_size){
+// this is the entry point of the packer from physical layer to data link layer 
+printf("Packet received on interface %s of node %s\n", interface->if_name, node->node_name);
+                return 0 ; 
+
+            }

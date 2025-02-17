@@ -18,6 +18,9 @@
 
 int send_packet_out(char *pkt, unsigned int pkt_size, interface_t *original_intf);
 
-
+/*API to recv packet from interface*/
+int
+pkt_receive(node_t *node, interface_t *interface, 
+            char *pkt, unsigned int pkt_size);
 
 #endif  /* __COMMUNICATION__ */
