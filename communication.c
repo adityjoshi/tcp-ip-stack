@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <pthread/pthread.h>
+#include <errno.h>
 
 
 static char recv_buffer[MAX_PACKET_BUFFER_SIZE];
@@ -141,6 +142,11 @@ int send_packet_out(char *pkt, unsigned int pkt_size, interface_t *original_intf
         return -1;
     }
     unsigned int destination_port_number = neighbour_node->udp_port_number;  
+    int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if(sock < 0){
+        printf("Error : Sending socket Creation failed , errno = %d", errno);
+        return -1;
+    }
     
 
 }
