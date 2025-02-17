@@ -4,6 +4,7 @@
 #include <netinet/in.h>
 #include <pthread/pthread.h>
 #include <errno.h>
+#include <Kernel/string.h>
 
 
 static char recv_buffer[MAX_PACKET_BUFFER_SIZE];
@@ -147,6 +148,9 @@ int send_packet_out(char *pkt, unsigned int pkt_size, interface_t *original_intf
         printf("Error : Sending socket Creation failed , errno = %d", errno);
         return -1;
     }
-    
+    interface_t *other_interface = &original_intf->link->intf1 == original_intf ? \
+                                    &original_intf->link->intf2 : &original_intf->link->intf1;
+
+    memset(send_buffer, 0, MAX_PACKET_BUFFER_SIZE);
 
 }
