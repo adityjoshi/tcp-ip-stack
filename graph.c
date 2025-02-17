@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "gluethread/glthread.h"
+#include "communication.h"
 
 
 graph_t *create_new_graph(char *topology_name) {

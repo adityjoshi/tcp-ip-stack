@@ -51,7 +51,8 @@ OBJS=gluethread/glthread.o \
 		  topologies.o	   \
 		  net.o			   \
 		  nwcli.o		   \
-		  utils.o		   
+		  utils.o		   \
+		  communication.o
 		  
 
 test.exe:testapp.o ${OBJS} CommandParser/libcli.a
@@ -79,6 +80,9 @@ nwcli.o:nwcli.c
 
 utils.o:utils.c
 	${CC} ${CFLAGS} -c -I . utils.c -o utils.o
+
+communication.o:communication.c
+	${CC} ${CFLAGS} -c -I . communication.c -o communication.o
 
 CommandParser/libcli.a:
 	(cd CommandParser; make)
