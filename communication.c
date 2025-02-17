@@ -8,6 +8,7 @@
 
 
 static char recv_buffer[MAX_PACKET_BUFFER_SIZE];
+static char send_buffer[MAX_PACKET_BUFFER_SIZE];
 static unsigned int udp_num = 40000;
 
 static unsigned int get_udp_port() {
@@ -152,5 +153,19 @@ int send_packet_out(char *pkt, unsigned int pkt_size, interface_t *original_intf
                                     &original_intf->link->intf2 : &original_intf->link->intf1;
 
     memset(send_buffer, 0, MAX_PACKET_BUFFER_SIZE);
+
+    char *pkt_with_auxillary_data = send_buffer;    
+
+    strncpy(pkt_with_auxillary_data, other_interface->if_name, IF_NAME_SIZE);
+
+    pkt_with_auxillary_data[IF_NAME_SIZE - 1] = '\0';
+
+    memcpy(pkt_with_auxillary_data + IF_NAME_SIZE, pkt, pkt_size);
+
+    rc = _send_pkt_out(sock, pkt_with_auxillary_data, pkt_size + IF_NAME_SIZE, 
+        destination_port_number);
+
+    close(sock);
+    return rc; 
 
 }
