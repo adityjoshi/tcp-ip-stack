@@ -127,5 +127,10 @@ void network_start_packet_receiver_thread(graph_t *topo) {
 */
 
 int send_packet_out(char *pkt, unsigned int pkt_size, interface_t *original_intf) {
+
+    int rc = 0 ; 
+    node_t *sending_node = original_intf->att_node;
+    node_t *neighbour_node = get_nbr_node(original_intf); 
+
     
 }
