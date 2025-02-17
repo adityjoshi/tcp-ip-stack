@@ -132,5 +132,15 @@ int send_packet_out(char *pkt, unsigned int pkt_size, interface_t *original_intf
     node_t *sending_node = original_intf->att_node;
     node_t *neighbour_node = get_nbr_node(original_intf); 
 
+    if (!neighbour_node) {
+        printf("Error : Neighbour Node not found for interface %s\n", original_intf->if_name);
+        return -1;
+    }
+    if (pkt_size + IF_NAME_SIZE > MAX_PACKET_BUFFER_SIZE) {
+        printf("Error : Packet size exceeds the max buffer size\n");
+        return -1;
+    }
+    unsigned int destination_port_number = neighbour_node->udp_port_number;  
     
+
 }
