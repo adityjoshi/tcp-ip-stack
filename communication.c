@@ -196,7 +196,7 @@ int
 pkt_receive(node_t *node, interface_t *interface,
             char *pkt, unsigned int pkt_size){
 // this is the entry point of the packer from physical layer to data link layer 
-printf("Packet received on interface %s of node %s\n", interface->if_name, node->node_name);
+printf("Packet received on interface %s of node %s and message %s\n", interface->if_name, node->node_name, pkt);
                 return 0 ; 
 
             }
