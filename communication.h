@@ -5,7 +5,8 @@
 
 #define MAX_PACKET_BUFFER_SIZE 2048
 
-
+typedef struct node_ node_t;
+typedef struct interface_ interface_t;
 
 
 /*

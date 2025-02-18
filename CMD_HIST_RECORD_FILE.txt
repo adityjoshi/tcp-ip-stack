@@ -6,3 +6,5 @@ show topology
 show topology
 .
 cd
+.
+show topology
