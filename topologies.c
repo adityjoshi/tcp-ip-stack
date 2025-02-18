@@ -60,6 +60,7 @@ graph_t * build_first_topo() {
     node_set_interface_ip_address(R2_re, "eth0/3", "30.1.1.2", 24);
     network_start_packet_receiver_thread(topo);
     // node_set_interface_ip_address(R2_re, "eth0/5", "40.1.1.2", 24);
+    // network_start_packet_receiver_thread(topo);
     return topo;
 // new topo
 }
