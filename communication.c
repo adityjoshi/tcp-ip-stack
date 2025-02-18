@@ -6,7 +6,9 @@
 #include <errno.h>
 #include <Kernel/string.h>
 #include <netdb.h>
-
+#include <stdio.h>
+#include <sys/select.h> 
+#include <unistd.h>
 
 
 static char recv_buffer[MAX_PACKET_BUFFER_SIZE];
@@ -130,8 +132,8 @@ void network_start_packet_receiver_thread(graph_t *topo) {
     pthread_attr_t attr;
     pthread_t recv_packet_thread;
 
-    pthread_attr_t_init(&attr);
-    pthread_attr_t_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
     pthread_create(&recv_packet_thread, &attr, 
         _network_start_pkt_receiver_thread, 

@@ -5,7 +5,7 @@
 #include "gluethread/glthread.h"
 #include "communication.h"
 
-
+extern void init_udp_socket(node_t *node);  
 graph_t *create_new_graph(char *topology_name) {
 graph_t *graph = calloc(1, sizeof(graph_t));
 strncpy(graph->topology_name, topology_name , 32);
