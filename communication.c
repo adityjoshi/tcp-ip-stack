@@ -102,6 +102,7 @@ static void *  _network_start_pkt_receiver_thread(void *arg) {
             continue;
 
         if(node->udp_socket_fd > sock_max_fd)
+        
             sock_max_fd = node->udp_socket_fd;
 
         FD_SET(node->udp_socket_fd, &back_fd_set);
