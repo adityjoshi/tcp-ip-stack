@@ -8,3 +8,7 @@ show topology
 cd
 .
 show topology
+show topology
+show topology
+show topology
+show topology

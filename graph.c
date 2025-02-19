@@ -4,6 +4,7 @@
 #include <string.h>
 #include "gluethread/glthread.h"
 #include "communication.h"
+#include "net.h"
 
 extern void init_udp_socket(node_t *node);  
 graph_t *create_new_graph(char *topology_name) {
@@ -46,6 +47,8 @@ empty_inf_slot = get_node_intf_available_slot(node1);
 node1->intf[empty_inf_slot] = &link->intf1;
 empty_inf_slot = get_node_intf_available_slot(node2);
 node2->intf[empty_inf_slot] = &link->intf2;
+interface_assign_mac_address(&link->intf1);
+interface_assign_mac_address(&link->intf2);
 
 }
 
@@ -98,7 +101,9 @@ void dump_interface(interface_t *interface){
             interface->if_name,
             nbr_node->node_name, 
             interface->att_node->node_name, 
-            link->cost);
+            link->cost,
+            // change
+        interface->interface_nw_props.mac_add);
            
 }
 

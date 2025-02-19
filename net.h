@@ -45,6 +45,7 @@ typedef struct interface_nw_properties_ {
   char mask ; 
 } interface_nw_properties_t ; 
 
+void interface_assign_mac_address(interface_t *interface);
 
 static inline void 
 init_interface_nw_properties_(interface_nw_properties_t *interface_nw_prop) {
