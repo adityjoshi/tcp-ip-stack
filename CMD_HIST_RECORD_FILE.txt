@@ -12,3 +12,7 @@ show topology
 show topology
 show topology
 show topology
+show topology
+.
+show topology
+show topology

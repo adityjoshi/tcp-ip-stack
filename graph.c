@@ -101,9 +101,7 @@ void dump_interface(interface_t *interface){
             interface->if_name,
             nbr_node->node_name, 
             interface->att_node->node_name, 
-            link->cost,
-            // change
-        interface->interface_nw_props.mac_add);
+            link->cost);
            
 }
 

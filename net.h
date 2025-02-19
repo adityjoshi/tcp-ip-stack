@@ -18,7 +18,7 @@ typedef struct ip_address_ {
 } ip_address_t ; 
 
 typedef struct mac_address_ {
-  char mac_address[8]; 
+ unsigned char mac_address[6]; 
 } mac_address_t; 
 
 
