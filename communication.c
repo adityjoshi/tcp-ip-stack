@@ -211,3 +211,21 @@ printf("Packet received on interface %s of node %s and message %s\n", interface-
                 return 0 ; 
 
             }
+
+/*Packet flooding across all the interface*/
+
+int send_pkt_flood(node_t *node, interface_t *exempted_intf,char *pkt, unsigned int pkt_size) {
+    unsigned int i = 0 ; 
+    interface_t *intf = NULL;
+    for (i ; i < MAX_INTF_PER_NODE; i++) {
+        intf = node->intf[i];
+        if (!intf) {
+            return 0; 
+        }
+        if (intf == exempted_intf) {
+            continue;
+        }
+        send_packet_out(pkt, pkt_size, intf);
+    }
+    return 0;
+}
