@@ -49,7 +49,7 @@ void interface_assign_mac_address(interface_t *interface);
 
 static inline void 
 init_interface_nw_properties_(interface_nw_properties_t *interface_nw_prop) {
-  memset(&interface_nw_prop->mac_add, 0, 48);
+  memset(&interface_nw_prop->mac_add.mac_address, 0, sizeof(interface_nw_prop->mac_add.mac_address));
   interface_nw_prop->is_ip_address_config = FALSE ; 
   memset(&interface_nw_prop->ip_add, 0, 16);
   interface_nw_prop->mask = 0 ; 

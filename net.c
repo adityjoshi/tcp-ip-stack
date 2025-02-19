@@ -12,7 +12,7 @@
 
 static unsigned int
 hash_code(void *ptr, unsigned int size){
-    unsigned int value=0, i =0;
+    unsigned long long value=0, i =0;
     char *str = (char*)ptr;
     while(i < size)
     {
@@ -29,13 +29,14 @@ node_t *node = interface->att_node;
 if(!node) {
 return ; 
 }
-unsigned int hashVal = 0 ; 
+unsigned long long hashVal = 0 ; 
     hashVal = hash_code(node->node_name, NODE_NAME_SIZE);
     hashVal *= hash_code(interface->if_name, IF_NAME_SIZE);
     memset(INTERFACE_MAC(interface), 0, sizeof(INTERFACE_MAC(interface)));
-    memcpy(INTERFACE_MAC(interface), (char *)&hashVal, sizeof(unsigned int));
+    memcpy(INTERFACE_MAC(interface), (char *)&hashVal, sizeof(unsigned long long));
 
 }
+
 
 
 bool_t node_set_loopback_address(node_t *node, char*ip_addr ) {
