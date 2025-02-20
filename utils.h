@@ -19,5 +19,6 @@ void layer2_add_broadcast_address(char *mac_array);
 
 
 #define IS_MAC_BROADCAST_ADDR(mac)   \
-  (mac[0] == 0xff && mac[1] ==  0xff && mac[2] ==  0xff && mac[3] ==  0xff && mac[4] ==  0xff && mac[5] ==  0xff);
+    (mac[0] == 0xFF  &&  mac[1] == 0xFF && mac[2] == 0xFF && \
+     mac[3] == 0xFF  &&  mac[4] == 0xFF && mac[5] == 0xFF)
 #endif /* __UTILS__ */
