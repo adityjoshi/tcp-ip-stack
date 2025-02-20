@@ -3,6 +3,7 @@
 #include "net.h"
 #include <stdlib.h>
 #include "graph.h"
+#include "utils.h"
 
 #pragma pack (push,1) // to avoid padding done by the compiler 
 typedef struct ethernetHeader_ {
@@ -22,6 +23,14 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
     if(!IS_INTF_L3_MODE(interface)) {
         return FALSE;
     }
+    if (memcpy(INTERFACE_MAC(interface),ethernetHeader->dest.mac_address,sizeof(mac_address_t)) == 0) {
+        return TRUE;
+    }
+    if (IS_MAC_BROADCAST_ADDR(ethernetHeader->dest.mac_address)) {
+        return TRUE ;
+    }
+
+    return FALSE ;
 
 }
 
