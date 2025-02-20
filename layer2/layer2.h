@@ -2,6 +2,7 @@
 #define __LAYER2__
 #include "net.h"
 #include <stdlib.h>
+#include "graph.h"
 
 #pragma pack (push,1) // to avoid padding done by the compiler 
 typedef struct ethernetHeader_ {
@@ -14,8 +15,15 @@ typedef struct ethernetHeader_ {
 #pragma pack(pop) 
 
 
+/*
+To check if the we can accept the packet or not arrived on the interface working in the layer 3 mode
+*/
+static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, ethernetHeader_t *ethernetHeader) {
+    if(!IS_INTF_L3_MODE(interface)) {
+        return FALSE;
+    }
 
-
+}
 
 
 
