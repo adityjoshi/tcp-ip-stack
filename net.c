@@ -128,6 +128,15 @@ return binary_prefix ;
 }
 
 
+
+char *
+pkt_buffer_shift_right(char *pkt, unsigned int pkt_size,unsigned int total_buffer_size) {
+    
+}
+
+
+
+
 void dump_nw_graph(graph_t *graph) {
 node_t *node;
 glthread_t *curr;

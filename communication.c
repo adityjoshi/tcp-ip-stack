@@ -206,8 +206,8 @@ send_packet_out(char *pkt, unsigned int pkt_size,
 int
 pkt_receive(node_t *node, interface_t *interface,
             char *pkt, unsigned int pkt_size){
+                pkt = pkt_buffer_shift_right(pkt,pkt_size,MAX_PACKET_BUFFER_SIZE - IF_NAME_SIZE);
 
-printf("Packet received on interface %s of node %s and message %s\n", interface->if_name, node->node_name, pkt);
                 return 0 ; 
 
             }
