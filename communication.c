@@ -206,8 +206,15 @@ send_packet_out(char *pkt, unsigned int pkt_size,
 int
 pkt_receive(node_t *node, interface_t *interface,
             char *pkt, unsigned int pkt_size){
+    /*
+    make room in the packet buffer shift the data to the right so that the tcp/ipc can append more
+    headers in the packet without any issye 
+    
+    */
                 pkt = pkt_buffer_shift_right(pkt,pkt_size,MAX_PACKET_BUFFER_SIZE - IF_NAME_SIZE);
 
+                 /*Do further processing of the pkt here*/
+    layer2_frame_recv(node, interface, pkt, pkt_size );
                 return 0 ; 
 
             }
