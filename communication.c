@@ -202,6 +202,9 @@ send_packet_out(char *pkt, unsigned int pkt_size,
     return rc; 
 }
 
+extern void
+layer2_frame_recv(node_t *node, interface_t *interface,
+                     char *pkt, unsigned int pkt_size);
 
 int
 pkt_receive(node_t *node, interface_t *interface,

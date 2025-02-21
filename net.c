@@ -127,11 +127,39 @@ return binary_prefix ;
 
 }
 
+/*
 
+pkt = [A B C D E 0 0 0 0 0]  
+
+Copy pkt to right:
+pkt = [A B C D E A B C D E]
+
+Clear first pkt_size bytes:
+pkt = [0 0 0 0 0 A B C D E]
+
+return pointer -> &pkt[5]
+
+*/
 
 char *
 pkt_buffer_shift_right(char *pkt, unsigned int pkt_size,unsigned int total_buffer_size) {
-    
+    char *temp = NULL ;
+    bool_t tempMemory = FALSE; 
+    if (pkt_size * 2 > total_buffer_size) {
+        tempMemory = TRUE;
+    }
+    if (tempMemory) {
+        temp = calloc(1, pkt_size);
+        memcpy(temp, pkt, pkt_size);
+        memset(pkt, 0, total_buffer_size);
+        memcpy(pkt + (total_buffer_size-pkt_size), temp, pkt_size);
+        free(temp); 
+        return pkt + (total_buffer_size-pkt_size);
+    }
+    memcpy(pkt + (total_buffer_size - pkt_size), pkt, pkt_size);
+    memset(pkt, 0, pkt_size);
+    return pkt + (total_buffer_size - pkt_size);
+
 }
 
 
