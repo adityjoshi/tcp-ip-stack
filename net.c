@@ -9,6 +9,7 @@
 #include <arpa/inet.h> 
 #include <sys/_endian.h>
 #include <sys/socket.h>
+#include <stdlib.h>
 
 static unsigned int
 hash_code(void *ptr, unsigned int size){
