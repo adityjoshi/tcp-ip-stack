@@ -16,6 +16,15 @@ typedef struct ethernetHeader_ {
 #pragma pack(pop) 
 
 
+
+typedef struct arpInterface_ {
+
+} arpInterface_t;
+
+
+
+
+
 /*
 To check if the we can accept the packet or not arrived on the interface working in the layer 3 mode
 */
