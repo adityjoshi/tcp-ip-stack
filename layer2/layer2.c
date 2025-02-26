@@ -21,7 +21,7 @@ init_arp_table(arp_table_t **arp_table){
 }
 
 
-void arp_table_entry_lookup(arp_table_t *arp_table, char *ip_addr) {
+arp_entries_t * arp_table_entry_lookup(arp_table_t *arp_table, char *ip_addr) {
     glthread_t *curr;
     arp_entries_t *arp_entry;
 
@@ -32,4 +32,12 @@ void arp_table_entry_lookup(arp_table_t *arp_table, char *ip_addr) {
         }
     } ITERATE_GLTHREAD_END(&arp_table->arp_entries,curr);
     return NULL ; 
+}
+
+void delete_arp_entry(arp_table_t *arp_table, char *ip_addr) {
+    arp_entries_t *arp_entry = arp_table_entry_lookup(arp_table, ip_addr);
+    if (!arp_entry) {
+        return;
+    }
+    // add delete arp_entry(arp_entry);
 }

@@ -42,22 +42,25 @@ typedef struct arp_table_{
 } arp_table_t ; 
 
 
+typedef struct arp_entries_ arp_entries_t;
 typedef struct arp_entries_ {
 ip_address_t ip_address;
 mac_address_t mac_address;
 char oif_name[IF_NAME_SIZE];
 glthread_t arp_glue;
-} arp_entries_t ;
+}  ;
 
 GLTHREAD_TO_STRUCT(arp_glue_to_arp_entry, arp_entries_t, arp_glue);
 
 
+/*
+                API's for the ARP table
 
-
+*/
 void init_arp_table(arp_table_t * *arp_table);
 bool_t arp_table_entry_addition(arp_table_t *arp_table, arp_entries_t *arp_entry);
-void arp_table_entry_lookup(arp_table_t *arp_table, char *ip_addr);
-
+arp_entries_t * arp_table_entry_lookup(arp_table_t *arp_table, char *ip_addr);
+void delete_arp_entry(arp_table_t *arp_table, char *ip_addr);
 
 
 
