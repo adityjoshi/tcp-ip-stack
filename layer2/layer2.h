@@ -35,6 +35,20 @@ typedef struct ethernetHeader_ {
 #pragma pack(pop) 
 
 
+// ARP table 
+
+typedef struct arp_table_{
+    glthread_t arp_entries; 
+} arp_table_t ; 
+
+
+struct arp_entries_ {
+ip_address_t ip_address;
+mac_address_t mac_address;
+char oif_name[IF_NAME_SIZE];
+glthread_t arp_glue;
+} arp_entries_t ;
+
 
 
 
