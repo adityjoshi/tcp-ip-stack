@@ -3,7 +3,7 @@
 #include <memory.h>
 #include <_string.h>
 #include "utils.h"
-#include "layer2.h"
+
 
 typedef struct graph_ graph_t;
 typedef struct interface_ interface_t;
@@ -21,6 +21,8 @@ typedef struct mac_address_ {
  unsigned char mac_address[6]; 
 } mac_address_t; 
 
+//forward declaration
+typedef struct arp_table_ arp_table_t;
 extern void init_arp_table(arp_table_t **arp_table);
 
 typedef struct node_nw_properties_ {
