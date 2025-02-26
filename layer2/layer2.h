@@ -17,9 +17,19 @@ typedef struct ethernetHeader_ {
 
 
 
-typedef struct arpInterface_ {
+typedef struct arpheader_ {
+    short hardware_type; /*1 for ethernet cable*/
+    short protocol_type; /*0x0800 for ipv4*/
+    char hardwareaddr_len; /*6 for mac */
+    char protocoladdr_len; /*4 for ipv4 */
+    short op_code; /* req or reply */
+    mac_address_t sender_mac;
+    unsigned int src_ip;
+    mac_address_t destination_mac;
+    unsigned int dest_ip; /*ip for which arp is resolved */
+    
 
-} arpInterface_t;
+} arpheader_t;
 
 
 
