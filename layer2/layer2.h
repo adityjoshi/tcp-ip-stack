@@ -42,14 +42,14 @@ typedef struct arp_table_{
 } arp_table_t ; 
 
 
-struct arp_entries_ {
+typedef struct arp_entries_ {
 ip_address_t ip_address;
 mac_address_t mac_address;
 char oif_name[IF_NAME_SIZE];
 glthread_t arp_glue;
 } arp_entries_t ;
 
-
+GLTHREAD_TO_STRUCT(arp_glue_to_arp_entry, arp_entries_t, arp_glue);
 
 
 
