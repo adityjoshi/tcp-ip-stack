@@ -6,14 +6,6 @@
 #include "utils.h"
 
 #pragma pack (push,1) // to avoid padding done by the compiler 
-typedef struct ethernetHeader_ {
-    mac_address_t dest;
-    mac_address_t src;
-    unsigned short type;
-    char payload[248];
-    unsigned int FCS; // crc
-} ethernetHeader_t;
-#pragma pack(pop) 
 
 
 
@@ -30,6 +22,18 @@ typedef struct arpheader_ {
     
 
 } arpheader_t;
+
+
+typedef struct ethernetHeader_ {
+    mac_address_t dest;
+    mac_address_t src;
+    unsigned short type;
+    char payload[248];
+    unsigned int FCS; // crc
+} ethernetHeader_t;
+
+#pragma pack(pop) 
+
 
 
 
