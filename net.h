@@ -3,7 +3,7 @@
 #include <memory.h>
 #include <_string.h>
 #include "utils.h"
-
+#include "layer2.h"
 
 typedef struct graph_ graph_t;
 typedef struct interface_ interface_t;
@@ -21,8 +21,12 @@ typedef struct mac_address_ {
  unsigned char mac_address[6]; 
 } mac_address_t; 
 
+extern void init_arp_table(arp_table_t **arp_table);
 
 typedef struct node_nw_properties_ {
+
+  // layer 2 config 
+  arp_table_t *arp_table; 
   // layer 3 config 
   bool_t is_loopback_address_config ; 
   ip_address_t loopback_addr;
@@ -33,6 +37,8 @@ static inline void
 init_node_nw_properties_(node_nw_properties_t *node_nw_prop) {
   node_nw_prop->is_loopback_address_config = FALSE; 
   memset(node_nw_prop->loopback_addr.ip_address,0,16);
+  init_arp_table(&(node_nw_prop->arp_table));
+
 }
 
 

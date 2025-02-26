@@ -53,6 +53,18 @@ GLTHREAD_TO_STRUCT(arp_glue_to_arp_entry, arp_entries_t, arp_glue);
 
 
 
+
+void init_arp_table(arp_table_t * *arp_table);
+
+
+
+
+
+
+
+
+
+
 /*
 To check if the we can accept the packet or not arrived on the interface working in the layer 3 mode
 */
