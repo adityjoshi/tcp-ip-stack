@@ -13,7 +13,7 @@ A graph is essentially a collection of nodes.
 In the example above, we have 3 nodes (think of nodes as routers), and each node has two interfaces. But what exactly are interfaces?
 
 ### An interface includes:
-- **Name** (e.g., `eth0/0`)
+- **Name** (e.g., `eth0/0` `eth0/1`)
 - **Node** (the connected node)
 - **Wire** (a wire or link connecting two nodes)
 
