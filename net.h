@@ -5,6 +5,7 @@
 #include "utils.h"
 
 
+
 typedef struct graph_ graph_t;
 typedef struct interface_ interface_t;
 typedef struct node_ node_t ; 
@@ -72,6 +73,7 @@ init_interface_nw_properties_(interface_nw_properties_t *interface_nw_prop) {
 #define INTERFACE_IP(intf_ptr) ((intf_ptr)->interface_nw_props.ip_add.ip_address) // returns the pointer to the ip address of the interface 
 #define NODE_LOOPBACKADDRESS(node_ptr) ((node_ptr)->node_network_prop.loopback_addr.ip_address) // return the pointer to the IP address configured as loopback on a device
 #define IS_INTF_L3_MODE(intf_ptr)     (intf_ptr->interface_nw_props.is_ip_address_config == TRUE) // returns true if the interface is in L3 mode
+#define NODE_ARP_TABLE(node_ptr)    (node_ptr->node_network_prop.arp_table) // returns the pointer to the arp table of the node
 /*
  *
  *
