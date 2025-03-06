@@ -24,3 +24,6 @@ show topology
 show topology
 show topology 
 .
+.
+show node R0_re arp
+run node R0_re resolve-arp 20.1.1.2

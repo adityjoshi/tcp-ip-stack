@@ -38,7 +38,16 @@ static int show_arp_handler(param_t *param, ser_buff_t *tlv_buf,
             node_name = tlv->value;
         } TLV_LOOP_END;
         node = get_node_by_node_name(topo, node_name);
-        dump_arp_table(NODE_ARP_TABLE(node));
+        if (!node) {
+            printf("Error: Node %s does not exist\n", node_name);
+            return -1;  // Prevent segmentation fault
+        }
+        arp_table_t *arp_table = NODE_ARP_TABLE(node);
+if (!arp_table) {
+    printf("Error: ARP table for node %s is NULL\n", node->node_name);
+    return -1;
+}
+dump_arp_table(arp_table);
         return 0;
         
     }
@@ -124,24 +133,27 @@ void nw_init_cli() {
          set_param_cmd_code(&topology, CMDCODE_SHOW_NW_TOPOLOGY);
 
          {
-             /*show node*/    
+            /*show node*/    
              static param_t node;
              init_param(&node, CMD, "node", 0, 0, INVALID, 0, "\"node\" keyword");
              libcli_register_param(show, &node);
              libcli_register_display_callback(&node, dump_nw_node);
-            /*show node <node-name>*/ 
-            static param_t node_name;
-            init_param(&node_name, LEAF, 0, 0, validate_node_extistence, STRING, "node-name", "Node Name");
-            libcli_register_param(&node, &node_name);
-            {
-               /*show node <node-name> arp*/
-               static param_t arp;
-               init_param(&arp, CMD, "arp", show_arp_handler, 0, INVALID, 0, "Dump Arp Table");
-               libcli_register_param(&node_name, &arp);
-               set_param_cmd_code(&arp, CMDCODE_SHOW_NODE_ARP_TABLE);
-            }
-         }
-     }
+             {
+                /*show node <node-name>*/ 
+                 static param_t node_name;
+                 init_param(&node_name, LEAF, 0, 0, validate_node_extistence, STRING, "node-name", "Node Name");
+                 libcli_register_param(&node, &node_name);
+                 {
+                    /*show node <node-name> arp*/
+                    static param_t arp;
+                    init_param(&arp, CMD, "arp", show_arp_handler, 0, INVALID, 0, "Dump Arp Table");
+                    libcli_register_param(&node_name, &arp);
+                    set_param_cmd_code(&arp, CMDCODE_SHOW_NODE_ARP_TABLE);
+                 }
+             }
+         } 
+    }
+     
 
      
 

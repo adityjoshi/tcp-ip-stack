@@ -10,7 +10,7 @@ graph_t *topo = NULL ;
 int main(int argc, char **argv) {
   
 nw_init_cli();
-topo = build_linear_topo();
+topo = build_first_topo();
 
 
 start_shell();
