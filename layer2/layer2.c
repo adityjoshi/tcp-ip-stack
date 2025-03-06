@@ -6,6 +6,36 @@
 
 
 
+void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)      {
+    unsigned int payload_size = sizeof(arpheader_t);
+    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)calloc(1, ETH_HDR_SIZE_EXCL_PAYLOAD + payload_size);
+
+    if (!oif) {
+        oif = node_get_matching_subnet_interface(node,ip_addr);
+        if(!oif){
+            printf("Error : %s : No eligible subnet for ARP resolution for Ip-address : %s",
+                    node->node_name, ip_addr);
+            return;
+        }
+        if(strncmp(INTERFACE_IP(oif),ip_addr,16)==0) {
+            printf("Error : %s : Attemp to resolve ARP for local Ip-address : %s",
+                node->node_name, ip_addr);
+        return;
+        }
+    }
+    /* Prep of ethernet header*/
+    layer2_add_broadcast_address(ethernet_header->dest.mac_address);
+    memcpy(ethernet_header->src.mac_address, INTERFACE_MAC(oif), sizeof(mac_address_t));
+    ethernet_header->type = ARP_MESSAGE;
+
+    /* prepare broadcast request out message for interface*/
+    
+
+}
+
+
+
+
 void
 init_arp_table(arp_table_t **arp_table){
 
