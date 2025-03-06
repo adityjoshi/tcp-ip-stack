@@ -165,36 +165,36 @@ pkt_buffer_shift_right(char *pkt, unsigned int pkt_size,unsigned int total_buffe
 
 
 
-interface_t *node_get_matching_subnet_interface(node_t *node, char *ip_addr) {
-    unsigned int i = 0 ; 
-    interface_t *intf;
-    char *intf_addr = NULL;
-    char mask;
-    char intf_subnet[16];
-    char subnet2[16];
+// interface_t *node_get_matching_subnet_interface(node_t *node, char *ip_addr) {
+//     unsigned int i = 0 ; 
+//     interface_t *intf;
+//     char *intf_addr = NULL;
+//     char mask;
+//     char intf_subnet[16];
+//     char subnet2[16];
 
    
-    for( ; i < MAX_INTF_PER_NODE; i++){
+//     for( ; i < MAX_INTF_PER_NODE; i++){
     
-        intf = node->intf[i];
-        if(!intf) return NULL;
+//         intf = node->intf[i];
+//         if(!intf) return NULL;
 
-        if(intf->interface_nw_props.is_ip_address_config == FALSE)
-            continue;
+//         if(intf->interface_nw_props.is_ip_address_config == FALSE)
+//             continue;
 
-        intf_addr = IF_IP(intf);
-        mask = intf->interface_nw_props.mask;
+//         intf_addr = INTERFACE_IP(intf);
+//         mask = intf->interface_nw_props.mask;
 
-        memset(intf_subnet, 0 , 16);
-        memset(subnet2, 0 , 16);
-        apply_mask(intf_addr, mask, intf_subnet);
-        apply_mask(ip_addr, mask, subnet2);
+//         memset(intf_subnet, 0 , 16);
+//         memset(subnet2, 0 , 16);
+//         apply_mask(intf_addr, mask, intf_subnet);
+//         apply_mask(ip_addr, mask, subnet2);
         
-        if(strncmp(intf_subnet, subnet2, 16) == 0){
-            return intf;
-        }
-    }
-}
+//         if(strncmp(intf_subnet, subnet2, 16) == 0){
+//             return intf;
+//         }
+//     }
+// }
 
 
 

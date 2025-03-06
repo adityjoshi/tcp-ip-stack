@@ -108,7 +108,7 @@ MACROS
 #define ETH_HDR_SIZE_EXCL_PAYLOAD   \
     (sizeof(ethernetHeader_t) - sizeof(((ethernetHeader_t *)0)->payload))
 
-    #define ETH_FCS(eth_hdr_ptr, payload_size)  \
+#define ETH_FCS(eth_hdr_ptr, payload_size)  \
     (*(unsigned int *)(((char *)(((ethernetHeader_t *)eth_hdr_ptr)->payload) + payload_size)))
 #endif /* __LAYER2__ */
 

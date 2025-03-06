@@ -50,6 +50,7 @@ OBJS=gluethread/glthread.o \
 		  graph.o 		   \
 		  topologies.o	   \
 		  net.o			   \
+		  layer2/layer2.o  \
 		  nwcli.o		   \
 		  utils.o		   \
 		  communication.o
@@ -83,12 +84,16 @@ utils.o:utils.c
 
 communication.o:communication.c
 	${CC} ${CFLAGS} -c -I . communication.c -o communication.o
+	
+layer2/layer2.o:layer2/layer2.c
+	${CC} ${CFLAGS} -c -I . layer2/layer2.c -o layer2/layer2.o
 
 CommandParser/libcli.a:
 	(cd CommandParser; make)
 clean:
 	rm -f *.o
 	rm -f gluethread/glthread.o
+	rm -f layer2/*.o
 	rm -f *exe
 	
 all:

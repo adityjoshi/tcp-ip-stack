@@ -1,7 +1,7 @@
 #include "layer2.h"
 #include "tcpconst.h"
 #include <arpa/inet.h>
-
+#include <stdio.h>
 
 
 
@@ -45,7 +45,8 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
     inet_pton(AF_INET, ip_addr, &arp_hdr->dest_ip);
     arp_hdr->dest_ip = htonl(arp_hdr->dest_ip);
 
-    
+    ETH_FCS(ethernet_header, ETH_HDR_SIZE_EXCL_PAYLOAD + payload_size) = 0;
+
 }
 
 
