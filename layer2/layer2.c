@@ -49,6 +49,14 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
 
 }
 
+static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, ethernetHeader_t *ethernet_hdr) {
+    printf("%s : ARP Broadcast msg recvd on interface %s of node %s\n", 
+        __FUNCTION__, iif->if_name , iif->att_node->node_name); 
+
+    char ip_addr[16];
+    arpheader_t *arp_hdr = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernet_hdr));
+}
+
 
 
 

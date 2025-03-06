@@ -113,6 +113,12 @@ MACROS
 #endif /* __LAYER2__ */
 
 
+static inline char *GET_ETHERNET_HEADER_PAYLOAD(ethernetHeader_t *ethernet_header) {
+    return ethernet_header->payload;
+}
+
+
+
 
 static inline ethernetHeader_t * ALLOC_ETH_HDR_WITH_PAYLOAD(char *pkt, unsigned int pkt_size){ 
     char *temp = (char *)calloc(1, pkt_size);   
