@@ -79,4 +79,8 @@ arp_table_update_from_arp_reply(arp_table_t *arp_table,
         strncpy(arp_entry->oif_name, iif->if_name, IF_NAME_SIZE);
 
         bool_t rc = arp_table_entry_addition(arp_table, arp_entry);
+
+        if (rc == FALSE) {
+            free(arp_entry);
+        }
     }
