@@ -53,4 +53,7 @@ bool_t arp_table_entry_addition(arp_table_t *arp_table, arp_entries_t *arp_entry
     if (arp_entry_old) {
         delete_arp_entry(arp_table, arp_entry->ip_address.ip_address);
     }
+    init_glthread(&arp_entry->arp_glue);
+    glthread_add_next(&arp_table->arp_entries, &arp_entry->arp_glue);
+    return TRUE;
 }
