@@ -37,8 +37,15 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
     arp_hdr->op_code = ARP_BROAD_REQ;
 
     memcpy(arp_hdr->sender_mac.mac_address,INTERFACE_MAC(oif),sizeof(mac_address_t));
- 
+    inet_pton(AF_INET, INTERFACE_IP(oif), &arp_hdr->src_ip);
+    arp_hdr->src_ip = htonl(arp_hdr->src_ip);  
 
+    memset(arp_hdr->destination_mac.mac_address,0,sizeof(mac_address_t));
+
+    inet_pton(AF_INET, ip_addr, &arp_hdr->dest_ip);
+    arp_hdr->dest_ip = htonl(arp_hdr->dest_ip);
+
+    
 }
 
 
