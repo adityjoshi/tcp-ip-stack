@@ -69,7 +69,7 @@ void
 arp_table_update_from_arp_reply(arp_table_t *arp_table, 
     arpheader_t *arp_hdr, interface_t *iif);
 
-
+void dump_arp_table(arp_table_t *arp_table);
 
 
 

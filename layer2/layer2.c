@@ -84,3 +84,26 @@ arp_table_update_from_arp_reply(arp_table_t *arp_table,
             free(arp_entry);
         }
     }
+
+    void
+    dump_arp_table(arp_table_t *arp_table){
+    
+        glthread_t *curr;
+        arp_entries_t *arp_entry;
+    
+        ITERATE_GLTHREAD_BEGIN(&arp_table->arp_entries, curr){
+    
+            arp_entry = arp_glue_to_arp_entry(curr);
+            printf("IP : %s, MAC : %u:%u:%u:%u:%u:%u, OIF = %s\n", 
+                arp_entry->ip_address.ip_address, 
+                arp_entry->mac_address.mac_address[0], 
+                arp_entry->mac_address.mac_address[1], 
+                arp_entry->mac_address.mac_address[2], 
+                arp_entry->mac_address.mac_address[3], 
+                arp_entry->mac_address.mac_address[4], 
+                arp_entry->mac_address.mac_address[5], 
+                arp_entry->oif_name);
+            
+        } ITERATE_GLTHREAD_END(&arp_table->arp_entries, curr);
+    }
+    
