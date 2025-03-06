@@ -29,7 +29,15 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
     ethernet_header->type = ARP_MESSAGE;
 
     /* prepare broadcast request out message for interface*/
-    
+    arpheader_t *arp_hdr = (arpheader_t *)ethernet_header->payload;
+    arp_hdr->hardware_type = 1;
+    arp_hdr->protocol_type = 0x0800;
+    arp_hdr->hardwareaddr_len = sizeof(mac_address_t);
+    arp_hdr->protocoladdr_len = 4;
+    arp_hdr->op_code = ARP_BROAD_REQ;
+
+    memcpy(arp_hdr->sender_mac.mac_address,INTERFACE_MAC(oif),sizeof(mac_address_t));
+ 
 
 }
 
