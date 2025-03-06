@@ -169,18 +169,21 @@ void nw_init_cli() {
              init_param(&node_name, LEAF, 0, 0,validate_node_extistence, STRING, "node-name", "Node Name");
              libcli_register_param(&node, &node_name);
 
-             {
-                /*run node <node-name> resolve-arp*/    
-                static param_t resolve_arp;
-                init_param(&resolve_arp, CMD, "resolve-arp", 0, 0, INVALID, 0, "Resolve ARP");
-                libcli_register_param(&node_name, &resolve_arp);
-                {
-                    /*run node <node-name> resolve-arp <ip-address>*/    
-                    static param_t ip_addr;
-                    init_param(&ip_addr, LEAF, 0, arp_handler, 0, IPV4, "ip-address", "Nbr IPv4 Address");
-                    libcli_register_param(&resolve_arp, &ip_addr);
-                    set_param_cmd_code(&ip_addr, CMDCODE_RUN_ARP);
-                }
+             {}
+
+             { 
+              /*run node <node-name> resolve-arp*/    
+             static param_t resolve_arp;
+              init_param(&resolve_arp, CMD, "resolve-arp", 0, 0, INVALID, 0, "Resolve ARP");
+              libcli_register_param(&node_name, &resolve_arp);
+             
+              {
+                  /*run node <node-name> resolve-arp <ip-address>*/    
+                  static param_t ip_addr;
+                  init_param(&ip_addr, LEAF, 0, arp_handler, 0, IPV4, "ip-address", "Nbr IPv4 Address");
+                  libcli_register_param(&resolve_arp, &ip_addr);
+                  set_param_cmd_code(&ip_addr, CMDCODE_RUN_ARP);
+              }
             }
 
         }
