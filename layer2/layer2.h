@@ -58,12 +58,16 @@ GLTHREAD_TO_STRUCT(arp_glue_to_arp_entry, arp_entries_t, arp_glue);
 
 */
 void init_arp_table(arp_table_t * *arp_table);
+
 bool_t arp_table_entry_addition(arp_table_t *arp_table, arp_entries_t *arp_entry);
+
 arp_entries_t * arp_table_entry_lookup(arp_table_t *arp_table, char *ip_addr);
+
 void delete_arp_entry(arp_table_t *arp_table, char *ip_addr);
 
-
-
+void
+arp_table_update_from_arp_reply(arp_table_t *arp_table, 
+    arpheader_t *arp_hdr, interface_t *iif);
 
 
 
