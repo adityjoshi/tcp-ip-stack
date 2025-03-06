@@ -1,6 +1,6 @@
 #include "layer2.h"
-
-
+#include "tcpconst.h"
+#include <arpa/inet.h>
 
 
 
@@ -57,3 +57,26 @@ bool_t arp_table_entry_addition(arp_table_t *arp_table, arp_entries_t *arp_entry
     glthread_add_next(&arp_table->arp_entries, &arp_entry->arp_glue);
     return TRUE;
 }
+
+
+
+void
+arp_table_update_from_arp_reply(arp_table_t *arp_table, 
+    arpheader_t *arp_hdr, interface_t *iif) {
+
+        unsigned int src_ip = 0 ; 
+        assert(arp_hdr->op_code == ARP_REPLY);
+        
+        arp_entries_t *arp_entry = calloc(1, sizeof(arp_entries_t));
+
+        src_ip = htonl(arp_hdr->src_ip);
+
+        inet_ntop(AF_INET, &src_ip, arp_entry->ip_address.ip_address, 16);
+        arp_entry->ip_address.ip_address[15] = '\0';
+
+        memcpy(arp_entry->mac_address.mac_address, arp_hdr->sender_mac.mac_address, sizeof(mac_address_t));
+
+        strncpy(arp_entry->oif_name, iif->if_name, IF_NAME_SIZE);
+
+        bool_t rc = arp_table_entry_addition(arp_table, arp_entry);
+    }
