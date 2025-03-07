@@ -73,7 +73,9 @@ static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *i
     ethernetHeader_t *ethernetHdr_reply = (ethernetHeader_t *)calloc(1,MAX_PACKET_BUFFER_SIZE);
 
     memcpy(ethernetHdr_reply->dest.mac_address, arpheader->sender_mac.mac_address, sizeof(mac_address_t));
-    
+    memcpy(ethernetHdr_reply->src.mac_address, INTERFACE_MAC(iif), sizeof(mac_address_t));  
+
+    ethernetHdr_reply->type = ARP_MESSAGE;
 }
 
 
