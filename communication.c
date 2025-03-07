@@ -202,9 +202,9 @@ send_packet_out(char *pkt, unsigned int pkt_size,
     return rc; 
 }
 
-// extern void
-// layer2_frame_recv(node_t *node, interface_t *interface,
-//                      char *pkt, unsigned int pkt_size);
+extern void
+layer2_frame_recv(node_t *node, interface_t *interface,
+                     char *pkt, unsigned int pkt_size);
 
 int
 pkt_receive(node_t *node, interface_t *interface,
@@ -217,7 +217,7 @@ pkt_receive(node_t *node, interface_t *interface,
                 pkt = pkt_buffer_shift_right(pkt,pkt_size,MAX_PACKET_BUFFER_SIZE - IF_NAME_SIZE);
 
                  /*Do further processing of the pkt here*/
-   //  layer2_frame_recv(node, interface, pkt, pkt_size );
+                layer2_frame_recv(node, interface, pkt, pkt_size );
                 return 0 ; 
 
             }

@@ -214,4 +214,31 @@ arp_table_update_from_arp_reply(arp_table_t *arp_table,
             
         } ITERATE_GLTHREAD_END(&arp_table->arp_entries, curr);
     }
+
+
+
+void layer2_frame_recv(node_t *node, interface_t *interface,
+        char *pkt, unsigned int pkt_size) {
+            ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+            switch (ethernet_header ->type) {
+                case ARP_MESSAGE:
+                {
+                    arpheader_t *arp_hdr = (arpheader_t *)ethernet_header->payload;
+                    switch (arp_hdr->op_code) {
+                        case ARP_BROAD_REQ:
+                        process_arp_broadcast_message_req(node, interface, ethernet_header);
+                        break;
+                        case ARP_REPLY:
+                        process_arp_reply_message(node, interface, ethernet_header);
+                        break;
+                        default:
+                        break;
+                    }
+                }
+                break;
+                default:
+                break;
+                
+            }
+        }
     

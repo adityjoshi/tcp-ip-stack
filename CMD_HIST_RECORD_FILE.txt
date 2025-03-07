@@ -38,3 +38,6 @@ show node R0_re arp
 show node R0_re arp 
 run node R0_re resolve-arp 20.1.1.2
 show node R0_re arp
+show node R0_re arp
+run node R0_re resolve-arp 20.1.1.2
+show node R0_re arp
