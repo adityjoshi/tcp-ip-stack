@@ -90,11 +90,20 @@ static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *o
     inet_pton(AF_INET, INTERFACE_IP(oif), &arp_header_reply->src_ip);   
     arp_header_reply->src_ip = htonl(arp_header_reply->src_ip);
 
-    memcpy(arp_header_reply->destination_mac.mac_address, arpheader->sender_mac.mac_address, sizeof(mac_address_t));    
+    memcpy(arp_header_reply->destination_mac.mac_address, arpheader->sender_mac.mac_address, sizeof(mac_address_t));     
+    arp_header_reply->dest_ip = arpheader->src_ip;
+
+    SET_COMMON_ETH_FCS(ethernetHdr_reply, sizeof(arpheader_t), 0); /* it is not used*/
+     
+    unsigned int total_pkt_size = ETH_HDR_SIZE_EXCL_PAYLOAD + sizeof(arpheader_t);
+    char *shifted_pkt_buffer = pkt_buffer_shift_right((char *)ethernetHdr_reply, total_pkt_size, MAX_PACKET_BUFFER_SIZE);
+
+    send_packet_out(shifted_pkt_buffer, total_pkt_size, oif);
+
+    free(ethernetHdr_reply);
+    
 
 }
-
-
 
 void
 init_arp_table(arp_table_t **arp_table){

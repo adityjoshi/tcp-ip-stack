@@ -130,3 +130,13 @@ static inline ethernetHeader_t * ALLOC_ETH_HDR_WITH_PAYLOAD(char *pkt, unsigned 
     free(temp);
     return eth_hdr;
 }
+
+
+static inline void
+SET_COMMON_ETH_FCS(ethernetHeader_t *ethernet_hdr, 
+                   unsigned int payload_size,
+                   unsigned int new_fcs){
+  
+        ETH_FCS(ethernet_hdr, payload_size) = new_fcs;
+    
+}
