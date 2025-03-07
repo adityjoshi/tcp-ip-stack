@@ -45,7 +45,11 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
     inet_pton(AF_INET, ip_addr, &arp_hdr->dest_ip);
     arp_hdr->dest_ip = htonl(arp_hdr->dest_ip);
 
-    ETH_FCS(ethernet_header, ETH_HDR_SIZE_EXCL_PAYLOAD + payload_size) = 0;
+    SET_COMMON_ETH_FCS(ethernet_header, sizeof(arpheader_t),0);
+
+    send_packet_out((char *)ethernet_header, ETH_HDR_SIZE_EXCL_PAYLOAD + payload_size, oif);
+
+    free(ethernet_header);
 
 }
 
