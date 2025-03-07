@@ -2,7 +2,7 @@
 #include "tcpconst.h"
 #include <arpa/inet.h>
 #include <stdio.h>
-
+#include "communication.h"  
 
 
 
@@ -63,9 +63,18 @@ static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, et
         printf("ARP Request for self IP address %s\n", ip_addr);
         return;
     }
-    send_arp_reply(ethernet_hdr,iif);
+    send_arp_reply_msg(ethernet_hdr,iif);
 }
 
+
+static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *iif) {
+    arpheader_t *arpheader = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernet_header));
+
+    ethernetHeader_t *ethernetHdr_reply = (ethernetHeader_t *)calloc(1,MAX_PACKET_BUFFER_SIZE);
+
+    memcpy(ethernetHdr_reply->dest.mac_address, arpheader->sender_mac.mac_address, sizeof(mac_address_t));
+    
+}
 
 
 
