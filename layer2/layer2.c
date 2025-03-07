@@ -67,15 +67,31 @@ static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, et
 }
 
 
-static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *iif) {
+static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *oif) {
     arpheader_t *arpheader = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernet_header));
 
     ethernetHeader_t *ethernetHdr_reply = (ethernetHeader_t *)calloc(1,MAX_PACKET_BUFFER_SIZE);
 
     memcpy(ethernetHdr_reply->dest.mac_address, arpheader->sender_mac.mac_address, sizeof(mac_address_t));
-    memcpy(ethernetHdr_reply->src.mac_address, INTERFACE_MAC(iif), sizeof(mac_address_t));  
+    memcpy(ethernetHdr_reply->src.mac_address, INTERFACE_MAC(oif), sizeof(mac_address_t));  
 
     ethernetHdr_reply->type = ARP_MESSAGE;
+
+    arpheader_t *arp_header_reply = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernetHdr_reply));
+
+    arp_header_reply->hardware_type = 1; 
+    arp_header_reply->protocol_type = 0x0800;
+    arp_header_reply->hardwareaddr_len = sizeof(mac_address_t);
+    arp_header_reply->protocoladdr_len = 4;
+
+    arp_header_reply->op_code = ARP_REPLY;  
+    memcpy(arp_header_reply->sender_mac.mac_address, INTERFACE_MAC(oif), sizeof(mac_address_t));    
+
+    inet_pton(AF_INET, INTERFACE_IP(oif), &arp_header_reply->src_ip);   
+    arp_header_reply->src_ip = htonl(arp_header_reply->src_ip);
+
+    memcpy(arp_header_reply->destination_mac.mac_address, arpheader->sender_mac.mac_address, sizeof(mac_address_t));    
+
 }
 
 
