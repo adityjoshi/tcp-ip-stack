@@ -49,24 +49,6 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
 
 }
 
-static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, ethernetHeader_t *ethernet_hdr) {
-    printf("%s : ARP Broadcast msg recvd on interface %s of node %s\n", 
-        __FUNCTION__, iif->if_name , iif->att_node->node_name); 
-
-    char ip_addr[16];
-    arpheader_t *arp_hdr = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernet_hdr));
-    unsigned int arp_dest_ip_addr = htonl(arp_hdr->dest_ip);
-    inet_ntop(AF_INET, &arp_dest_ip_addr, ip_addr, 16);
-    ip_addr[15] = '\0';
-    
-    if (strncmp(INTERFACE_IP(iif), ip_addr, 16) == 0) {
-        printf("ARP Request for self IP address %s\n", ip_addr);
-        return;
-    }
-    send_arp_reply_msg(ethernet_hdr,iif);
-}
-
-
 static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *oif) {
     arpheader_t *arpheader = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernet_header));
 
@@ -104,6 +86,36 @@ static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *o
     
 
 }
+
+
+static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, ethernetHeader_t *ethernet_hdr) {
+    printf("%s : ARP Broadcast msg recvd on interface %s of node %s\n", 
+        __FUNCTION__, iif->if_name , iif->att_node->node_name); 
+
+    char ip_addr[16];
+    arpheader_t *arp_hdr = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernet_hdr));
+    unsigned int arp_dest_ip_addr = htonl(arp_hdr->dest_ip);
+    inet_ntop(AF_INET, &arp_dest_ip_addr, ip_addr, 16);
+    ip_addr[15] = '\0';
+    
+    if (strncmp(INTERFACE_IP(iif), ip_addr, 16) == 0) {
+        printf("ARP Request for self IP address %s\n", ip_addr);
+        return;
+    }
+    send_arp_reply_msg(ethernet_hdr,iif);
+}
+
+
+
+
+static void process_arp_reply_message(node_t *node, interface_t *iif, ethernetHeader_t *ethernet_hdr) {
+    printf("%s : ARP reply msg recvd on interface %s of node %s\n",
+        __FUNCTION__, iif->if_name , iif->att_node->node_name);
+
+arp_table_update_from_arp_reply( NODE_ARP_TABLE(node), 
+               (arpheader_t *)GET_ETHERNET_HEADER_PAYLOAD(ethernet_hdr), iif);   
+}
+
 
 void
 init_arp_table(arp_table_t **arp_table){
