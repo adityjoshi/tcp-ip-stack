@@ -54,6 +54,7 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
 }
 
 static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *oif) {
+    printf("Debug: Sending ARP Reply from interface %s\n", oif->if_name);
     arpheader_t *arpheader = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernet_header));
 
     ethernetHeader_t *ethernetHdr_reply = (ethernetHeader_t *)calloc(1,MAX_PACKET_BUFFER_SIZE);
@@ -104,7 +105,7 @@ static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, et
     
     if (strncmp(INTERFACE_IP(iif), ip_addr, 16) == 0) {
         printf("ARP Request for self IP address %s\n", ip_addr);
-        return;
+    
     }
     send_arp_reply_msg(ethernet_hdr,iif);
 }
@@ -168,30 +169,62 @@ bool_t arp_table_entry_addition(arp_table_t *arp_table, arp_entries_t *arp_entry
 
 
 
-void
-arp_table_update_from_arp_reply(arp_table_t *arp_table, 
+// void
+// arp_table_update_from_arp_reply(arp_table_t *arp_table, 
+//     arpheader_t *arp_hdr, interface_t *iif) {
+
+//         unsigned int src_ip = 0 ; 
+//         assert(arp_hdr->op_code == ARP_REPLY);
+        
+//         arp_entries_t *arp_entry = calloc(1, sizeof(arp_entries_t));
+
+//         src_ip = htonl(arp_hdr->src_ip);
+
+//         inet_ntop(AF_INET, &src_ip, arp_entry->ip_address.ip_address, 16);
+//         arp_entry->ip_address.ip_address[15] = '\0';
+
+//         memcpy(arp_entry->mac_address.mac_address, arp_hdr->sender_mac.mac_address, sizeof(mac_address_t));
+
+//         strncpy(arp_entry->oif_name, iif->if_name, IF_NAME_SIZE);
+
+//         bool_t rc = arp_table_entry_addition(arp_table, arp_entry);
+
+//         if (rc == FALSE) {
+//             printf("Error: Failed to add ARP entry for IP: %s\n", arp_entry->ip_address.ip_address);
+//             free(arp_entry);
+//         }
+        
+//     }
+
+
+void arp_table_update_from_arp_reply(arp_table_t *arp_table, 
     arpheader_t *arp_hdr, interface_t *iif) {
 
-        unsigned int src_ip = 0 ; 
-        assert(arp_hdr->op_code == ARP_REPLY);
-        
-        arp_entries_t *arp_entry = calloc(1, sizeof(arp_entries_t));
+unsigned int src_ip = 0;
+assert(arp_hdr->op_code == ARP_REPLY);
 
-        src_ip = htonl(arp_hdr->src_ip);
+arp_entries_t *arp_entry = calloc(1, sizeof(arp_entries_t));
 
-        inet_ntop(AF_INET, &src_ip, arp_entry->ip_address.ip_address, 16);
-        arp_entry->ip_address.ip_address[15] = '\0';
+// Fix: Convert network byte order to host byte order
+src_ip = ntohl(arp_hdr->src_ip);
+inet_ntop(AF_INET, &src_ip, arp_entry->ip_address.ip_address, 16);
+arp_entry->ip_address.ip_address[15] = '\0';
 
-        memcpy(arp_entry->mac_address.mac_address, arp_hdr->sender_mac.mac_address, sizeof(mac_address_t));
+memcpy(arp_entry->mac_address.mac_address, 
+arp_hdr->sender_mac.mac_address, 
+sizeof(mac_address_t));
 
-        strncpy(arp_entry->oif_name, iif->if_name, IF_NAME_SIZE);
+strncpy(arp_entry->oif_name, iif->if_name, IF_NAME_SIZE);
 
-        bool_t rc = arp_table_entry_addition(arp_table, arp_entry);
+bool_t rc = arp_table_entry_addition(arp_table, arp_entry);
 
-        if (rc == FALSE) {
-            free(arp_entry);
-        }
-    }
+if (rc == FALSE) {
+printf("Error: Failed to add ARP entry for IP: %s\n", arp_entry->ip_address.ip_address);
+free(arp_entry);
+}
+}
+
+    
 
     void
     dump_arp_table(arp_table_t *arp_table){
@@ -202,6 +235,7 @@ arp_table_update_from_arp_reply(arp_table_t *arp_table,
         ITERATE_GLTHREAD_BEGIN(&arp_table->arp_entries, curr){
     
             arp_entry = arp_glue_to_arp_entry(curr);
+            
             printf("IP : %s, MAC : %u:%u:%u:%u:%u:%u, OIF = %s\n", 
                 arp_entry->ip_address.ip_address, 
                 arp_entry->mac_address.mac_address[0], 

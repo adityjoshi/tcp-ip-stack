@@ -59,6 +59,7 @@ strncpy(node->node_name,node_name,NODE_NAME_SIZE);
 node->node_name[NODE_NAME_SIZE-1]='\0';
 init_udp_socket(node);
 init_glthread(&node->graph_glue);
+init_node_nw_properties_(&node->node_network_prop);
 glthread_add_next(&graph->node_list,&node->graph_glue);
 return node ; 
 
