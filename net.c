@@ -229,6 +229,8 @@ void dump_intf_props(interface_t *interface){
                 INTERFACE_MAC(interface)[0], INTERFACE_MAC(interface)[1],
                 INTERFACE_MAC(interface)[2], INTERFACE_MAC(interface)[3],
                 INTERFACE_MAC(interface)[4], INTERFACE_MAC(interface)[5]);
+    } else {
+        printf("\t l2 mode = %s", intf_l2_mode_str(IF_L2_Mode(interface)));
     }
 }
 
