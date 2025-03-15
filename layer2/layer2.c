@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <stdio.h>
 #include "communication.h"  
+#include "net.h"
 
 
 
@@ -169,33 +170,6 @@ bool_t arp_table_entry_addition(arp_table_t *arp_table, arp_entries_t *arp_entry
 
 
 
-// void
-// arp_table_update_from_arp_reply(arp_table_t *arp_table, 
-//     arpheader_t *arp_hdr, interface_t *iif) {
-
-//         unsigned int src_ip = 0 ; 
-//         assert(arp_hdr->op_code == ARP_REPLY);
-        
-//         arp_entries_t *arp_entry = calloc(1, sizeof(arp_entries_t));
-
-//         src_ip = htonl(arp_hdr->src_ip);
-
-//         inet_ntop(AF_INET, &src_ip, arp_entry->ip_address.ip_address, 16);
-//         arp_entry->ip_address.ip_address[15] = '\0';
-
-//         memcpy(arp_entry->mac_address.mac_address, arp_hdr->sender_mac.mac_address, sizeof(mac_address_t));
-
-//         strncpy(arp_entry->oif_name, iif->if_name, IF_NAME_SIZE);
-
-//         bool_t rc = arp_table_entry_addition(arp_table, arp_entry);
-
-//         if (rc == FALSE) {
-//             printf("Error: Failed to add ARP entry for IP: %s\n", arp_entry->ip_address.ip_address);
-//             free(arp_entry);
-//         }
-        
-//     }
-
 
 void arp_table_update_from_arp_reply(arp_table_t *arp_table, 
     arpheader_t *arp_hdr, interface_t *iif) {
@@ -276,3 +250,21 @@ void layer2_frame_recv(node_t *node, interface_t *interface,
             }
         }
     
+void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode) {
+    intf_l2_mode_t intf_l2_mode;
+    
+    if (strncmp(l2_mode,"access", strlen("access")) == 0) {
+        intf_l2_mode = ACCESS;
+    } else if (strncmp(l2_mode, "trunk", strlen("trunk")) == 0) {
+        intf_l2_mode = TRUNK;
+    } else {
+        assert(0);
+    }
+}
+
+
+void node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2_mode) {
+    interface_t *interface = get_node_intf_by_name(node, intf_name);
+    assert(interface);
+    interface_set_l2_mode(node,interface, intf_l2_mode_str( intf_l2_mode));
+}

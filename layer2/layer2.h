@@ -140,3 +140,7 @@ SET_COMMON_ETH_FCS(ethernetHeader_t *ethernet_hdr,
         ETH_FCS(ethernet_hdr, payload_size) = new_fcs;
     
 }
+
+
+void
+node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2_mode);

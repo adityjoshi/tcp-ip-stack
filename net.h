@@ -45,9 +45,30 @@ init_node_nw_properties_(node_nw_properties_t *node_nw_prop) {
 }
 
 
+typedef enum {
+  ACCESS,
+  TRUNK,
+  L2_MODE_UNKNOWN
+} intf_l2_mode_t;
+
+static inline char *intf_l2_mode_str(intf_l2_mode_t intf_l2_mode) {
+  switch(intf_l2_mode) {
+    case ACCESS:
+      return "access";
+    case TRUNK:
+      return "trunk";
+    default:
+      return "L2_mode_unknown";
+
+  }
+}
+
+
 typedef struct interface_nw_properties_ {
   /* L2 properties */
   mac_address_t mac_add;
+  intf_l2_mode_t intf_l2_mode; // if ip address is configured to this interface then it should be set to unknown state 
+  
   /* L3 properties */
   bool_t is_ip_address_config;
   ip_address_t ip_add;
