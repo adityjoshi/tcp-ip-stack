@@ -7,7 +7,7 @@
 typedef struct mac_table_entries {
     mac_address_t mac_address;
     char oif_name[IF_NAME_SIZE];
-    glthread_t mac_glue;
+    glthread_t mac_entry_glue;
 } mac_table_entries_t;
 
 
@@ -17,6 +17,7 @@ typedef struct mac_table_ {
     glthread_t mac_entries;
 } mac_table_t;
 
+GLTHREAD_TO_STRUCT(mac_entry_glue_to_mac_entry, mac_table_entries_t, mac_entry_glue);
 
 
 void init_mac_table(mac_table_t **mac_table) {
@@ -35,4 +36,9 @@ mac_table_entries_t *mac_table_entries_lookup(mac_table_t *mac_table, char *mac)
         }
     } ITERATE_GLTHREAD_END(&mac_table->mac_entries,curr);
     return NULL;
+}
+
+void delete_mac_entry(mac_table_t *mac_table, char *mac) {
+    mac_table_entries_t *mac_entry = mac_table_entries_lookup(mac_table,mac);
+    
 }
