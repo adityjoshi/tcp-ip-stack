@@ -1,4 +1,4 @@
-#include "glthread.h"
+#include "gluethread/glthread.h"
 #include "net.h"
 #include "graph.h"
 
