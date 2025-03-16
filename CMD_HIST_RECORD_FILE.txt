@@ -74,3 +74,4 @@ run node R0_re resolve-arp 20.1.1.2
 show node R0_re arp
 show topology
 show topology
+.
