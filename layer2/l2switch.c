@@ -62,5 +62,11 @@ bool_t add_mac_table_entry (mac_table_t *mac_table, mac_table_entries_t *mac_tab
     if (mac_table_entry_old && IS_MAC_TABLE_ENTRY_EQUAL(mac_table_entry_old, mac_table_entries)) {
         return FALSE;
     }
+    if (mac_table_entry_old) {
+        delete_mac_entry(mac_table, mac_table_entries->mac_address.mac_address);
+    }
+    init_glthread(&mac_table_entries->mac_entry_glue);  
+    glthread_add_next(&mac_table->mac_entries, &mac_table_entries->mac_entry_glue);
+    return TRUE ; 
 }
 
