@@ -70,3 +70,22 @@ bool_t add_mac_table_entry (mac_table_t *mac_table, mac_table_entries_t *mac_tab
     return TRUE ; 
 }
 
+
+
+void dump_mac_table(mac_table_t *mac_table) {
+    glthread_t *curr;
+    mac_table_entries_t *mac_entry;
+
+    ITERATE_GLTHREAD_BEGIN(&mac_table->mac_entries,curr) {
+        mac_entry = mac_entry_glue_to_mac_entry(curr);
+        printf("\tMAC : %u:%u:%u:%u:%u:%u   | Intf : %s\n", 
+            mac_entry->mac_address.mac_address[0], 
+            mac_entry->mac_address.mac_address[1],
+            mac_entry->mac_address.mac_address[2],
+            mac_entry->mac_address.mac_address[3], 
+            mac_entry->mac_address.mac_address[4],
+            mac_entry->mac_address.mac_address[5],
+            mac_entry->oif_name);
+    } ITERATE_GLTHREAD_END(&mac_table->mac_entries,curr);
+}
+
