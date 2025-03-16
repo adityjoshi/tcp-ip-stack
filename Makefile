@@ -1,47 +1,3 @@
-
-
-# CC = gcc
-# CFLAGS = -arch arm64 -g
-# TARGET = test.exe
-# LIBS = -lpthread -L ./CommandParser -lcli
-# OBJS = gluethread/glthread.o \
-#        graph.o \
-#        topologies.o \
-#        net.o
-
-# $(TARGET): testapp.o $(OBJS) CommandParser/libcli.a
-# 	$(CC) $(CFLAGS) testapp.o $(OBJS) -o $(TARGET) $(LIBS)
-
-# testapp.o: testapp.c
-# 	$(CC) $(CFLAGS) -c testapp.c -o testapp.o
-
-# gluethread/glthread.o: gluethread/glthread.c
-# 	$(CC) $(CFLAGS) -c -I gluethread gluethread/glthread.c -o gluethread/glthread.o
-
-# graph.o: graph.c
-# 	$(CC) $(CFLAGS) -c -I . graph.c -o graph.o
-
-# topologies.o: topologies.c
-# 	$(CC) $(CFLAGS) -c -I . topologies.c -o topologies.o
-
-# net.o: net.c
-# 	$(CC) $(CFLAGS) -c -I . net.c -o net.o
-
-# CommandParser/libcli.a:
-# 	(cd CommandParser; $(MAKE))
-
-# clean:
-# 	rm -f *.o
-# 	rm -f gluethread/glthread.o
-# 	rm -f $(TARGET)
-# 	(cd CommandParser; $(MAKE) clean)
-
-# all:
-# 	$(MAKE)
-# 	(cd CommandParser; $(MAKE))
-
-
-
 CC=gcc
 CFLAGS=-g
 TARGET:test.exe CommandParser/libcli.a 
@@ -53,7 +9,7 @@ OBJS=gluethread/glthread.o \
 		  layer2/layer2.o  \
 		  nwcli.o		   \
 		  utils.o		   \
-		  layer2\l2switch.o \
+		  layer2/l2switch.o \
 		  communication.o
 		  
 
