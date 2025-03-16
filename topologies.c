@@ -3,6 +3,9 @@
 #include "communication.h"
 extern void
 network_start_packet_receiver_thread(graph_t *topo);
+
+extern void node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2_mode);
+
 graph_t * build_first_topo() {
 
     // add switch in layer 2 for communication 
@@ -128,10 +131,37 @@ build_simple_l2_switch_topo(){
 #endif
 
 
+graph_t *graph = create_new_graph("L2 switch topology");
+node_t *H1 = create_new_node(graph, "H1");
+node_t *H2 = create_new_node(graph, "H2");  
+node_t *H3 = create_new_node(graph, "H3");
+node_t *H4 = create_new_node(graph, "H4");
+node_t *L2Sw = create_new_node(graph, "L2Sw");
+
+insert_link_between_node(H1, L2Sw, "eth0/5", "eth0/4", 1);
+insert_link_between_node(H2, L2Sw, "eth0/8", "eth0/3", 1);
+insert_link_between_node(H3, L2Sw, "eth0/6", "eth0/2", 1);
+insert_link_between_node(H4, L2Sw, "eth0/7", "eth0/1", 1);
+
+node_set_loopback_address(H1, "122.1.1.1");
+node_set_interface_ip_address(H1, "eth0/5", "10.1.1.2",24);
+
+node_set_loopback_address(H2, "122.1.1.2");
+node_set_interface_ip_address(H1, "eth0/5", "10.1.1.4",24);
+
+node_set_loopback_address(H3, "122.1.1.3");
+node_set_interface_ip_address(H1, "eth0/5", "10.1.1.1",24);
+
+node_set_loopback_address(H4, "122.1.1.4");
+node_set_interface_ip_address(H1, "eth0/5", "10.1.1.3",24);
 
 
+node_set_intf_l2_mode(L2Sw, "eth0/1", ACCESS);
+node_set_intf_l2_mode(L2Sw, "eth0/2", ACCESS);
+node_set_intf_l2_mode(L2Sw, "eth0/3", ACCESS);  
+node_set_intf_l2_mode(L2Sw, "eth0/4", ACCESS);
 
-
-
+network_start_packet_receiver_thread(graph);
+return graph; 
 
 }
