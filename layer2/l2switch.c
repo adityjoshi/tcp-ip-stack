@@ -48,5 +48,19 @@ void delete_mac_entry(mac_table_t *mac_table, char *mac) {
 }
 
 
-bool_t add_mac_table_entry (mac_table_t *mac_table, mac_table_entries_t *mac_table_entries)
+/*
+macro
+*/
+
+#define IS_MAC_TABLE_ENTRY_EQUAL(mac_entry1, mac_entry2) \
+    (strncmp(mac_entry1->mac_address.mac_address,mac_entry2->mac_address.mac_address, sizeof(mac_address_t)) == 0 && \
+    strncmp(mac_entry1->oif_name, mac_entry2->oif_name, IF_NAME_SIZE) == 0)
+
+
+bool_t add_mac_table_entry (mac_table_t *mac_table, mac_table_entries_t *mac_table_entries) {
+    mac_table_entries_t *mac_table_entry_old = mac_table_entries_lookup(mac_table, mac_table_entries->mac_address.mac_address);
+    if (mac_table_entry_old && IS_MAC_TABLE_ENTRY_EQUAL(mac_table_entry_old, mac_table_entries)) {
+        return FALSE;
+    }
+}
 
