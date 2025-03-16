@@ -16,3 +16,10 @@ typedef struct mac_table_entries {
 typedef struct mac_table_ {
     glthread_t mac_entries;
 } mac_table_t;
+
+
+
+void init_mac_table(mac_table_t **mac_table) {
+    *mac_table = calloc(1, sizeof(mac_table_t));
+    init_glthread(&(*mac_table)->mac_entries);
+}
