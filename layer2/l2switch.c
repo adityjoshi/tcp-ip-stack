@@ -1,6 +1,7 @@
 #include "gluethread/glthread.h"
 #include "net.h"
 #include "graph.h"
+#include <stdio.h>
 
 
 
