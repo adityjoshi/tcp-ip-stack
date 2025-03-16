@@ -24,6 +24,15 @@ void init_mac_table(mac_table_t **mac_table) {
     init_glthread(&(*mac_table)->mac_entries);
 }
 
-mac_table_entries_t *mac_table_entries_lookup(mac_table_entries_t *mac_table, char *mac) {
-    
+mac_table_entries_t *mac_table_entries_lookup(mac_table_t *mac_table, char *mac) {
+    glthread_t *curr;
+    mac_table_entries_t *mac_table_entry;
+
+    ITERATE_GLTHREAD_BEGIN(&mac_table->mac_entries,curr) {
+        mac_table_entry = mac_entry_glue_to_mac_entry(curr);
+        if (strncmp(mac_table_entry->mac_address.mac_address, mac, sizeof(mac_address_t)) == 0) {
+            return mac_table_entry;
+        }
+    } ITERATE_GLTHREAD_END(&mac_table->mac_entries,curr);
+    return NULL;
 }
