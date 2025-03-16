@@ -99,6 +99,7 @@ init_interface_nw_properties_(interface_nw_properties_t *interface_nw_prop) {
 #define IS_INTF_L3_MODE(intf_ptr)     (intf_ptr->interface_nw_props.is_ip_address_config == TRUE) // returns true if the interface is in L3 mode
 #define NODE_ARP_TABLE(node_ptr)    (node_ptr->node_network_prop.arp_table) // returns the pointer to the arp table of the node
 #define IF_L2_Mode(intf_ptr) (intf_ptr->interface_nw_props.intf_l2_mode) // returns the L2 mode of the interface
+#define NODE_MAC_TABLE(node_ptr) (node_ptr->node_network_prop.mac_table)
 /*
  *
  *
