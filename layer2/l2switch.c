@@ -23,3 +23,7 @@ void init_mac_table(mac_table_t **mac_table) {
     *mac_table = calloc(1, sizeof(mac_table_t));
     init_glthread(&(*mac_table)->mac_entries);
 }
+
+mac_table_entries_t *mac_table_entries_lookup(mac_table_entries_t *mac_table, char *mac) {
+    
+}
