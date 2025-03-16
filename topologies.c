@@ -143,17 +143,21 @@ insert_link_between_node(H2, L2Sw, "eth0/8", "eth0/3", 1);
 insert_link_between_node(H3, L2Sw, "eth0/6", "eth0/2", 1);
 insert_link_between_node(H4, L2Sw, "eth0/7", "eth0/1", 1);
 
+
 node_set_loopback_address(H1, "122.1.1.1");
-node_set_interface_ip_address(H1, "eth0/5", "10.1.1.2",24);
+node_set_intf_ip_address(H1, "eth0/5", "10.1.1.2", 24);
+
 
 node_set_loopback_address(H2, "122.1.1.2");
-node_set_interface_ip_address(H1, "eth0/8", "10.1.1.4",24);
+node_set_intf_ip_address(H2, "eth0/8", "10.1.1.4", 24);
+
 
 node_set_loopback_address(H3, "122.1.1.3");
-node_set_interface_ip_address(H1, "eth0/6", "10.1.1.1",24);
+node_set_intf_ip_address(H3, "eth0/6", "10.1.1.1", 24);
+
 
 node_set_loopback_address(H4, "122.1.1.4");
-node_set_interface_ip_address(H1, "eth0/7", "10.1.1.3",24);
+node_set_intf_ip_address(H4, "eth0/7", "10.1.1.3", 24);
 
 
 node_set_intf_l2_mode(L2Sw, "eth0/1", ACCESS);
