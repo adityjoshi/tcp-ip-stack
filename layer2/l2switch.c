@@ -48,3 +48,5 @@ void delete_mac_entry(mac_table_t *mac_table, char *mac) {
 }
 
 
+bool_t add_mac_table_entry (mac_table_t *mac_table, mac_table_entries_t *mac_table_entries)
+
