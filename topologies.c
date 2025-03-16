@@ -147,13 +147,13 @@ node_set_loopback_address(H1, "122.1.1.1");
 node_set_interface_ip_address(H1, "eth0/5", "10.1.1.2",24);
 
 node_set_loopback_address(H2, "122.1.1.2");
-node_set_interface_ip_address(H1, "eth0/5", "10.1.1.4",24);
+node_set_interface_ip_address(H1, "eth0/8", "10.1.1.4",24);
 
 node_set_loopback_address(H3, "122.1.1.3");
-node_set_interface_ip_address(H1, "eth0/5", "10.1.1.1",24);
+node_set_interface_ip_address(H1, "eth0/6", "10.1.1.1",24);
 
 node_set_loopback_address(H4, "122.1.1.4");
-node_set_interface_ip_address(H1, "eth0/5", "10.1.1.3",24);
+node_set_interface_ip_address(H1, "eth0/7", "10.1.1.3",24);
 
 
 node_set_intf_l2_mode(L2Sw, "eth0/1", ACCESS);
