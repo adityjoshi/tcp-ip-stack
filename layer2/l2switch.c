@@ -40,5 +40,11 @@ mac_table_entries_t *mac_table_entries_lookup(mac_table_t *mac_table, char *mac)
 
 void delete_mac_entry(mac_table_t *mac_table, char *mac) {
     mac_table_entries_t *mac_entry = mac_table_entries_lookup(mac_table,mac);
-    
+    if (!mac_entry) {
+        return ; 
+    }
+    remove_glthread(&mac_entry->mac_entry_glue);
+    free(mac_entry);
 }
+
+
