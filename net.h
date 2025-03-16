@@ -24,12 +24,15 @@ typedef struct mac_address_ {
 
 //forward declaration
 typedef struct arp_table_ arp_table_t;
+typedef struct mac_table_ mac_table_t; 
+
 extern void init_arp_table(arp_table_t **arp_table);
 
 typedef struct node_nw_properties_ {
 
   // layer 2 config 
   arp_table_t *arp_table; 
+  mac_table_t *mac_table;
   // layer 3 config 
   bool_t is_loopback_address_config ; 
   ip_address_t loopback_addr;
