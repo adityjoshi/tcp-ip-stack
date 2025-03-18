@@ -133,7 +133,13 @@ static void l2_switch_forward_frame(node_t *node, interface_t *interface, char *
     mac_table_entries_lookup(NODE_MAC_TABLE(node), ethernet_header->dest.mac_address);
 
     if (!mac_table_entry) {
-        send_packet_flodd(node, interface, pkt, pkt_size);
+        send_pkt_flood(node, interface, pkt, pkt_size);
         return ;
     }
+    char *oif_name = mac_table_entry->oif_name;
+    interface_t *oif = get_node_if_by_name(node, oif_name);
+    if (!oif) {
+        return ;
+    }
+    send_packet_out(pkt, pkt_size, oif);
 }
