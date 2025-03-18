@@ -3,7 +3,7 @@
 #include "graph.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "layer2/layer2.h"
 
 typedef struct mac_table_entries {
     mac_address_t mac_address;
@@ -91,9 +91,12 @@ void dump_mac_table(mac_table_t *mac_table) {
 }
 
 
-// void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
+void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
 
-// }
+    node_t *node = interface->att_node;
+    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+
+}
 
 
 static void l2_switch_perform_mac_learning(node_t *node, char *src_mac, char *if_name) {
