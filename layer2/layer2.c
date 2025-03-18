@@ -258,6 +258,39 @@ free(arp_entry);
                     printf("L2 frame has been rejected");
                     return ;
                 }
+
+                printf("L2 frame accepted \n");
+
+                if (IS_INTF_L3_MODE(interface)) {
+                   
+                    switch (ethernet_header->type) {
+                        case ARP_MESSAGE:
+                        {
+                            arpheader_t *arp_hdr = (arpheader_t *)ethernet_header->payload;
+                            switch (arp_hdr->op_code) {
+                                case ARP_BROAD_REQ:
+                                process_arp_broadcast_message_req(node, interface, ethernet_header);
+                                break;
+                                case ARP_REPLY:
+                                process_arp_reply_message(node, interface, ethernet_header);
+                                break;
+                                default:
+                                break;
+                            }
+                        }
+                        break;
+                        default:
+                        break;
+                    }
+                }
+
+                else if (IS_INTF_L2_MODE(interface) == ACCESS || IS_INTF_L2_MODE(interface) == TRUNK ) {
+                    layer2_switch_recv_frame(interface, pkt, pkt_size);
+                } else {
+                    return ; 
+                }
+
+
             }
         
     
