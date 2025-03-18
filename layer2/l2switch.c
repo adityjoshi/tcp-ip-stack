@@ -96,6 +96,12 @@ void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pk
     node_t *node = interface->att_node;
     ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
 
+    char *dst_mac = ethernet_header->dest.mac_address;
+    char *src_add = ethernet_header->src.mac_address;
+
+    l2_switch_perform_mac_learning(node,src_add,interface->if_name);
+    l2_swithc_perform_forwarding(node, interface, pkt, pkt_size);   
+
 }
 
 
