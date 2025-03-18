@@ -96,4 +96,8 @@ void dump_mac_table(mac_table_t *mac_table) {
 // }
 
 
-
+static void l2_switch_perform_mac_learning(node_t *node, char *src_mac, char *if_name) {
+    bool_t rc ;
+    mac_table_entries_t *mac_table_entry = calloc(1, sizeof(mac_table_entries_t));
+    memcpy(mac_table_entry->mac_address.mac_address,src_mac, sizeof(mac_address_t));    
+}
