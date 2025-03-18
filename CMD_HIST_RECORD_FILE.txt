@@ -75,3 +75,4 @@ show node R0_re arp
 show topology
 show topology
 .
+show node H1 mac

@@ -27,6 +27,7 @@ typedef struct arp_table_ arp_table_t;
 typedef struct mac_table_ mac_table_t; 
 
 extern void init_arp_table(arp_table_t **arp_table);
+extern void init_mac_table(mac_table_t **mac_table);
 
 typedef struct node_nw_properties_ {
 
@@ -44,6 +45,7 @@ init_node_nw_properties_(node_nw_properties_t *node_nw_prop) {
   node_nw_prop->is_loopback_address_config = FALSE; 
   memset(node_nw_prop->loopback_addr.ip_address,0,16);
   init_arp_table(&(node_nw_prop->arp_table));
+  init_mac_table(&(node_nw_prop->mac_table));
 
 }
 
