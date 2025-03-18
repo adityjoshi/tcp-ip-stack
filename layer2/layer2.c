@@ -287,7 +287,7 @@ free(arp_entry);
                 else if (IS_INTF_L2_MODE(interface) == ACCESS || IS_INTF_L2_MODE(interface) == TRUNK ) {
                     layer2_switch_recv_frame(interface, pkt, pkt_size);
                 } else {
-                    return ; 
+                    return ; /*do nothing, drop the packet*/
                 }
 
 
