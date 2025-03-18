@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "layer2/layer2.h"
+#include "communication.h"
 
 typedef struct mac_table_entries {
     mac_address_t mac_address;
@@ -114,5 +115,17 @@ static void l2_switch_perform_mac_learning(node_t *node, char *src_mac, char *if
     rc  = add_mac_table_entry(NODE_MAC_TABLE(node), mac_table_entry);
     if (rc == FALSE) {
         free(mac_table_entry);
+    }
+}
+
+
+
+static void l2_switch_forward_frame(node_t *node, interface_t *interface, char *pkt, unsigned int pkt_size) {
+
+    /*if dst add is broadcast add then flood the frame*/
+    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+    if (IS_MAC_BROADCAST_ADDR(ethernet_header->dest.mac_address)) {
+        send_pkt_flood(node, interface, pkt, pkt_size);
+        return ;
     }
 }
