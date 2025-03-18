@@ -223,32 +223,43 @@ free(arp_entry);
         } ITERATE_GLTHREAD_END(&arp_table->arp_entries, curr);
     }
 
+    extern void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size);
 
 
-void layer2_frame_recv(node_t *node, interface_t *interface,
-        char *pkt, unsigned int pkt_size) {
-            ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
-            switch (ethernet_header ->type) {
-                case ARP_MESSAGE:
-                {
-                    arpheader_t *arp_hdr = (arpheader_t *)ethernet_header->payload;
-                    switch (arp_hdr->op_code) {
-                        case ARP_BROAD_REQ:
-                        process_arp_broadcast_message_req(node, interface, ethernet_header);
-                        break;
-                        case ARP_REPLY:
-                        process_arp_reply_message(node, interface, ethernet_header);
-                        break;
-                        default:
-                        break;
-                    }
-                }
-                break;
-                default:
-                break;
+// void layer2_frame_recv(node_t *node, interface_t *interface,
+//         char *pkt, unsigned int pkt_size) {
+//             ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+//             switch (ethernet_header ->type) {
+//                 case ARP_MESSAGE:
+//                 {
+//                     arpheader_t *arp_hdr = (arpheader_t *)ethernet_header->payload;
+//                     switch (arp_hdr->op_code) {
+//                         case ARP_BROAD_REQ:
+//                         process_arp_broadcast_message_req(node, interface, ethernet_header);
+//                         break;
+//                         case ARP_REPLY:
+//                         process_arp_reply_message(node, interface, ethernet_header);
+//                         break;
+//                         default:
+//                         break;
+//                     }
+//                 }
+//                 break;
+//                 default:
+//                 break;
                 
+//             }
+//         }
+
+        void layer2_frame_recv(node_t *node, interface_t *interface,
+            char *pkt, unsigned int pkt_size) {
+                ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+                if (l2_frame_recv_qualify_on_interface(interface,ethernet_header) == FALSE) {
+                    printf("L2 frame has been rejected");
+                    return ;
+                }
             }
-        }
+        
     
 void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode) {
     intf_l2_mode_t intf_l2_mode;
