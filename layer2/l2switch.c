@@ -100,4 +100,6 @@ static void l2_switch_perform_mac_learning(node_t *node, char *src_mac, char *if
     bool_t rc ;
     mac_table_entries_t *mac_table_entry = calloc(1, sizeof(mac_table_entries_t));
     memcpy(mac_table_entry->mac_address.mac_address,src_mac, sizeof(mac_address_t));    
+    strncpy(mac_table_entry->oif_name, if_name, IF_NAME_SIZE);
+    mac_table_entry->oif_name[IF_NAME_SIZE - 1] = '\0';
 }
