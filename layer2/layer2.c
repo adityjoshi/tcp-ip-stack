@@ -268,3 +268,5 @@ void node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2
     assert(interface);
     interface_set_l2_mode(node,interface, intf_l2_mode_str( intf_l2_mode));
 }
+
+
