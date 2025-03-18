@@ -129,6 +129,7 @@ static void l2_switch_forward_frame(node_t *node, interface_t *interface, char *
         return ;
     }
 
+    /*check mac table to forward the frame*/
     mac_table_entries_t *mac_table_entry = 
     mac_table_entries_lookup(NODE_MAC_TABLE(node), ethernet_header->dest.mac_address);
 
