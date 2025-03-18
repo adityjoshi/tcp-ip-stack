@@ -128,4 +128,12 @@ static void l2_switch_forward_frame(node_t *node, interface_t *interface, char *
         send_pkt_flood(node, interface, pkt, pkt_size);
         return ;
     }
+
+    mac_table_entries_t *mac_table_entry = 
+    mac_table_entries_lookup(NODE_MAC_TABLE(node), ethernet_header->dest.mac_address);
+
+    if (!mac_table_entry) {
+        send_packet_flodd(node, interface, pkt, pkt_size);
+        return ;
+    }
 }
