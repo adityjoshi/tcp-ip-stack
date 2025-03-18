@@ -91,6 +91,9 @@ void dump_mac_table(mac_table_t *mac_table) {
 }
 
 
-void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
+// void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
 
-}
+// }
+
+
+
