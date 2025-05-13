@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "utils.h"
+#include "tcpconst.h"
 
 #pragma pack (push,1) // to avoid padding done by the compiler 
 
@@ -72,6 +73,9 @@ void dump_arp_table(arp_table_t *arp_table);
 
 
 
+
+
+
 /*
 To check if the we can accept the packet or not arrived on the interface working in the layer 3 mode
 */
@@ -124,6 +128,18 @@ typedef struct vlan_ethernet_hdr_{
 
 
 
+static inline vlan_8021q_hdr_t * is_pkt_vlan_tagged(ethernetHeader_t *ethernet_hdr) {
+
+
+vlan_8021q_hdr_t *vlan_8021q_hdr = (vlan_8021q_hdr_t *)((char *)ethernet_hdr + (sizeof(mac_address_t) * 2));
+
+if(vlan_8021q_hdr->tpid == VLAN_8021Q_PROTO) {
+    return vlan_8021q_hdr;
+} else {
+    return NULL;
+}
+
+}
 
 
 
