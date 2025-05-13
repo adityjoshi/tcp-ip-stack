@@ -91,7 +91,35 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
 }
 
 
+/*
+*
+*           VLAN SUPPORT 
+*
+*/
 
+#pragma pack (push,1) // to avoid padding done by the compiler
+
+typedef struct vlan_8021q_hdr_ {
+    unsigned short tpid; /* = 0x8100*/
+    short tci_pcp : 3; /* inital 4 bits not used*/
+    short tci_dei : 1;  /*Not used*/
+    short tci_vid : 12; /*tagged vlan id */
+} vlan_8021q_hdr_t;
+
+typedef struct vlan_ethernet_hdr_{
+
+    mac_address_t dst_mac;
+    mac_address_t src_mac;
+    vlan_8021q_hdr_t vlan_8021q_hdr;
+    unsigned short type;
+    char payload[248];  /*Max allowed 1500*/
+    unsigned int FCS;
+} vlan_ethernet_hdr_t;
+
+
+
+
+#pragma pack(pop)
 
 
 
