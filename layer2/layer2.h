@@ -143,6 +143,10 @@ if(vlan_8021q_hdr->tpid == VLAN_8021Q_PROTO) {
 
 
 
+static inline unsigned int GET_802_1Q_VLAN_ID(vlan_8021q_hdr_t *vlan_8021q_hdr) {}
+
+
+
 /*
 
 MACROS 
