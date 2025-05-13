@@ -8,7 +8,6 @@
 #pragma pack (push,1) // to avoid padding done by the compiler 
 
 
-
 typedef struct arpheader_ {
     short hardware_type; /*1 for ethernet cable*/
     short protocol_type; /*0x0800 for ipv4*/
