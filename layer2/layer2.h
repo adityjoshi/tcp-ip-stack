@@ -150,10 +150,17 @@ static inline unsigned int GET_802_1Q_VLAN_ID(vlan_8021q_hdr_t *vlan_8021q_hdr) 
 
 
 /*
-
+*
+*
+*
 MACROS 
-
+*
+*
+*
 */
+
+
+
 #define ETH_HDR_SIZE_EXCL_PAYLOAD   \
     (sizeof(ethernetHeader_t) - sizeof(((ethernetHeader_t *)0)->payload))
 
@@ -169,12 +176,23 @@ MACROS
 #define VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD \
     (sizeof(vlan_ethernet_hdr_t) - sizeof(((vlan_ethernet_hdr_t *)0)->payload))
 
+
+
+#define GET_COMMON_ETH_FCS(eth_hdr_ptr, payload_size) \
+(is_pkt_vlan_tagged(eth_hdr_ptr) ? VLAN_ETH_FCS(eth_hdr_ptr, payload_size) : ETH_FCS(eth_hdr_ptr, payload_size))
+
+
+
 static inline char *GET_ETHERNET_HEADER_PAYLOAD(ethernetHeader_t *ethernet_header) {
     return ethernet_header->payload;
 }
 
 static inline char *GET_ETHERNET_HDR_PAYLOAD(ethernetHeader_t *ethernet_hdr) {
-    
+    if (is_pkt_vlan_tagged(ethernet_hdr)) {
+        return ((vlan_ethernet_hdr_t *)(ethernet_hdr))->payload;
+    } else {
+        return ethernet_hdr->payload;
+    }
 }
 
 
