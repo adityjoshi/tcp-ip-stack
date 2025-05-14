@@ -166,10 +166,14 @@ MACROS
     (*(unsigned int *)(((char *)(((vlan_ethernet_hdr_t *)vlan_eth_hdr_ptr)->payload)+payload_size)))
 
 
+#define VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD \
+    (sizeof(vlan_ethernet_hdr_t) - sizeof(((vlan_ethernet_hdr_t *)0)->payload))
 
 static inline char *GET_ETHERNET_HEADER_PAYLOAD(ethernetHeader_t *ethernet_header) {
     return ethernet_header->payload;
 }
+
+static inline char *GET_ETHERNET_HDR_PAYLOAD(ethernetHeader_t *ethernet_hdr);
 
 
 
