@@ -162,6 +162,11 @@ MACROS
 #endif /* __LAYER2__ */
 
 
+#define VLAN_ETH_FCS(vlan_eth_hdr_ptr, payload_size) \
+    (*(unsigned int *)(((char *)(((vlan_ethernet_hdr_t *)vlan_eth_hdr_ptr)->payload)+payload_size)))
+
+
+
 static inline char *GET_ETHERNET_HEADER_PAYLOAD(ethernetHeader_t *ethernet_header) {
     return ethernet_header->payload;
 }
