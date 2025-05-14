@@ -215,10 +215,7 @@ static inline unsigned int GET_ETH_HDR_SIZE_EXCL_PAYLOAD(ethernetHeader_t *ether
     }
 }
 
-static inline ethernetHeader_t * ALLOC_ETH_HDR_WITH_PAYLOAD(char *pkt, unsigned int pkt_size) {
-    char *temp  = calloc(1, pkt_size);
-    memcpy(temp, pkt, pkt)
-}
+
                  
 
 
@@ -228,7 +225,7 @@ static inline ethernetHeader_t * ALLOC_ETH_HDR_WITH_PAYLOAD(char *pkt, unsigned 
     ethernetHeader_t *eth_hdr = (ethernetHeader_t *)(pkt-ETH_HDR_SIZE_EXCL_PAYLOAD);
     memset((char *)eth_hdr, 0, ETH_HDR_SIZE_EXCL_PAYLOAD);
     memcpy(eth_hdr->payload, temp, pkt_size);
-   // SET_COMMON_ETH_FCS(eth_hdr, pkt_size, 0);
+    SET_COMMON_ETH_FCS(eth_hdr, pkt_size, 0);
     free(temp);
     return eth_hdr;
 }
