@@ -206,6 +206,15 @@ static inline void SET_COMMON_ETH_FCS(ethernetHeader_t *ethernet_hdr,  unsigned 
     }
 }
 
+
+static inline unsigned int GET_ETH_HDR_SIZE_EXCL_PAYLOAD(ethernetHeader_t *ethernet_hdr) {
+    if (is_pkt_vlan_tagged(ethernet_hdr)) {
+        return VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD;
+    } else {
+        return ETH_HDR_SIZE_EXCL_PAYLOAD;
+    }
+}
+
                  
 
 
