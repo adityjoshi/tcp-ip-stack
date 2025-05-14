@@ -187,6 +187,7 @@ static inline char *GET_ETHERNET_HEADER_PAYLOAD(ethernetHeader_t *ethernet_heade
     return ethernet_header->payload;
 }
 
+
 static inline char *GET_ETHERNET_HDR_PAYLOAD(ethernetHeader_t *ethernet_hdr) {
     if (is_pkt_vlan_tagged(ethernet_hdr)) {
         return ((vlan_ethernet_hdr_t *)(ethernet_hdr))->payload;
@@ -195,7 +196,13 @@ static inline char *GET_ETHERNET_HDR_PAYLOAD(ethernetHeader_t *ethernet_hdr) {
     }
 }
 
+static inline void
 
+SET_COMMON_ETH_FCS(ethernetHeader_t *ethernet_hdr,  unsigned int payload_size,  unsigned int new_fcs) {
+    
+}
+
+                 
 
 
 static inline ethernetHeader_t * ALLOC_ETH_HDR_WITH_PAYLOAD(char *pkt, unsigned int pkt_size){ 
