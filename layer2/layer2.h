@@ -173,7 +173,9 @@ static inline char *GET_ETHERNET_HEADER_PAYLOAD(ethernetHeader_t *ethernet_heade
     return ethernet_header->payload;
 }
 
-static inline char *GET_ETHERNET_HDR_PAYLOAD(ethernetHeader_t *ethernet_hdr);
+static inline char *GET_ETHERNET_HDR_PAYLOAD(ethernetHeader_t *ethernet_hdr) {
+    
+}
 
 
 
