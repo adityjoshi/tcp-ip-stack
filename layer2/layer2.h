@@ -196,10 +196,14 @@ static inline char *GET_ETHERNET_HDR_PAYLOAD(ethernetHeader_t *ethernet_hdr) {
     }
 }
 
-static inline void
 
-SET_COMMON_ETH_FCS(ethernetHeader_t *ethernet_hdr,  unsigned int payload_size,  unsigned int new_fcs) {
-    
+
+static inline void SET_COMMON_ETH_FCS(ethernetHeader_t *ethernet_hdr,  unsigned int payload_size,  unsigned int new_fcs) {
+    if (is_pkt_vlan_tagged(ethernet_hdr)) {
+        VLAN_ETH_FCS(ethernet_hdr,payload_size) = new_fcs ; 
+    } else {
+        ETH_FCS(ethernet_hdr,payload_size) = new_fcs ; 
+    }
 }
 
                  
