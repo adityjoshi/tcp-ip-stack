@@ -215,6 +215,10 @@ static inline unsigned int GET_ETH_HDR_SIZE_EXCL_PAYLOAD(ethernetHeader_t *ether
     }
 }
 
+static inline ethernetHeader_t * ALLOC_ETH_HDR_WITH_PAYLOAD(char *pkt, unsigned int pkt_size) {
+    char *temp  = calloc(1, pkt_size);
+    memcpy(temp, pkt, pkt)
+}
                  
 
 
