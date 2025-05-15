@@ -1,5 +1,7 @@
 #ifndef __LAYER2__
 #define __LAYER2__
+
+
 #include "net.h"
 #include <stdlib.h>
 #include "graph.h"
@@ -243,3 +245,13 @@ SET_COMMON_ETH_FCS(ethernetHeader_t *ethernet_hdr,
 
 void
 node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2_mode);
+
+
+
+
+
+ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned int total_pkt_size, int vlan_id,  unsigned int *new_pkt_size);
+                    
+
+
+                     

@@ -314,3 +314,27 @@ void node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2
 }
 
 
+
+/*
+
+VLAN MANAGEMENT
+
+*/
+
+
+/*RETURN NEW PACKET SIZE IF THE VLAN IS TAGGED*/
+
+ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned int total_pkt_size, int vlan_id,  unsigned int *new_pkt_size) {
+    unsigned int payload_size = 0 ;
+    *new_pkt_size = 0;
+
+    vlan_8021q_hdr_t *vlan_8021q_hdr = is_pkt_vlan_tagged(ethernet_hdr);
+
+    if (vlan_8021q_hdr) {
+        payload_size = total_pkt_size - VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD;
+        vlan_8021q_hdr->tci_vid = (short)vlan_id;
+        SET_COMMON_ETH_FCS(ethernet_hdr, payload_size, 0);
+        *new_pkt_size = total_pkt_size;
+        return ethernet_hdr;
+    }
+}
