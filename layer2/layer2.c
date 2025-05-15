@@ -334,7 +334,7 @@ ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned 
         payload_size = total_pkt_size - VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD;
         vlan_8021q_hdr->tci_vid = (short)vlan_id;
         SET_COMMON_ETH_FCS(ethernet_hdr, payload_size, 0);
-        *new_pkt_size = total_pkt_size;
+        *new_pkt_size = total_pkt_size;  
         return ethernet_hdr;
     }
 }
