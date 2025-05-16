@@ -350,6 +350,7 @@ ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned 
 
     memset((char *)vlan_ethernet_hdr,0,VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD-sizeof(vlan_ethernet_hdr->FCS));
     memcpy(vlan_ethernet_hdr->dst_mac.mac_address,ethernet_hdr_old->dest.mac_address,sizeof(mac_address_t));
+    memcpy(vlan_ethernet_hdr->src_mac.mac_address, ethernet_hdr_old->src.mac_address,sizeof(mac_address_t));
 
 
 
