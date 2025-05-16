@@ -352,6 +352,13 @@ ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned 
     memcpy(vlan_ethernet_hdr->dst_mac.mac_address,ethernet_hdr_old->dest.mac_address,sizeof(mac_address_t));
     memcpy(vlan_ethernet_hdr->src_mac.mac_address, ethernet_hdr_old->src.mac_address,sizeof(mac_address_t));
 
+    /*802.1Q vlan hdr*/
+
+    vlan_ethernet_hdr->vlan_8021q_hdr.tpid = VLAN_8021Q_PROTO;
+    vlan_ethernet_hdr->vlan_8021q_hdr.tci_pcp = 0;
+    vlan_ethernet_hdr->vlan_8021q_hdr.tci_dei = 0;
+    vlan_ethernet_hdr->vlan_8021q_hdr.tci_vid = (short)vlan_id;
+
 
 
 
