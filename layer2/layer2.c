@@ -349,7 +349,7 @@ ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned 
     vlan_ethernet_hdr_t *vlan_ethernet_hdr =   (vlan_ethernet_hdr_t *)((char *)ethernet_hdr - sizeof(vlan_8021q_hdr_t));
 
     memset((char *)vlan_ethernet_hdr,0,VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD-sizeof(vlan_ethernet_hdr->FCS));
-    memcpy()
+    memcpy();
 
 
 
