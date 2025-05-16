@@ -372,6 +372,11 @@ ethernetHeader_t *untag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigne
     *new_pkt_size = 0;
 
     vlan_8021q_hdr_t *vlan_8021q_hdr = is_pkt_vlan_tagged(ethernet_hdr);
+
+    if (!vlan_8021q_hdr) {
+        *new_pkt_size = total_pkt_size;
+        return ethernet_hdr;
+    }
 }
                      
                    
