@@ -359,8 +359,9 @@ ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned 
     vlan_ethernet_hdr->vlan_8021q_hdr.tci_dei = 0;
     vlan_ethernet_hdr->vlan_8021q_hdr.tci_vid = (short)vlan_id;
 
+    vlan_ethernet_hdr->type = ethernet_hdr_old->type;
 
-
+     SET_COMMON_ETH_FCS((ethernetHeader_t *)vlan_ethernet_hdr, payload_size, 0 );
 
 
 }
