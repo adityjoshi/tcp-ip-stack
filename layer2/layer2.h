@@ -251,6 +251,7 @@ node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2_mode
 
 
 ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned int total_pkt_size, int vlan_id,  unsigned int *new_pkt_size);
+ethernetHeader_t *untag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned int total_pkt_size,  unsigned int *new_pkt_size);
                     
 
 

@@ -365,3 +365,11 @@ ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned 
      *new_pkt_size = VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD + payload_size;
      return (ethernetHeader_t *)vlan_ethernet_hdr;
 }
+
+
+
+ethernetHeader_t *untag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned int total_pkt_size,  unsigned int *new_pkt_size) {
+    
+}
+                     
+                   
