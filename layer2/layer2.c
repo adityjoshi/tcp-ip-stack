@@ -363,5 +363,5 @@ ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned 
 
      SET_COMMON_ETH_FCS((ethernetHeader_t *)vlan_ethernet_hdr, payload_size, 0 );
      *new_pkt_size = VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD + payload_size;
-    memcpy(vlan_ethernet_hdr->payload, ethernet_hdr_old->payload, payload_size);
+     
 }
