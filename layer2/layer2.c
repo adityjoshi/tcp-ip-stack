@@ -377,6 +377,19 @@ ethernetHeader_t *untag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigne
         *new_pkt_size = total_pkt_size;
         return ethernet_hdr;
     }
+
+    vlan_ethernet_hdr_t vlan_ethernet_hdr_old;
+    memcpy((char *)&vlan_ethernet_hdr_old,(char *)ethernet_hdr, VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD - sizeof(vlan_ethernet_hdr_old.FCS));
+
+    ethernet_hdr = (ethernetHeader_t *)((char *)ethernet_hdr + sizeof(vlan_8021q_hdr_t));
+    memcpy(ethernet_hdr->dest.mac_address, vlan_ethernet_hdr_old.dst_mac.mac_address, sizeof(mac_address_t));
+    memcpy(ethernet_hdr->src.mac_address, vlan_ethernet_hdr_old.src_mac.mac_address, sizeof(mac_address_t));
+    ethernet_hdr->type = vlan_ethernet_hdr_old.type;
+    unsigned int payload_size = total_pkt_size - VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD;    
+      SET_COMMON_ETH_FCS(ethernet_hdr, payload_size, 0);
+    
+    *new_pkt_size = total_pkt_size - sizeof(vlan_8021q_hdr_t);
+    return ethernet_hdr;
 }
                      
                    
