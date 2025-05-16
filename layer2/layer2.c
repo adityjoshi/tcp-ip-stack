@@ -328,6 +328,8 @@ ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned 
     unsigned int payload_size = 0 ;
     *new_pkt_size = 0;
 
+         /*If the pkt is already tagged, replace it*/
+
     vlan_8021q_hdr_t *vlan_8021q_hdr = is_pkt_vlan_tagged(ethernet_hdr);
 
     if (vlan_8021q_hdr) {
@@ -337,4 +339,20 @@ ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned 
         *new_pkt_size = total_pkt_size;  
         return ethernet_hdr;
     }
+
+
+    ethernetHeader_t *ethernet_hdr_old;
+    memcpy((char *)&ethernet_hdr_old, (char *)ethernet_hdr,ETH_HDR_SIZE_EXCL_PAYLOAD - sizeof(ethernet_hdr_old->FCS));
+
+    payload_size = total_pkt_size - ETH_HDR_SIZE_EXCL_PAYLOAD;
+
+    vlan_ethernet_hdr_t *vlan_ethernet_hdr =   (vlan_ethernet_hdr_t *)((char *)ethernet_hdr - sizeof(vlan_8021q_hdr_t));
+
+    memset((char *)vlan_ethernet_hdr,0,VLAN_ETH_HDR_SIZE_EXCL_PAYLOAD-sizeof(vlan_ethernet_hdr->FCS));
+    memcpy()
+
+
+
+
+
 }
