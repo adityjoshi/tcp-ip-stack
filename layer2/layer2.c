@@ -305,7 +305,18 @@ void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode)
         assert(0);
     }
 
-    
+    /*
+    Case 1 : If the interface is in L3 mode, then we need to set it to L2 mode.
+    So disable the ip and set it to the l2 mode 
+    */
+
+    if(IS_INTF_L3_MODE(interface)) {
+        interface->interface_nw_props.is_ipadd_config_backup = TRUE ; 
+        interface->interface_nw_props.is_ip_address_config = FALSE ; 
+        IF_L2_Mode(interface) = intf_l2_mode;
+        return ; 
+    }
+
 }
 
 

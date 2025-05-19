@@ -78,6 +78,7 @@ typedef struct interface_nw_properties_ {
   
   /* L3 properties */
   bool_t is_ip_address_config;
+  bool_t is_ipadd_config_backup;
   ip_address_t ip_add;
   char mask ; 
 } interface_nw_properties_t ; 
