@@ -304,6 +304,8 @@ void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode)
     } else {
         assert(0);
     }
+
+    
 }
 
 
