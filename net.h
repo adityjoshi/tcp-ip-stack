@@ -3,6 +3,7 @@
 #include <memory.h>
 #include <_string.h>
 #include "utils.h"
+#include "tcpconst.h"
 
 
 
@@ -71,8 +72,9 @@ static inline char *intf_l2_mode_str(intf_l2_mode_t intf_l2_mode) {
 
 typedef struct interface_nw_properties_ {
   /* L2 properties */
-  mac_address_t mac_add;
+  mac_address_t mac_add;  /**Mac are hard burnt in interface NIC*/
   intf_l2_mode_t intf_l2_mode; // if ip address is configured to this interface then it should be set to unknown state 
+   unsigned int vlans[MAX_VLAN_MEMBERSHIP];    /*If the interface is operating in Trunk mode, it can be a member of these many vlans*/
   
   /* L3 properties */
   bool_t is_ip_address_config;
