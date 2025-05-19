@@ -317,6 +317,13 @@ void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode)
         return ; 
     }
 
+    /*
+    Case 2 : If the interface is neither working l2 mode or it is working in l3 mode.
+    */
+
+    if (IF_L2_Mode(interface) ==  L2_MODE_UNKNOWN) {
+        IF_L2_Mode(interface) = intf_l2_mode;
+    }
 }
 
 
