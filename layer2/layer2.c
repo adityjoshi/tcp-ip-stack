@@ -307,10 +307,10 @@ void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode)
 }
 
 
-void node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2_mode) {
+void node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2_node) {
     interface_t *interface = get_node_if_by_name(node, intf_name);
     assert(interface);
-    interface_set_l2_mode(node,interface, intf_l2_mode_str( intf_l2_mode));
+    interface_set_l2_mode(node,interface, intf_l2_mode_str( intf_l2_node));
 }
 
 
