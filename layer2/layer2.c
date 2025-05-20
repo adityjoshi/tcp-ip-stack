@@ -348,8 +348,13 @@ remove all vlans from interface, user must enable vlan again  on interface
 */
 
 if (IF_L2_MODE(interface) == TRUNK && intf_l2_mode == ACCESS) {
+
     IF_L2_MODE(interface) == ACCESS; 
-    interface->interface_nw_props.is_ipadd_config_backup = FALSE ;
+   
+    unsigned int i = 0 ; 
+    for (i ; i<MAX_VLAN_MEMBERSHIP; i++) {
+        interface->interface_nw_props.vlans[i] = 0 ;  
+    }
 }
 
 }
