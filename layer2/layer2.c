@@ -327,10 +327,9 @@ void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode)
 
 
     /*
-Case 3: if the user operating in the same mode that the user entered then do nothign
-*/
-
-if (IF_L2_Mode(interface) == intf_l2_mode) {
+    Case 3: if the user operating in the same mode that the user entered then do nothign
+    */
+   if (IF_L2_Mode(interface) == intf_l2_mode) {
     return ;
 }
 
