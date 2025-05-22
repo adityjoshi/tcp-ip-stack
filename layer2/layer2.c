@@ -293,7 +293,11 @@ free(arp_entry);
 
             }
         
+
+void interface_set_vlan(node_t *node, interface_t *interface, unsigned int vlan_id) {
     
+}
+
 void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode) {
     intf_l2_mode_t intf_l2_mode;
     
