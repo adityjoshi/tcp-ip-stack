@@ -296,6 +296,26 @@ free(arp_entry);
 
 void interface_set_vlan(node_t *node, interface_t *interface, unsigned int vlan_id) {
     
+    /*
+    Case 1: if the interface has ip then can't set 
+    */
+   if (IS_INTF_L3_MODE(interface)) {
+    printf("Error : Interface %s : L3 mode enabled\n", interface->if_name);
+        return;
+   }
+
+   /*
+   Case 2 : can't set the vlan if the interface is not in l2 mode 
+   */
+
+   if (IF_L2_Mode(interface) != ACCESS && IF_L2_Mode(interface) != TRUNK) {
+    printf("Error : Interface %s : L2 mode not set\n", interface->if_name);
+        return;
+   }
+
+   /*
+   Case 3 : 
+   */
 }
 
 void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode) {
