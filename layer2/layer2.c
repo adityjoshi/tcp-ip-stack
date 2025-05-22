@@ -370,6 +370,12 @@ void node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2
 }
 
 
+void node_set_intf_vlan_membership(node_t *node, char *intf_name, unsigned int vlan_id) {
+    interface_t *interface = get_node_if_by_name(node, intf_name);
+
+}
+
+
 
 /*
 
