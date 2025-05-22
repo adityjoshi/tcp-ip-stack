@@ -314,8 +314,43 @@ void interface_set_vlan(node_t *node, interface_t *interface, unsigned int vlan_
    }
 
    /*
-   Case 3 : 
+   Case 3 :  Can set only one vlan on interface operating in ACCESS mode
    */
+
+    if(interface->interface_nw_props.intf_l2_mode == ACCESS){
+        
+        unsigned int i = 0, *vlan = NULL;    
+        for( ; i < MAX_VLAN_MEMBERSHIP; i++){
+            if(interface->interface_nw_props.vlans[i]){
+                vlan = &interface->interface_nw_props.vlans[i];
+            }
+        }
+        if(vlan){
+            *vlan = vlan_id;
+            return;
+        }
+        interface->interface_nw_props.vlans[0] = vlan_id;
+    }
+    /*case 4 : Add vlan membership on interface operating in TRUNK mode*/
+    if(interface->interface_nw_props.intf_l2_mode == TRUNK){
+
+        unsigned int i = 0, *vlan = NULL;
+
+        for( ; i < MAX_VLAN_MEMBERSHIP; i++){
+
+            if(!vlan && interface->interface_nw_props.vlans[i] == 0){
+                vlan = &interface->interface_nw_props.vlans[i];
+            }
+            else if(interface->interface_nw_props.vlans[i] == vlan_id){
+                return;
+            }
+        }
+        if(vlan){
+            *vlan = vlan_id;
+            return;
+        }
+        printf("Error : Interface %s : Max Vlan membership limit reached", interface->if_name);
+    }
 }
 
 void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode) {
