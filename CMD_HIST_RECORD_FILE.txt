@@ -76,3 +76,9 @@ show topology
 show topology
 .
 show node H1 mac
+.
+show topology
+.
+show topology
+show topology
+show topology

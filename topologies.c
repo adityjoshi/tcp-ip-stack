@@ -1,6 +1,7 @@
 #include "gluethread/glthread.h"
 #include "graph.h"
 #include "communication.h"
+#include "layer2/layer2.h"
 extern void
 network_start_packet_receiver_thread(graph_t *topo);
 

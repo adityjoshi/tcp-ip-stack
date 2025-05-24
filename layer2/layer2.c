@@ -284,7 +284,7 @@ free(arp_entry);
                     }
                 }
 
-                else if (IS_INTF_L2_MODE(interface) == ACCESS || IS_INTF_L2_MODE(interface) == TRUNK ) {
+                else if (IF_L2_Mode(interface) == ACCESS || IF_L2_Mode(interface) == TRUNK ) {
                     layer2_switch_recv_frame(interface, pkt, pkt_size);
                 } else {
                     return ; /*do nothing, drop the packet*/
@@ -396,7 +396,7 @@ void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode)
 Case 4: if the interface is working in the access mode and the user want in the trunk mode then overwrite 
 */
 
-if (IF_L2_MODE(interface) == ACCESS && intf_l2_mode == TRUNK) {
+if (IF_L2_Mode(interface) == ACCESS && intf_l2_mode == TRUNK) {
     IF_L2_Mode(interface) == TRUNK ; 
     return ; 
 }
@@ -407,9 +407,9 @@ Case 5: If the interface is working in the trunk mode and the user want access m
 remove all vlans from interface, user must enable vlan again  on interface
 */
 
-if (IF_L2_MODE(interface) == TRUNK && intf_l2_mode == ACCESS) {
+if (IF_L2_Mode(interface) == TRUNK && intf_l2_mode == ACCESS) {
 
-    IF_L2_MODE(interface) == ACCESS; 
+    IF_L2_Mode(interface) == ACCESS; 
    
     unsigned int i = 0 ; 
     for (i ; i<MAX_VLAN_MEMBERSHIP; i++) {

@@ -45,7 +45,7 @@ typedef struct arp_table_{
 
 
 typedef struct arp_entries_ arp_entries_t;
-typedef struct arp_entries_ {
+ struct arp_entries_ {
 ip_address_t ip_address;
 mac_address_t mac_address;
 char oif_name[IF_NAME_SIZE];
@@ -233,18 +233,13 @@ static inline ethernetHeader_t * ALLOC_ETH_HDR_WITH_PAYLOAD(char *pkt, unsigned 
 }
 
 
-static inline void
-SET_COMMON_ETH_FCS(ethernetHeader_t *ethernet_hdr, 
-                   unsigned int payload_size,
-                   unsigned int new_fcs){
-  
-        ETH_FCS(ethernet_hdr, payload_size) = new_fcs;
-    
-}
 
 
 void
 node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2_mode);
+
+void
+node_set_intf_vlan_membership(node_t *node, char *intf_name, unsigned int vlan_id);
 
 
 

@@ -91,21 +91,6 @@ void dump_mac_table(mac_table_t *mac_table) {
     } ITERATE_GLTHREAD_END(&mac_table->mac_entries,curr);
 }
 
-
-void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
-
-    node_t *node = interface->att_node;
-    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
-
-    char *dst_mac = ethernet_header->dest.mac_address;
-    char *src_add = ethernet_header->src.mac_address;
-
-    l2_switch_perform_mac_learning(node,src_add,interface->if_name);
-    l2_swithc_perform_forwarding(node, interface, pkt, pkt_size);   
-
-}
-
-
 static void l2_switch_perform_mac_learning(node_t *node, char *src_mac, char *if_name) {
     bool_t rc ;
     mac_table_entries_t *mac_table_entry = calloc(1, sizeof(mac_table_entries_t));
@@ -117,8 +102,6 @@ static void l2_switch_perform_mac_learning(node_t *node, char *src_mac, char *if
         free(mac_table_entry);
     }
 }
-
-
 
 static void l2_switch_forward_frame(node_t *node, interface_t *interface, char *pkt, unsigned int pkt_size) {
 
@@ -144,3 +127,20 @@ static void l2_switch_forward_frame(node_t *node, interface_t *interface, char *
     }
     send_packet_out(pkt, pkt_size, oif);
 }
+
+void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
+
+    node_t *node = interface->att_node;
+    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+
+    char *dst_mac = ethernet_header->dest.mac_address;
+    char *src_add = ethernet_header->src.mac_address;
+
+    l2_switch_perform_mac_learning(node,src_add,interface->if_name);
+    l2_switch_forward_frame(node, interface, pkt, pkt_size);   
+
+}
+
+
+
+

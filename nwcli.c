@@ -506,8 +506,8 @@ arp_handler(param_t *param, ser_buff_t *tlv_buf,
 
 
 /*Layer 3 Commands*/
-extern void
-layer3_ping_fn(node_t *node, char *dst_ip_addr);
+// extern void
+// layer3_ping_fn(node_t *node, char *dst_ip_addr);
 
 static int
 ping_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){
@@ -536,7 +536,7 @@ ping_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){
     switch(CMDCODE){
 
         case CMDCODE_PING:
-            layer3_ping_fn(node, ip_addr);
+            // layer3_ping_fn(node, ip_addr);
             break;
         default:
             ;
@@ -564,7 +564,7 @@ show_rt_handler(param_t *param, ser_buff_t *tlv_buf,
     }TLV_LOOP_END;
 
     node = get_node_by_node_name(topo, node_name);
-    dump_rt_table(NODE_RT_TABLE(node));
+    // dump_rt_table(NODE_RT_TABLE(node));
     return 0;
 }
 
@@ -632,11 +632,11 @@ l3_config_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable
                             return -1;
                         }
                     }
-                    rt_table_add_route(NODE_RT_TABLE(node), dest, mask, gwip, intf_name);
+                    // rt_table_add_route(NODE_RT_TABLE(node), dest, mask, gwip, intf_name);
                 }
                 break;
                 case CONFIG_DISABLE:
-                    delete_rt_table_entry(NODE_RT_TABLE(node), dest, mask);
+                    // delete_rt_table_entry(NODE_RT_TABLE(node), dest, mask);
                     break;
                 default:
                     ;
@@ -663,18 +663,18 @@ interface_set_l2_mode(node_t *node,
                        interface_t *interface,
                        char *l2_mode_option);
 
-extern void
-interface_unset_l2_mode(node_t *node,
-                         interface_t *interface,
-                         char *l2_mode_option);
+// extern void
+// interface_unset_l2_mode(node_t *node,
+//                          interface_t *interface,
+//                          char *l2_mode_option);
 extern void
 interface_set_vlan(node_t *node,
                     interface_t *interface,
                     unsigned int vlan);
-extern void
-interface_unset_vlan(node_t *node,
-                      interface_t *interface,
-                      unsigned int vlan);
+// extern void
+// interface_unset_vlan(node_t *node,
+//                       interface_t *interface,
+//                       unsigned int vlan);
 
 static int
 intf_config_handler(param_t *param, ser_buff_t *tlv_buf, 
@@ -719,7 +719,7 @@ intf_config_handler(param_t *param, ser_buff_t *tlv_buf,
                     interface_set_l2_mode(node, interface, l2_mode_option);
                     break;
                 case CONFIG_DISABLE:
-                    interface_unset_l2_mode(node, interface, l2_mode_option);
+                    // interface_unset_l2_mode(node, interface, l2_mode_option);
                     break;
                 default:
                     ;
@@ -731,7 +731,7 @@ intf_config_handler(param_t *param, ser_buff_t *tlv_buf,
                     interface_set_vlan(node, interface, vlan_id);
                     break;
                 case CONFIG_DISABLE:
-                    interface_unset_vlan(node, interface, vlan_id);
+                    // interface_unset_vlan(node, interface, vlan_id);
                     break;
                 default:
                     ;

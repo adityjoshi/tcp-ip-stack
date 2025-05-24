@@ -231,12 +231,21 @@ void dump_intf_props(interface_t *interface){
                 INTERFACE_MAC(interface)[4], INTERFACE_MAC(interface)[5]);
     } else {
         printf("\t l2 mode = %s", intf_l2_mode_str(IF_L2_Mode(interface)));
+         printf("\t vlan membership : ");
+         int i = 0;
+         for(; i < MAX_VLAN_MEMBERSHIP; i++){
+            if(interface->interface_nw_props.vlans[i]){
+                printf("%u  ", interface->interface_nw_props.vlans[i]);
+            }
+         }
+         printf("\n");
     }
 }
 
 
 void dump_node_nw_props(node_t * node) {
-    printf("Node Name = %s\n", node->node_name);
+    printf("\nNode Name = %s, UDP Port No = %u\n", node->node_name, node->udp_port_number);
+   
     if(node->node_network_prop.is_loopback_address_config) {
         printf("\t Loopback IP : %s\n", NODE_LOOPBACKADDRESS(node));
     }
