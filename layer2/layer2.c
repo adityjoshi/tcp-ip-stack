@@ -106,9 +106,10 @@ static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, et
     
     if (strncmp(INTERFACE_IP(iif), ip_addr, 16) == 0) {
         printf("ARP Request for self IP address %s\n", ip_addr);
-    
+        // yee change thaaaaa
+         send_arp_reply_msg(ethernet_hdr,iif);
     }
-    send_arp_reply_msg(ethernet_hdr,iif);
+   
 }
 
 
@@ -156,7 +157,7 @@ void delete_arp_entry(arp_table_t *arp_table, char *ip_addr) {
 bool_t arp_table_entry_addition(arp_table_t *arp_table, arp_entries_t *arp_entry) {
     arp_entries_t *arp_entry_old = arp_table_entry_lookup(arp_table,arp_entry->ip_address.ip_address);
 
-    if (arp_entry_old && memcpy(arp_entry_old, arp_entry, sizeof(arp_entries_t)) == 0) {
+    if (arp_entry_old && memcmp(arp_entry_old, arp_entry, sizeof(arp_entries_t)) == 0) {
         return FALSE;
     }
 
@@ -397,7 +398,7 @@ Case 4: if the interface is working in the access mode and the user want in the 
 */
 
 if (IF_L2_Mode(interface) == ACCESS && intf_l2_mode == TRUNK) {
-    IF_L2_Mode(interface) == TRUNK ; 
+    IF_L2_Mode(interface) = TRUNK ; 
     return ; 
 }
 
@@ -409,7 +410,7 @@ remove all vlans from interface, user must enable vlan again  on interface
 
 if (IF_L2_Mode(interface) == TRUNK && intf_l2_mode == ACCESS) {
 
-    IF_L2_Mode(interface) == ACCESS; 
+    IF_L2_Mode(interface) = ACCESS; 
    
     unsigned int i = 0 ; 
     for (i ; i<MAX_VLAN_MEMBERSHIP; i++) {
@@ -425,7 +426,7 @@ if (IF_L2_Mode(interface) == TRUNK && intf_l2_mode == ACCESS) {
 void node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t intf_l2_node) {
     interface_t *interface = get_node_if_by_name(node, intf_name);
     assert(interface);
-    interface_set_l2_mode(node,interface, intf_l2_mode_str( intf_l2_node));
+    interface_set_l2_mode(node, interface, intf_l2_mode_str( intf_l2_node));
 }
 
 
