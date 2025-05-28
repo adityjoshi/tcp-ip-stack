@@ -19,8 +19,7 @@ static unsigned int get_udp_port() {
     return udp_num++;
 }
 
-static int _send_pkt_out(int sock_fd, char *pkt_data, unsigned int pkt_size, 
-    unsigned int dst_udp_port_no) {
+static int _send_pkt_out(int sock_fd, char *pkt_data, unsigned int pkt_size,  unsigned int dst_udp_port_no) {
         int rc ; 
         struct sockaddr_in dest_addr;
    
@@ -31,6 +30,7 @@ static int _send_pkt_out(int sock_fd, char *pkt_data, unsigned int pkt_size,
     
         rc = sendto(sock_fd, pkt_data, pkt_size, 0, 
                 (struct sockaddr *)&dest_addr, sizeof(struct sockaddr));
+      
         
         return rc;
     }

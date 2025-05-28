@@ -84,6 +84,7 @@ static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *o
     SET_COMMON_ETH_FCS(ethernetHdr_reply, sizeof(arpheader_t), 0); /* it is not used*/
      
     unsigned int total_pkt_size = ETH_HDR_SIZE_EXCL_PAYLOAD + sizeof(arpheader_t);
+
     char *shifted_pkt_buffer = pkt_buffer_shift_right((char *)ethernetHdr_reply, total_pkt_size, MAX_PACKET_BUFFER_SIZE);
 
     send_packet_out(shifted_pkt_buffer, total_pkt_size, oif);
@@ -102,16 +103,26 @@ static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, et
 
     char ip_addr[16];
     arpheader_t *arp_hdr = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernet_hdr));
+
     unsigned int arp_dest_ip_addr = htonl(arp_hdr->dest_ip);
+
     inet_ntop(AF_INET, &arp_dest_ip_addr, ip_addr, 16);
     ip_addr[15] = '\0';
     
-    if (strncmp(INTERFACE_IP(iif), ip_addr, 16) == 0) {
-        printf("ARP Request for self IP address %s\n", ip_addr);
-        // yee change thaaaaa
-         send_arp_reply_msg(ethernet_hdr,iif);
+    // if (strncmp(INTERFACE_IP(iif), ip_addr, 16) == 0) {
+    //     printf("ARP Request for self IP address %s\n", ip_addr);
+        
+        
+    // }
+
+     
+    if(strncmp(INTERFACE_IP(iif), ip_addr, 16)){
+        
+        printf("%s : ARP Broadcast req msg dropped, Dst IP address %s did not match with interface ip : %s\n", 
+                node->node_name, ip_addr , INTERFACE_IP(iif));
+        return;
     }
-   
+    send_arp_reply_msg(ethernet_hdr,iif);
 }
 
 
@@ -257,6 +268,7 @@ free(arp_entry);
         void layer2_frame_recv(node_t *node, interface_t *interface,
             char *pkt, unsigned int pkt_size) {
                 ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+                printf(interface, ethernet_header);
                 if (l2_frame_recv_qualify_on_interface(interface,ethernet_header) == FALSE) {
                     printf("L2 frame has been rejected");
                     return ;
