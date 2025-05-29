@@ -171,6 +171,10 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
             send_packet_out(pkt, pkt_size, oif);
             return TRUE ; 
            }
+
+           /*
+           CASE 2 : If the interface is 
+           */
         }
     }
 
