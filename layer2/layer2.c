@@ -301,7 +301,15 @@ free(arp_entry);
                 }
 
                 else if (IF_L2_Mode(interface) == ACCESS || IF_L2_Mode(interface) == TRUNK ) {
-                    layer2_switch_recv_frame(interface, pkt, pkt_size);
+                      unsigned int new_pkt_size = 0;
+
+        if(vlan_id_to_tag){
+            pkt = (char *)tag_pkt_with_vlan_id((ethernetHeader_t *)pkt,
+                                                pkt_size, vlan_id_to_tag,
+                                                &new_pkt_size);
+            assert(new_pkt_size != pkt_size);
+        }
+                    layer2_switch_recv_frame(interface, pkt, vlan_id_to_tag ? new_pkt_size : pkt_size);
                 } else {
                     return ; /*do nothing, drop the packet*/
                 }
