@@ -37,6 +37,60 @@ typedef struct ethernetHeader_ {
 #pragma pack(pop) 
 
 
+
+
+/*
+*
+*           VLAN SUPPORT 
+*
+*/
+
+#pragma pack (push,1) // to avoid padding done by the compiler
+
+typedef struct vlan_8021q_hdr_ {
+    unsigned short tpid; /* = 0x8100*/
+    short tci_pcp : 3; /* inital 4 bits not used*/
+    short tci_dei : 1;  /*Not used*/
+    short tci_vid : 12; /*tagged vlan id */
+} vlan_8021q_hdr_t;
+
+typedef struct vlan_ethernet_hdr_{
+
+    mac_address_t dst_mac;
+    mac_address_t src_mac;
+    vlan_8021q_hdr_t vlan_8021q_hdr;
+    unsigned short type;
+    char payload[248];  /*Max allowed 1500*/
+    unsigned int FCS;
+} vlan_ethernet_hdr_t;
+
+
+
+
+#pragma pack(pop)
+
+
+
+
+static inline vlan_8021q_hdr_t * is_pkt_vlan_tagged(ethernetHeader_t *ethernet_hdr) {
+
+
+vlan_8021q_hdr_t *vlan_8021q_hdr = (vlan_8021q_hdr_t *)((char *)ethernet_hdr + (sizeof(mac_address_t) * 2));
+
+if(vlan_8021q_hdr->tpid == VLAN_8021Q_PROTO) {
+    return vlan_8021q_hdr;
+} else {
+    return NULL;
+}
+
+}
+
+
+
+static inline unsigned int GET_802_1Q_VLAN_ID(vlan_8021q_hdr_t *vlan_8021q_hdr) {
+    return (unsigned int)vlan_8021q_hdr->tci_vid;
+}
+
 // ARP table 
 
 typedef struct arp_table_{
@@ -166,58 +220,6 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
 
 }
 
-
-/*
-*
-*           VLAN SUPPORT 
-*
-*/
-
-#pragma pack (push,1) // to avoid padding done by the compiler
-
-typedef struct vlan_8021q_hdr_ {
-    unsigned short tpid; /* = 0x8100*/
-    short tci_pcp : 3; /* inital 4 bits not used*/
-    short tci_dei : 1;  /*Not used*/
-    short tci_vid : 12; /*tagged vlan id */
-} vlan_8021q_hdr_t;
-
-typedef struct vlan_ethernet_hdr_{
-
-    mac_address_t dst_mac;
-    mac_address_t src_mac;
-    vlan_8021q_hdr_t vlan_8021q_hdr;
-    unsigned short type;
-    char payload[248];  /*Max allowed 1500*/
-    unsigned int FCS;
-} vlan_ethernet_hdr_t;
-
-
-
-
-#pragma pack(pop)
-
-
-
-
-static inline vlan_8021q_hdr_t * is_pkt_vlan_tagged(ethernetHeader_t *ethernet_hdr) {
-
-
-vlan_8021q_hdr_t *vlan_8021q_hdr = (vlan_8021q_hdr_t *)((char *)ethernet_hdr + (sizeof(mac_address_t) * 2));
-
-if(vlan_8021q_hdr->tpid == VLAN_8021Q_PROTO) {
-    return vlan_8021q_hdr;
-} else {
-    return NULL;
-}
-
-}
-
-
-
-static inline unsigned int GET_802_1Q_VLAN_ID(vlan_8021q_hdr_t *vlan_8021q_hdr) {
-    return (unsigned int)vlan_8021q_hdr->tci_vid;
-}
 
 
 
