@@ -201,8 +201,12 @@ unsigned int get_access_intf_operating_vlan_id(interface_t *interface) {
     if (IF_L2_Mode(interface) != ACCESS) {
          assert(0) ; 
     }
-
+    return interface->interface_nw_props.vlans[0];
 }
+
+
+
+
 
 void dump_nw_graph(graph_t *graph) {
 node_t *node;
