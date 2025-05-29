@@ -152,6 +152,10 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
         assert(0);
     }
 
+    intf_l2_mode_t *intf  = IF_L2_Mode(oif);
+    if (intf == L2_MODE_UNKNOWN) {
+        return FALSE ; 
+    }
 
 }
 
