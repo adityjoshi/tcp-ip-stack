@@ -205,6 +205,9 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
 
         {
             unsigned int vlan_id = 0 ; 
+            if (vlan_ethernet_hdr) {
+                vlan_id = GET_802_1Q_VLAN_ID(ethernet_header);
+            }
 
         }
     }
