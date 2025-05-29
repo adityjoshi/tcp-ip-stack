@@ -108,6 +108,33 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
      }
 
 
+     /*
+     if the interface is working in the ACCESS mode and operating within a vlan then,
+
+     * 1. it must accept untagged frame and tag it with a vlan-id of an interface
+     * 2. Or  it must accept tagged frame but tagged with same vlan-id as interface's vlan operation
+     
+     */
+
+     unsigned int pkt_vlan_id = 0 ;
+     unsigned int interface_vlan_id = 0 ; 
+
+     if (IF_L2_Mode(interface) == ACCESS ) {
+        interface_vlan_id = get_access_intf_operating_vlan_id(interface); 
+
+        if (!vlan_hdr && interface_vlan_id ) {
+            *output_vlan_id = interface_vlan_id ; 
+            return TRUE ; /* CASE 6 */
+
+        if (!vlan_hdr && !interface_vlan_id) {
+            return TRUE ; /* CASE 3 */ 
+        }
+
+        pkt_vlan_id = GET_802_1Q_VLAN_ID(vlan_hdr);
+        }
+
+        
+     }
      
     
     if(!IS_INTF_L3_MODE(interface)) {
@@ -183,7 +210,7 @@ static inline unsigned int GET_802_1Q_VLAN_ID(vlan_8021q_hdr_t *vlan_8021q_hdr) 
 *
 *
 *
-MACROS 
+* MACROS 
 *
 *
 *
