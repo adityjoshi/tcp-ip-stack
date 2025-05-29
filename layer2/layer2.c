@@ -267,9 +267,10 @@ free(arp_entry);
 
         void layer2_frame_recv(node_t *node, interface_t *interface,
             char *pkt, unsigned int pkt_size) {
+                unsigned int vlan_id_to_tag = 0 ; 
                 ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
                 printf(interface, ethernet_header);
-                if (l2_frame_recv_qualify_on_interface(interface,ethernet_header) == FALSE) {
+                if (l2_frame_recv_qualify_on_interface(interface,ethernet_header, &vlan_id_to_tag) == FALSE) {
                     printf("L2 frame has been rejected");
                     return ;
                 }
