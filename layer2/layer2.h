@@ -152,6 +152,9 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
         /*
         * if the interface is working in the L3 mode and the the interface mac == dest mac or the dest mac is broadcast then accept the packet 
         */
+       if (IS_INTF_L3_MODE(interface) && memcmp(INTERFACE_MAC(interface), ethernetHeader->dest.mac_address,sizeof(mac_address_t)) == 0 )  {
+        return TRUE ; /* CASE 1 */
+       }
         
      }
      
