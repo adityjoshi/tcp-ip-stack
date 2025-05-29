@@ -157,6 +157,9 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
         return FALSE ; 
     }
 
+    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+    vlan_8021q_hdr_t *vlan_ethernet_hdr = is_pkt_vlan_tagged(ethernet_header);
+
 }
 
 
