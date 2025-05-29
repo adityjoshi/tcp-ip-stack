@@ -142,5 +142,11 @@ void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pk
 }
 
 
+static bool_t
+l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
+    
+}
+
+
 
 
