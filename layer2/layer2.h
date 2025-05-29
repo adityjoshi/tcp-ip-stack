@@ -131,6 +131,11 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
         }
 
         pkt_vlan_id = GET_802_1Q_VLAN_ID(vlan_hdr);
+        if (pkt_vlan_id == interface_vlan_id) {
+            return TRUE ; /* CASE 5*/
+        } else {
+            return FALSE ; /* CASE 4 */
+        }
         }
 
         
