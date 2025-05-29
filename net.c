@@ -198,7 +198,10 @@ pkt_buffer_shift_right(char *pkt, unsigned int pkt_size,unsigned int total_buffe
 
 
 unsigned int get_access_intf_operating_vlan_id(interface_t *interface) {
-    
+    if (IF_L2_Mode(interface) != ACCESS) {
+         assert(0) ; 
+    }
+
 }
 
 void dump_nw_graph(graph_t *graph) {
