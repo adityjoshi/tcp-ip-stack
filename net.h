@@ -126,6 +126,8 @@ init_interface_nw_properties_(interface_nw_properties_t *interface_nw_prop) {
 bool_t node_set_loopback_address(node_t *node, char*ip_addr );
 bool_t node_set_interface_ip_address(node_t *node,char*local_if, char*ip_addr, char mask );
 bool_t node_unset_interface_ip_address(node_t *node, char*local_if );
+unsigned int get_access_intf_operating_vlan_id(interface_t *interface) ;
+
 
 
 
