@@ -205,7 +205,9 @@ unsigned int get_access_intf_operating_vlan_id(interface_t *interface) {
 }
 
 
-
+bool_t is_trunk_interface_vlan_enabled(interface_t *interface, unsigned int vlan_id) {
+    
+}
 
 
 void dump_nw_graph(graph_t *graph) {

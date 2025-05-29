@@ -127,6 +127,7 @@ bool_t node_set_loopback_address(node_t *node, char*ip_addr );
 bool_t node_set_interface_ip_address(node_t *node,char*local_if, char*ip_addr, char mask );
 bool_t node_unset_interface_ip_address(node_t *node, char*local_if );
 unsigned int get_access_intf_operating_vlan_id(interface_t *interface) ;
+bool_t is_trunk_interface_vlan_enabled(interface_t *interface, unsigned int vlan_id);
 
 
 
