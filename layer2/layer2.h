@@ -138,6 +138,16 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
         }
         }
 
+
+
+        /* 
+        * if the interface is working in the L3 mode and tagged with the vlan id then just drop it 
+        */
+
+        if (IS_INTF_L3_MODE(interface) && vlan_hdr) {
+            /*case 2*/
+            return FALSE ; 
+        }
         
      }
      
