@@ -91,9 +91,24 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
     CASE 10 : if the interface is neither working in the layer 3 mode nor in the layer 2 mode, then drop the packet 
     */
 
-    if (IS_INTF_L3_MODE(interface) == FALSE && IF_L2_Mode(interface) == FALSE ) {
+    if (IS_INTF_L3_MODE(interface) == FALSE && IF_L2_Mode(interface) == L2_MODE_UNKNOWN ) {
         return FALSE ; 
     }
+
+     /* If interface is working in ACCESS mode but at the
+     * same time not operating within a vlan, then it must
+     * accept untagged packet only*/
+
+     if (IF_L2_Mode(interface) == ACCESS && get_access_intf_operating_vlan_id(interface) == 0 ) {
+        if (!vlan_hdr) {
+            return TRUE; /* case 3 */
+        } else {
+            return FALSE ; /* case 4*/
+        }
+     }
+
+
+     
     
     if(!IS_INTF_L3_MODE(interface)) {
         return FALSE;
