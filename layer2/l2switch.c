@@ -144,7 +144,15 @@ void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pk
 
 static bool_t
 l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
-    
+
+    /* CASE 1 : If the interface is working int L3 mode then it should assert*/\
+
+    if (IS_INTF_L3_MODE(oif)) {
+        printf("Error : Interface %s is working in L3 mode, can't send pkt out\n", oif->if_name);
+        assert(0);
+    }
+
+
 }
 
 
