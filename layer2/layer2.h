@@ -148,6 +148,10 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
             /*case 2*/
             return FALSE ; 
         }
+
+        /*
+        * if the interface is working in the L3 mode and the the interface mac == dest mac or the dest mac is broadcast then accept the packet 
+        */
         
      }
      
