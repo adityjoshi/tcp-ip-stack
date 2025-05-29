@@ -230,3 +230,12 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
 
 
 
+static bool_t l2_switch_flood_pkt_out(node_t *node, interface_t *exempted_intf, char *pkt, unsigned int pkt_size) {
+
+    interface_t *oif  = NULL ; 
+
+    unsigned int i = 0 ; 
+
+}
+
+               
