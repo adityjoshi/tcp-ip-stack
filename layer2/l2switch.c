@@ -173,8 +173,39 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
            }
 
            /*
-           CASE 2 : If the interface is 
+           CASE 2 : If the interface is vlan aware but the packet is untagged just drop the packet 
            */
+          if (vlan_id && !vlan_ethernet_hdr) {
+            return FALSE ; 
+          }
+
+          /*
+          CASE 3 : If the interface is vlan aware and the packet is tagged, then forward the frame only if the vlan id matches
+          */
+         if (vlan_ethernet_hdr && GET_802_1Q_VLAN_ID(vlan_ethernet_hdr) == vlan_id) {
+            unsigned int new_pkt_size = 0 ; 
+            ethernet_header = untag_pkt_with_vlan_id(ethernet_header, pkt_size, &new_pkt_size);
+            send_packet_out((char *)ethernet_header, new_pkt_size, oif);
+         }
+
+         /*
+         CASE 4: If the interface not vlan aware and the packet is tagged with vlan then drop it
+         */
+
+         if (!vlan_id && vlan_ethernet_hdr) {
+            return FALSE ; 
+         }
+
+        }
+        break;
+
+        case TRUNK: 
+
+        /*CASE 5: If the packet is vlan tagged and the interface is aware of the vlan*/
+
+        {
+            unsigned int vlan_id = 0 ; 
+
         }
     }
 
