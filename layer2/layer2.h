@@ -81,7 +81,20 @@ void dump_arp_table(arp_table_t *arp_table);
 /*
 To check if the we can accept the packet or not arrived on the interface working in the layer 3 mode
 */
-static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, ethernetHeader_t *ethernetHeader) {
+static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, ethernetHeader_t *ethernetHeader, unsigned int *output_vlan_id) {
+
+    *output_vlan_id = 0 ; 
+
+    vlan_8021q_hdr_t *vlan_hdr = is_pkt_vlan_tagged(ethernetHeader) ;
+
+    /*
+    CASE 10 : if the interface is neither working in the layer 3 mode nor in the layer 2 mode, then drop the packet 
+    */
+
+    if (IS_INTF_L3_MODE(interface) == FALSE && IF_L2_Mode(interface) == FALSE ) {
+        return FALSE ; 
+    }
+    
     if(!IS_INTF_L3_MODE(interface)) {
         return FALSE;
     }
