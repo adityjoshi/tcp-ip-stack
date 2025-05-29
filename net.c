@@ -206,7 +206,15 @@ unsigned int get_access_intf_operating_vlan_id(interface_t *interface) {
 
 
 bool_t is_trunk_interface_vlan_enabled(interface_t *interface, unsigned int vlan_id) {
-    
+    if (IF_L2_Mode(interface) != TRUNK) {
+        assert(0);
+    }
+    for (unsigned int i = 0 ; i<MAX_VLAN_MEMBERSHIP; i++) {
+        if (interface->interface_nw_props.vlans[i] == vlan_id) {
+            return TRUE ; 
+        }
+    }
+    return FALSE ; 
 }
 
 
