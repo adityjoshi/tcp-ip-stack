@@ -152,13 +152,27 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
         assert(0);
     }
 
-    intf_l2_mode_t *intf  = IF_L2_Mode(oif);
+    intf_l2_mode_t intf  = IF_L2_Mode(oif);
     if (intf == L2_MODE_UNKNOWN) {
         return FALSE ; 
     }
 
     ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
     vlan_8021q_hdr_t *vlan_ethernet_hdr = is_pkt_vlan_tagged(ethernet_header);
+
+    switch(intf) {
+        case ACCESS :
+        {
+            unsigned int vlan_id = get_access_intf_operating_vlan_id(oif);
+            /*
+            CASE 1 : If the interface is in ACCESS mode but not in any vlan and the vlan id is also untagged then forward it 
+            */
+           if (!vlan_id && !vlan_ethernet_hdr) {
+            send_packet_out(pkt, pkt_size, oif);
+            return TRUE ; 
+           }
+        }
+    }
 
 }
 
