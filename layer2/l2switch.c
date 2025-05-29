@@ -209,7 +209,20 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
                 vlan_id = GET_802_1Q_VLAN_ID(ethernet_header);
             }
 
+            if (vlan_id && is_trunk_interface_vlan_enabled(oif,vlan_id)) {
+                send_packet_out(pkt,pkt_size,oif);
+                return TRUE ; 
+            }
+            /* do nothing */
+            return FALSE ; 
+
         }
+        break ; 
+        case L2_MODE_UNKNOWN:
+        break ; 
+        default:
+        ;
+        return FALSE ; 
     }
 
 }
