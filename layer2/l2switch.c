@@ -103,43 +103,31 @@ static void l2_switch_perform_mac_learning(node_t *node, char *src_mac, char *if
     }
 }
 
-static void l2_switch_forward_frame(node_t *node, interface_t *interface, char *pkt, unsigned int pkt_size) {
+// static void l2_switch_forward_frame(node_t *node, interface_t *interface, char *pkt, unsigned int pkt_size) {
 
-    /*if dst add is broadcast add then flood the frame*/
-    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
-    if (IS_MAC_BROADCAST_ADDR(ethernet_header->dest.mac_address)) {
-        send_pkt_flood(node, interface, pkt, pkt_size);
-        return ;
-    }
+//     /*if dst add is broadcast add then flood the frame*/
+//     ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+//     if (IS_MAC_BROADCAST_ADDR(ethernet_header->dest.mac_address)) {
+//         send_pkt_flood(node, interface, pkt, pkt_size);
+//         return ;
+//     }
 
-    /*check mac table to forward the frame*/
-    mac_table_entries_t *mac_table_entry = 
-    mac_table_entries_lookup(NODE_MAC_TABLE(node), ethernet_header->dest.mac_address);
+//     /*check mac table to forward the frame*/
+//     mac_table_entries_t *mac_table_entry = 
+//     mac_table_entries_lookup(NODE_MAC_TABLE(node), ethernet_header->dest.mac_address);
 
-    if (!mac_table_entry) {
-        send_pkt_flood(node, interface, pkt, pkt_size);
-        return ;
-    }
-    char *oif_name = mac_table_entry->oif_name;
-    interface_t *oif = get_node_if_by_name(node, oif_name);
-    if (!oif) {
-        return ;
-    }
-    send_packet_out(pkt, pkt_size, oif);
-}
+//     if (!mac_table_entry) {
+//         send_pkt_flood(node, interface, pkt, pkt_size);
+//         return ;
+//     }
+//     char *oif_name = mac_table_entry->oif_name;
+//     interface_t *oif = get_node_if_by_name(node, oif_name);
+//     if (!oif) {
+//         return ;
+//     }
+//     send_packet_out(pkt, pkt_size, oif);
+// }
 
-void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
-
-    node_t *node = interface->att_node;
-    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
-
-    char *dst_mac = ethernet_header->dest.mac_address;
-    char *src_add = ethernet_header->src.mac_address;
-
-    l2_switch_perform_mac_learning(node,src_add,interface->if_name);
-    l2_switch_forward_frame(node, interface, pkt, pkt_size);   
-
-}
 
 
 static bool_t
@@ -229,7 +217,6 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
 
 
 
-
 static bool_t l2_switch_flood_pkt_out(node_t *node, interface_t *exempted_intf, char *pkt, unsigned int pkt_size) {
 
     interface_t *oif  = NULL ; 
@@ -258,3 +245,50 @@ static bool_t l2_switch_flood_pkt_out(node_t *node, interface_t *exempted_intf, 
 }
 
                
+
+
+
+static void
+l2_switch_forward_frame(node_t *node, interface_t *recv_intf, 
+                        ethernetHeader_t *ethernet_hdr, 
+                        unsigned int pkt_size){
+
+    /*If dst mac is broadcast mac, then flood the frame*/
+    if(IS_MAC_BROADCAST_ADDR(ethernet_hdr->dest.mac_address)){
+        l2_switch_flood_pkt_out(node, recv_intf, (char *)ethernet_hdr, pkt_size);
+        return;
+    }
+
+    /*Check the mac table to forward the frame*/
+    mac_table_entries_t *mac_table_entry = 
+        mac_table_entries_lookup(NODE_MAC_TABLE(node), ethernet_hdr->dest.mac_address);
+
+    if(!mac_table_entry){
+        l2_switch_flood_pkt_out(node, recv_intf, (char *)ethernet_hdr, pkt_size);
+        return;
+    }
+
+    char *oif_name = mac_table_entry->oif_name;
+    interface_t *oif = get_node_if_by_name(node, oif_name);
+
+    if(!oif){
+        return;
+    }
+
+    l2_switch_send_pkt_out((char *)ethernet_hdr, pkt_size, oif);
+}
+
+
+void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
+
+    node_t *node = interface->att_node;
+    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+
+    char *dst_mac = ethernet_header->dest.mac_address;
+    char *src_add = ethernet_header->src.mac_address;
+
+    l2_switch_perform_mac_learning(node,src_add,interface->if_name);
+    l2_switch_forward_frame(node, interface, pkt, pkt_size);   
+
+}
+

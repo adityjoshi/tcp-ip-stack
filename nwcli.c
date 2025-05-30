@@ -41,14 +41,14 @@ static int show_arp_handler(param_t *param, ser_buff_t *tlv_buf,
         node = get_node_by_node_name(topo, node_name);
         if (!node) {
             printf("Error: Node %s does not exist\n", node_name);
-            return -1;  // Prevent segmentation fault
+            return -1;
         }
-        arp_table_t *arp_table = NODE_ARP_TABLE(node);
-if (!arp_table) {
-    printf("Error: ARP table for node %s is NULL\n", node->node_name);
-    return -1;
-}
-dump_arp_table(arp_table);
+//         arp_table_t *arp_table = NODE_ARP_TABLE(node);
+// if (!arp_table) {
+//     printf("Error: ARP table for node %s is NULL\n", node->node_name);
+//     return -1;
+// }
+dump_arp_table(NODE_ARP_TABLE(node));
         return 0;
         
     }

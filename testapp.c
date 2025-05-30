@@ -12,7 +12,7 @@ graph_t *topo = NULL ;
 int main(int argc, char **argv) {
   
 nw_init_cli();
-topo = build_first_topo();
+topo = build_dualswitch_topo();
 
 
 start_shell();
