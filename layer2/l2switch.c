@@ -241,6 +241,19 @@ static bool_t l2_switch_flood_pkt_out(node_t *node, interface_t *exempted_intf, 
 
     pkt_copy = temp_pkt + MAX_PACKET_BUFFER_SIZE - pkt_size ; 
 
+    for ( ; i<MAX_INTF_PER_NODE; i++)  {
+        oif = node->intf[i]; 
+        if (!oif) {
+            break ;
+        }
+        if (oif == exempted_intf) {
+            continue; /* skip the interface */
+        }
+        memcpy(pkt_copy, pkt, pkt_size);
+        l2_switch_send_pkt_out(pkt_copy, pkt_size, oif);
+    }
+
+    return TRUE;
 
 }
 
