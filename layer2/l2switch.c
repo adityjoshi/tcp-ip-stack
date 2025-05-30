@@ -132,13 +132,11 @@ static void l2_switch_perform_mac_learning(node_t *node, char *src_mac, char *if
 
 static bool_t
 l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
+    
 
     /* CASE 1 : If the interface is working int L3 mode then it should assert*/\
 
-    if (IS_INTF_L3_MODE(oif)) {
-        printf("Error : Interface %s is working in L3 mode, can't send pkt out\n", oif->if_name);
-        assert(0);
-    }
+   assert(!IS_INTF_L3_MODE(oif));
 
     intf_l2_mode_t intf  = IF_L2_Mode(oif);
     if (intf == L2_MODE_UNKNOWN) {
@@ -147,7 +145,7 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
 
     ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
     vlan_8021q_hdr_t *vlan_ethernet_hdr = is_pkt_vlan_tagged(ethernet_header);
-
+ printf("[DEBUG] Sending packet out on interface %s (mode %d)\n", oif->if_name, IF_L2_Mode(oif));
     switch(intf) {
         case ACCESS :
         {
@@ -170,10 +168,11 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
           /*
           CASE 3 : If the interface is vlan aware and the packet is tagged, then forward the frame only if the vlan id matches
           */
-         if (vlan_ethernet_hdr && GET_802_1Q_VLAN_ID(vlan_ethernet_hdr) == vlan_id) {
+         if (vlan_ethernet_hdr && (GET_802_1Q_VLAN_ID(vlan_ethernet_hdr) == vlan_id)) {
             unsigned int new_pkt_size = 0 ; 
             ethernet_header = untag_pkt_with_vlan_id(ethernet_header, pkt_size, &new_pkt_size);
             send_packet_out((char *)ethernet_header, new_pkt_size, oif);
+            return TRUE ;
          }
 
          /*
@@ -194,8 +193,8 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
         {
             unsigned int vlan_id = 0 ; 
             if (vlan_ethernet_hdr) {
-                vlan_id = GET_802_1Q_VLAN_ID(ethernet_header);
-            }
+                vlan_id = GET_802_1Q_VLAN_ID(vlan_ethernet_hdr);
+            } 
 
             if (vlan_id && is_trunk_interface_vlan_enabled(oif,vlan_id)) {
                 send_packet_out(pkt,pkt_size,oif);
@@ -233,10 +232,11 @@ static bool_t l2_switch_flood_pkt_out(node_t *node, interface_t *exempted_intf, 
         if (!oif) {
             break ;
         }
-        if (oif == exempted_intf) {
+        if (oif == exempted_intf || IS_INTF_L3_MODE(oif)){
             continue; /* skip the interface */
         }
         memcpy(pkt_copy, pkt, pkt_size);
+      
         l2_switch_send_pkt_out(pkt_copy, pkt_size, oif);
     }
 
@@ -246,15 +246,15 @@ static bool_t l2_switch_flood_pkt_out(node_t *node, interface_t *exempted_intf, 
 
                
 
-
-
 static void
 l2_switch_forward_frame(node_t *node, interface_t *recv_intf, 
                         ethernetHeader_t *ethernet_hdr, 
-                        unsigned int pkt_size){
+                        unsigned int pkt_size) {
+
 
     /*If dst mac is broadcast mac, then flood the frame*/
     if(IS_MAC_BROADCAST_ADDR(ethernet_hdr->dest.mac_address)){
+        printf("[DEBUG] Destination is broadcast MAC, flooding the frame\n");
         l2_switch_flood_pkt_out(node, recv_intf, (char *)ethernet_hdr, pkt_size);
         return;
     }
@@ -264,23 +264,30 @@ l2_switch_forward_frame(node_t *node, interface_t *recv_intf,
         mac_table_entries_lookup(NODE_MAC_TABLE(node), ethernet_hdr->dest.mac_address);
 
     if(!mac_table_entry){
+        printf("[DEBUG] MAC entry not found, flooding the frame\n");
         l2_switch_flood_pkt_out(node, recv_intf, (char *)ethernet_hdr, pkt_size);
         return;
     }
 
     char *oif_name = mac_table_entry->oif_name;
+    printf("[DEBUG] MAC found on interface: %s\n", oif_name);
     interface_t *oif = get_node_if_by_name(node, oif_name);
 
     if(!oif){
+        printf("[ERROR] Interface %s not found on node\n", oif_name);
         return;
     }
 
-    l2_switch_send_pkt_out((char *)ethernet_hdr, pkt_size, oif);
+    bool_t sent = l2_switch_send_pkt_out((char *)ethernet_hdr, pkt_size, oif);
+    if (!sent) {
+        printf("[WARNING] Failed to send packet out on interface %s\n", oif->if_name);
+    } else {
+        printf("[DEBUG] Packet sent out successfully on interface %s\n", oif->if_name);
+    }
 }
 
-
 void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
-
+ printf("[DEBUG] layer2_switch_recv_frame called on interface %s\n", interface->if_name);
     node_t *node = interface->att_node;
     ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
 

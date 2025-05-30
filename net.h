@@ -154,5 +154,6 @@ pkt_buffer_shift_right(char *pkt, unsigned int pkt_size,unsigned int total_buffe
 
 interface_t * node_get_matching_subnet_interface(node_t *node, char *ip_addr);
                                
-
+unsigned int
+get_access_intf_operating_vlan_id(interface_t *interface);
 #endif /* __NET__ */

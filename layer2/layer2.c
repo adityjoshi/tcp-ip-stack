@@ -108,15 +108,9 @@ static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, et
 
     inet_ntop(AF_INET, &arp_dest_ip_addr, ip_addr, 16);
     ip_addr[15] = '\0';
-    
-    // if (strncmp(INTERFACE_IP(iif), ip_addr, 16) == 0) {
-    //     printf("ARP Request for self IP address %s\n", ip_addr);
-        
-        
-    // }
 
      
-    if(strncmp(INTERFACE_IP(iif), ip_addr, 16) == 0){
+    if(strncmp(INTERFACE_IP(iif), ip_addr, 16) != 0){
         
         printf("%s : ARP Broadcast req msg dropped, Dst IP address %s did not match with interface ip : %s\n", 
                 node->node_name, ip_addr , INTERFACE_IP(iif));
@@ -124,6 +118,8 @@ static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, et
     }
     send_arp_reply_msg(ethernet_hdr,iif);
 }
+
+
 
 
 
@@ -267,15 +263,22 @@ free(arp_entry);
 
         void layer2_frame_recv(node_t *node, interface_t *interface,
             char *pkt, unsigned int pkt_size) {
+
+                  printf("[DEBUG] layer2_frame_recv called on node %s interface %s\n", 
+           node->node_name, interface->if_name);
+
+
                 unsigned int vlan_id_to_tag = 0 ; 
                 ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
                 printf(interface, ethernet_header);
-                if (l2_frame_recv_qualify_on_interface(interface,ethernet_header, &vlan_id_to_tag) == FALSE) {
+                if (l2_frame_recv_qualify_on_interface(interface,ethernet_header,&vlan_id_to_tag) == FALSE) {
                     printf("L2 frame has been rejected");
                     return ;
                 }
 
                 printf("L2 frame accepted \n");
+printf("Interface %s is in mode %s\n", interface->if_name,
+   IS_INTF_L3_MODE(interface) ? "L3" : "L2");
 
                 if (IS_INTF_L3_MODE(interface)) {
                    

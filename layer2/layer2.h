@@ -154,11 +154,7 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
      * accept untagged packet only*/
 
      if (IF_L2_Mode(interface) == ACCESS && get_access_intf_operating_vlan_id(interface) == 0 ) {
-        if (!vlan_hdr) {
-            return TRUE; /* case 3 */
-        } else {
-            return FALSE ; /* case 4*/
-        }
+        return FALSE;
      }
 
 
@@ -180,8 +176,6 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
             *output_vlan_id = interface_vlan_id ; 
             return TRUE ; /* CASE 6 */
 
-        if (!vlan_hdr && !interface_vlan_id) {
-            return TRUE ; /* CASE 3 */ 
         }
 
         pkt_vlan_id = GET_802_1Q_VLAN_ID(vlan_hdr);
@@ -190,32 +184,60 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
         } else {
             return FALSE ; /* CASE 4 */
         }
-        }
-
-
-
-        /* 
-        * if the interface is working in the L3 mode and tagged with the vlan id then just drop it 
-        */
-
-        if (IS_INTF_L3_MODE(interface) && vlan_hdr) {
-            /*case 2*/
-            return FALSE ; 
-        }
-
-        /*
-        * if the interface is working in the L3 mode and the the interface mac == dest mac or the dest mac is broadcast then accept the packet 
-        */
-       if (IS_INTF_L3_MODE(interface) && memcmp(INTERFACE_MAC(interface), ethernetHeader->dest.mac_address,sizeof(mac_address_t)) == 0 )  {
-        return TRUE ; /* CASE 1 */
-       }
-
-       if (IS_INTF_L3_MODE(interface) && IS_MAC_BROADCAST_ADDR(ethernetHeader->dest.mac_address)) {
-        return TRUE ;  /* CASE 1 */
-       }
-        return FALSE;
+          
      }
+
+     /* if interface is operating in a TRUNK mode, then it must discard all untagged
+     * frames*/
+    
+    if(IF_L2_Mode(interface) == TRUNK){
+       
+        if(!vlan_hdr){
+            /*case 7 & 8*/
+            return FALSE;
+        }
+    }
+
+     /* if interface is operating in a TRUNK mode, then it must accept the frame
+     * which are tagged with any vlan-id in which interface is operating.*/
+
+    if(IF_L2_Mode(interface) == TRUNK && 
+            vlan_hdr){
+        
+        pkt_vlan_id = GET_802_1Q_VLAN_ID(vlan_hdr);
+        if(is_trunk_interface_vlan_enabled(interface, pkt_vlan_id)){
+            return TRUE;    /*case 9*/
+        }
+        else{
+            return FALSE;   /*case 9*/
+        }
+    }
      
+     /*If the interface is operating in L3 mode, and recv vlan tagged frame, drop it*/
+    if(IS_INTF_L3_MODE(interface) && vlan_hdr){
+        /*case 2*/
+        return FALSE;
+    }
+
+     /* If interface is working in L3 mode, then accept the frame only when
+     * its dst mac matches with receiving interface MAC*/
+    if(IS_INTF_L3_MODE(interface) &&
+        memcmp(IF_MAC(interface), 
+        ethernetHeader->dest.mac_address, 
+        sizeof(mac_address_t)) == 0){
+        /*case 1*/
+        return TRUE;
+    }
+
+    /*If interface is working in L3 mode, then accept the frame with
+     * broadcast MAC*/
+    if(IS_INTF_L3_MODE(interface) &&
+        IS_MAC_BROADCAST_ADDR(ethernetHeader->dest.mac_address)){
+        /*case 1*/
+        return TRUE;
+    }
+
+    return FALSE;
  
 
 }

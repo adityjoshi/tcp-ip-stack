@@ -235,14 +235,14 @@ graph_t *build_dualswitch_topo(){
     insert_link_between_node(L2SW1, L2SW2, "eth0/5", "eth0/7", 1);
     insert_link_between_node(H5, L2SW2, "eth0/8", "eth0/9", 1);
     insert_link_between_node(H4, L2SW2, "eth0/11", "eth0/12", 1);
-    insert_link_between_node(H6, L2SW2, "eth0/11", "eth0/10", 1);
+    insert_link_between_node(H6, L2SW2, "eth0/13", "eth0/10", 1);
 
     node_set_interface_ip_address(H1, "eth0/1",  "10.1.1.1", 24);
     node_set_interface_ip_address(H2, "eth0/3",  "10.1.1.2", 24);
     node_set_interface_ip_address(H3, "eth0/4",  "10.1.1.3", 24);
     node_set_interface_ip_address(H4, "eth0/11", "10.1.1.4", 24);
     node_set_interface_ip_address(H5, "eth0/8",  "10.1.1.5", 24);
-    node_set_interface_ip_address(H6, "eth0/11", "10.1.1.6", 24);
+    node_set_interface_ip_address(H6, "eth0/13", "10.1.1.6", 24);
 
     node_set_intf_l2_mode(L2SW1, "eth0/2", ACCESS);
     node_set_intf_vlan_membership(L2SW1, "eth0/2", 10);

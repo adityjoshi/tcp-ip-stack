@@ -209,6 +209,10 @@ layer2_frame_recv(node_t *node, interface_t *interface,
 int
 pkt_receive(node_t *node, interface_t *interface,
             char *pkt, unsigned int pkt_size){
+             
+                 printf("[DEBUG] pkt_receive called on node %s interface %s, pkt_size: %u\n", 
+           node->node_name, interface->if_name, pkt_size);
+    
     /*
     make room in the packet buffer shift the data to the right so that the tcp/ipc can append more
     headers in the packet without any issye 
