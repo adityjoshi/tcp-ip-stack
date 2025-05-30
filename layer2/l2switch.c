@@ -236,7 +236,11 @@ static bool_t l2_switch_flood_pkt_out(node_t *node, interface_t *exempted_intf, 
 
     unsigned int i = 0 ; 
 
-    
+    char *pkt_copy = NULL ;
+    char *temp_pkt = calloc(1, MAX_PACKET_BUFFER_SIZE);
+
+    pkt_copy = temp_pkt + MAX_PACKET_BUFFER_SIZE - pkt_size ; 
+
 
 }
 
