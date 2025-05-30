@@ -253,7 +253,7 @@ static bool_t l2_switch_flood_pkt_out(node_t *node, interface_t *exempted_intf, 
         l2_switch_send_pkt_out(pkt_copy, pkt_size, oif);
     }
 
-    return TRUE;
+   free(temp_pkt);
 
 }
 
