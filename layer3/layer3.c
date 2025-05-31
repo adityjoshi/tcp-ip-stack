@@ -1,5 +1,5 @@
 #include "layer3/layer3.h"
-
+#include "arpa/inet.h"
 
 
 
@@ -18,10 +18,12 @@ void rt_table_add_route(rt_table_t *rt_table,
 unsigned int dst_int = 0 ; 
 char dst_str_with_mask[16];
 
+apply_mask(dst, mask, &dst_str_with_mask);
+
+inet_pton(AF_INET, dst_str_with_mask, &dst_int);
 
 
-
-
+L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int);
 
 
                           }
