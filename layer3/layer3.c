@@ -13,9 +13,6 @@ init_rt_table(rt_table_t **rt_table) {
 
 
 
-static bool_t _rt_table_entry_add(rt_table_t *rt_table, l3_route_t *l3_route) {
-    
-}
 
 
 void rt_table_add_route(rt_table_t *rt_table,
@@ -30,7 +27,7 @@ apply_mask(dst, mask, &dst_str_with_mask);
 inet_pton(AF_INET, dst_str_with_mask, &dst_int);
 
 
-L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int);
+L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int); /* TO DO */
 
 
 /*Trying to add duplicate route!!*/
@@ -54,7 +51,7 @@ L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int);
     l3_route->if_name[IF_NAME_SIZE - 1] = '\0';
    }
 
-    if(!_rt_table_entry_add(rt_table, l3_route)){
+    if(!_rt_table_entry_add(rt_table, l3_route)){ /* TO DO */
         printf("Error : Route %s/%d Installation Failed\n", 
             dst_str_with_mask, mask);
         free(l3_route);   
