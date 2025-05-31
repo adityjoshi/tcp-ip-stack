@@ -26,6 +26,14 @@ inet_pton(AF_INET, dst_str_with_mask, &dst_int);
 L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int);
 
 
+/*Trying to add duplicate route!!*/
+   assert(!l3_route);
+
+   l3_route = calloc(1, sizeof(L3_route_t));
+   strncpy(l3_route->dest, dst_str_with_mask, 16);
+   l3_route->dest[15] = '\0';
+    l3_route->mask = mask;
+
                           }
 
 void rt_table_add_direct_route(rt_table_t *rt_table,
