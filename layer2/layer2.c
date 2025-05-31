@@ -261,6 +261,41 @@ free(arp_entry);
 //             }
 //         }
 
+
+static void
+promote_pkt_to_layer2(node_t *node, interface_t *iif,
+        ethernetHeader_t *ethernet_hdr,
+        uint32_t pkt_size){
+  switch (ethernet_hdr->type) {
+                        case ARP_MESSAGE:
+                        {
+                            arpheader_t *arp_hdr = (arpheader_t *)ethernet_hdr->payload;
+                            switch (arp_hdr->op_code) {
+                                case ARP_BROAD_REQ:
+                                process_arp_broadcast_message_req(node, iif, ethernet_hdr);
+                                break;
+                                case ARP_REPLY:
+                                process_arp_reply_message(node, iif, ethernet_hdr);
+                                break;
+                                default:
+                                break;
+                            }
+                        }
+                        break;
+                         case ETH_IP:
+            promote_pkt_to_layer3(node, iif,
+                    GET_ETHERNET_HDR_PAYLOAD(ethernet_hdr),
+                    pkt_size - GET_ETH_HDR_SIZE_EXCL_PAYLOAD(ethernet_hdr),
+                    ethernet_hdr->type);
+                    break;
+                        default:
+                        
+                    }
+
+
+
+                }
+
         void layer2_frame_recv(node_t *node, interface_t *interface,
             char *pkt, unsigned int pkt_size) {
 
@@ -276,26 +311,9 @@ free(arp_entry);
                 printf("L2 frame has been accepted\n");
 
                 if (IS_INTF_L3_MODE(interface)) {
-                   
-                    switch (ethernet_header->type) {
-                        case ARP_MESSAGE:
-                        {
-                            arpheader_t *arp_hdr = (arpheader_t *)ethernet_header->payload;
-                            switch (arp_hdr->op_code) {
-                                case ARP_BROAD_REQ:
-                                process_arp_broadcast_message_req(node, interface, ethernet_header);
-                                break;
-                                case ARP_REPLY:
-                                process_arp_reply_message(node, interface, ethernet_header);
-                                break;
-                                default:
-                                break;
-                            }
-                        }
-                        break;
-                        default:
-                        break;
-                    }
+                   promote_pkt_to_layer2(node,interface, ethernet_header, pkt_size);
+                 
+                  
                 }
 
                 else if (IF_L2_Mode(interface) == ACCESS || IF_L2_Mode(interface) == TRUNK ) {
