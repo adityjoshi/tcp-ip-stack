@@ -32,7 +32,18 @@ L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int);
    l3_route = calloc(1, sizeof(L3_route_t));
    strncpy(l3_route->dest, dst_str_with_mask, 16);
    l3_route->dest[15] = '\0';
-    l3_route->mask = mask;
+   l3_route->mask = mask;
+
+   if (!gw && !oif) {
+    l3_route->is_direct = TRUE; 
+   } else {
+    l3_route->is_direct = FALSE;
+   }
+
+   if (gw && oif) {
+    strncpy(l3_route->gw_ip,gw,16);
+    l3_route->gw_ip[15] = '\0';
+   }
 
                           }
 
