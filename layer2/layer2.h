@@ -136,6 +136,7 @@ void dump_arp_table(arp_table_t *arp_table);
 To check if the we can accept the packet or not arrived on the interface working in the layer 3 mode
 */
 static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, ethernetHeader_t *ethernetHeader, unsigned int *output_vlan_id) {
+ 
 
     *output_vlan_id = 0 ; 
 
@@ -145,7 +146,7 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
     CASE 10 : if the interface is neither working in the layer 3 mode nor in the layer 2 mode, then drop the packet 
     */
 
-    if (IS_INTF_L3_MODE(interface) == FALSE && IF_L2_Mode(interface) == L2_MODE_UNKNOWN ) {
+    if (!IS_INTF_L3_MODE(interface) == FALSE && IF_L2_Mode(interface) == L2_MODE_UNKNOWN ) {
         return FALSE ; 
     }
 
@@ -222,7 +223,7 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
      /* If interface is working in L3 mode, then accept the frame only when
      * its dst mac matches with receiving interface MAC*/
     if(IS_INTF_L3_MODE(interface) &&
-        memcmp(IF_MAC(interface), 
+        memcmp(INTERFACE_MAC(interface), 
         ethernetHeader->dest.mac_address, 
         sizeof(mac_address_t)) == 0){
         /*case 1*/

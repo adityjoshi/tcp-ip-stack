@@ -264,8 +264,6 @@ free(arp_entry);
         void layer2_frame_recv(node_t *node, interface_t *interface,
             char *pkt, unsigned int pkt_size) {
 
-                  printf("[DEBUG] layer2_frame_recv called on node %s interface %s\n", 
-           node->node_name, interface->if_name);
 
 
                 unsigned int vlan_id_to_tag = 0 ; 
