@@ -176,3 +176,10 @@ show node L2SW2 mac
 show topology
 run node H1 resolve-arp 10.1.1.6
 run node H1 resolve-arp 10.1.1.6
+show topology
+run node H1 resolve-arp 10.1.1.6
+show node H1 mac
+show node H1 arp
+run node H1 resolve-arp 10.1.1.6
+show node L2SW1 arp
+show node L2SW1 mac
