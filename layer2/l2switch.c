@@ -145,7 +145,6 @@ l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
 
     ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
     vlan_8021q_hdr_t *vlan_ethernet_hdr = is_pkt_vlan_tagged(ethernet_header);
- printf("[DEBUG] Sending packet out on interface %s (mode %d)\n", oif->if_name, IF_L2_Mode(oif));
     switch(intf) {
         case ACCESS :
         {
@@ -254,7 +253,6 @@ l2_switch_forward_frame(node_t *node, interface_t *recv_intf,
 
     /*If dst mac is broadcast mac, then flood the frame*/
     if(IS_MAC_BROADCAST_ADDR(ethernet_hdr->dest.mac_address)){
-        printf("[DEBUG] Destination is broadcast MAC, flooding the frame\n");
         l2_switch_flood_pkt_out(node, recv_intf, (char *)ethernet_hdr, pkt_size);
         return;
     }
@@ -264,30 +262,26 @@ l2_switch_forward_frame(node_t *node, interface_t *recv_intf,
         mac_table_entries_lookup(NODE_MAC_TABLE(node), ethernet_hdr->dest.mac_address);
 
     if(!mac_table_entry){
-        printf("[DEBUG] MAC entry not found, flooding the frame\n");
+      
         l2_switch_flood_pkt_out(node, recv_intf, (char *)ethernet_hdr, pkt_size);
         return;
     }
 
     char *oif_name = mac_table_entry->oif_name;
-    printf("[DEBUG] MAC found on interface: %s\n", oif_name);
+   
     interface_t *oif = get_node_if_by_name(node, oif_name);
 
     if(!oif){
-        printf("[ERROR] Interface %s not found on node\n", oif_name);
         return;
     }
 
-    bool_t sent = l2_switch_send_pkt_out((char *)ethernet_hdr, pkt_size, oif);
-    if (!sent) {
-        printf("[WARNING] Failed to send packet out on interface %s\n", oif->if_name);
-    } else {
-        printf("[DEBUG] Packet sent out successfully on interface %s\n", oif->if_name);
-    }
+ l2_switch_send_pkt_out((char *)ethernet_hdr, pkt_size, oif);
+   
+        
 }
 
 void layer2_switch_recv_frame(interface_t *interface, char *pkt, unsigned int pkt_size) {
- printf("[DEBUG] layer2_switch_recv_frame called on interface %s\n", interface->if_name);
+ 
     node_t *node = interface->att_node;
     ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
 

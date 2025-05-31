@@ -55,7 +55,7 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
 }
 
 static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *oif) {
-    printf("Debug: Sending ARP Reply from interface %s\n", oif->if_name);
+
     arpheader_t *arpheader = (arpheader_t *)(GET_ETHERNET_HEADER_PAYLOAD(ethernet_header));
 
     ethernetHeader_t *ethernetHdr_reply = (ethernetHeader_t *)calloc(1,MAX_PACKET_BUFFER_SIZE);
@@ -273,10 +273,7 @@ free(arp_entry);
                     printf("L2 frame has been rejected");
                     return ;
                 }
-
-                printf("L2 frame accepted \n");
-printf("Interface %s is in mode %s\n", interface->if_name,
-   IS_INTF_L3_MODE(interface) ? "L3" : "L2");
+                printf("L2 frame has been accepted\n");
 
                 if (IS_INTF_L3_MODE(interface)) {
                    
