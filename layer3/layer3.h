@@ -21,6 +21,9 @@ typedef struct L3_route {
 } L3_route_t;
 
 
+GLTHREAD_TO_STRUCT(rt_glue_to_l3_route, L3_route_t, route_glue);
+
+
 
 
 

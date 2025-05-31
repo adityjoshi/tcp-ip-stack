@@ -4,6 +4,7 @@
 #include <_string.h>
 #include "utils.h"
 #include "tcpconst.h"
+#include "layer3/layer3.h"
 
 
 
@@ -35,6 +36,7 @@ typedef struct node_nw_properties_ {
   // layer 2 config 
   arp_table_t *arp_table; 
   mac_table_t *mac_table;
+  rt_table_t *rt_table; // local route for the node
   // layer 3 config 
   bool_t is_loopback_address_config ; 
   ip_address_t loopback_addr;
