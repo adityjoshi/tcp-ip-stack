@@ -11,6 +11,13 @@ init_rt_table(rt_table_t **rt_table) {
 }
 
 
+
+
+static bool_t _rt_table_entry_add(rt_table_t *rt_table, l3_route_t *l3_route) {
+    
+}
+
+
 void rt_table_add_route(rt_table_t *rt_table,
                           char *dst, char mask,
                           char *gw, char *oif) {
