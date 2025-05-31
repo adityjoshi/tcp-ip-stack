@@ -43,9 +43,21 @@ L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int);
    if (gw && oif) {
     strncpy(l3_route->gw_ip,gw,16);
     l3_route->gw_ip[15] = '\0';
+    strncpy(l3_route->if_name, oif, IF_NAME_SIZE);
+    l3_route->if_name[IF_NAME_SIZE - 1] = '\0';
    }
 
-                          }
+    if(!_rt_table_entry_add(rt_table, l3_route)){
+        printf("Error : Route %s/%d Installation Failed\n", 
+            dst_str_with_mask, mask);
+        free(l3_route);   
+   } 
+
+}
+
+
+
+
 
 void rt_table_add_direct_route(rt_table_t *rt_table,
                           char *dst, char mask) {
