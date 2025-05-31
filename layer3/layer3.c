@@ -17,6 +17,13 @@ void rt_table_add_route(rt_table_t *rt_table,
 
 unsigned int dst_int = 0 ; 
 char dst_str_with_mask[16];
+
+
+
+
+
+
+
                           }
 
 void rt_table_add_direct_route(rt_table_t *rt_table,
