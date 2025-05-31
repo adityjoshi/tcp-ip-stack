@@ -49,6 +49,7 @@ init_node_nw_properties_(node_nw_properties_t *node_nw_prop) {
   memset(node_nw_prop->loopback_addr.ip_address,0,16);
   init_arp_table(&(node_nw_prop->arp_table));
   init_mac_table(&(node_nw_prop->mac_table));
+  init_rt_table(&(node_nw_prop->rt_table));
 
 }
 
