@@ -45,6 +45,8 @@ assert(ip_addr);
 node->node_network_prop.is_loopback_address_config = TRUE;
 strncpy(NODE_LOOPBACKADDRESS(node),ip_addr,16);
 NODE_LOOPBACKADDRESS(node)[15] = '\0';
+
+rt_table_add_direct_route(Node_RT_TABLE(node), ip_addr, 32);
 return TRUE ; 
 }
 
@@ -58,7 +60,7 @@ bool_t node_set_interface_ip_address(node_t *node,char *local_if, char *ip_addr,
     INTERFACE_IP(interface)[15] = '\0';
     interface->interface_nw_props.mask = mask; 
     interface->interface_nw_props.is_ip_address_config = TRUE;
-
+    rt_table_add_direct_route(Node_RT_TABLE(node), ip_addr, mask);
     return TRUE;
 }
 
