@@ -43,7 +43,8 @@ l3rib_lookup_lpm(rt_table_t *rt_table,
                  unsigned int dest_ip);
 
 
-
+void
+dump_rt_table(rt_table_t *rt_table);
 
 
 
