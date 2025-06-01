@@ -240,6 +240,88 @@ static int show_rt_handler(param_t *param, ser_buff_t *tlv_buf,
 }
 
 
+/*
+
+L3 CONFIG HANDLER 
+
+*/
+
+
+static int
+l3_config_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){
+
+    node_t *node = NULL;
+    char *node_name = NULL;
+    char *intf_name = NULL;
+    char *gwip = NULL;
+    char *mask_str = NULL;
+    char *dest = NULL;
+    int CMDCODE = -1;
+
+    CMDCODE = EXTRACT_CMD_CODE(tlv_buf); 
+    
+    tlv_struct_t *tlv = NULL;
+    
+    TLV_LOOP_BEGIN(tlv_buf, tlv){
+
+        if     (strncmp(tlv->leaf_id, "node-name", strlen("node-name")) ==0)
+            node_name = tlv->value;
+        else if(strncmp(tlv->leaf_id, "ip-address", strlen("ip-address")) ==0)
+            dest = tlv->value;
+        else if(strncmp(tlv->leaf_id, "gw-ip", strlen("gw-ip")) ==0)
+            gwip = tlv->value;
+        else if(strncmp(tlv->leaf_id, "mask", strlen("mask")) ==0)
+            mask_str = tlv->value;
+        else if(strncmp(tlv->leaf_id, "oif", strlen("oif")) ==0)
+            intf_name = tlv->value;
+        else
+            assert(0);
+
+    }TLV_LOOP_END;
+
+    node = get_node_by_node_name(topo, node_name);
+
+    char mask;
+    if(mask_str){
+        mask = atoi(mask_str);
+    }
+
+    switch(CMDCODE){
+        case CMDCODE_CONF_NODE_L3ROUTE:
+            switch(enable_or_disable){
+                case CONFIG_ENABLE:
+                {
+                    interface_t *intf;
+                    if(intf_name){
+                        intf = get_node_if_by_name(node, intf_name);
+                        if(!intf){
+                            printf("Config Error : Non-Existing Interface : %s\n", intf_name);
+                            return -1;
+                        }
+                        if(!IS_INTF_L3_MODE(intf)){
+                            printf("Config Error : Not L3 Mode Interface : %s\n", intf_name);
+                            return -1;
+                        }
+                    }
+                    rt_table_add_route(Node_RT_TABLE(node), dest, mask, gwip, intf_name);
+                }
+                break;
+                case CONFIG_DISABLE:
+                    delete_rt_table_entry(Node_RT_TABLE(node), dest, mask);
+                    break;
+                default:
+                    ;
+            }
+            break;
+        default:
+            break;
+    }
+    return 0;
+}
+
+
+
+
 void nw_init_cli() {
     init_libcli();
 

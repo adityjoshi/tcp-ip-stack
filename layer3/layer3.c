@@ -93,6 +93,22 @@ static bool_t _rt_table_entry_add(rt_table_t *rt_table, L3_route_t *l3_route) {
 }
 
 
+void
+delete_rt_table_entry(rt_table_t *rt_table, 
+        char *ip_addr, char mask){
+
+    char dst_str_with_mask[16];
+    
+    apply_mask(ip_addr, mask, dst_str_with_mask); 
+    L3_route_t *l3_route = rt_table_lookup(rt_table, dst_str_with_mask, mask);
+
+    if(!l3_route)
+        return;
+
+    remove_glthread(&l3_route->route_glue);
+    free(l3_route);
+}
+
 
 void rt_table_add_route(rt_table_t *rt_table,
                           char *dst, char mask,
