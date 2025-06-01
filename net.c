@@ -39,6 +39,8 @@ unsigned long long hashVal = 0 ;
 }
 
 
+extern void rt_table_add_direct_route(rt_table_t *rt_table, char *ip_addr, char mask);
+
 
 bool_t node_set_loopback_address(node_t *node, char*ip_addr ) {
 assert(ip_addr);
