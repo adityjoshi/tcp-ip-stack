@@ -3,6 +3,7 @@
 #include "cmdcodes.h"
 #include "graph.h"
 #include <stdio.h>
+#include "layer3/layer3.h"
 
 extern graph_t *topo;
 
@@ -234,11 +235,18 @@ static int show_rt_handler(param_t *param, ser_buff_t *tlv_buf,
     }TLV_LOOP_END;
 
     node = get_node_by_node_name(topo, node_name);
-    dump_rt_table(NODE_RT_TABLE(node));
+    dump_rt_table(Node_RT_TABLE(node));
     return 0;
                     
 }
 
+extern void
+delete_rt_table_entry(rt_table_t *rt_table,
+        char *ip_addr, char mask);
+extern void
+rt_table_add_route(rt_table_t *rt_table,
+        char *dst, char mask,
+        char *gw, char *oif);
 
 /*
 

@@ -183,3 +183,15 @@ show node H1 arp
 run node H1 resolve-arp 10.1.1.6
 show node L2SW1 arp
 show node L2SW1 mac
+show topology
+show node R1 rt
+show node R2 rt
+show node /
+R1 rt
+show topology
+show node R1 rt
+show node R1 rt
+show node R1 rt
+show node R1 rt
+show node R1 rt
+show node R2 rt

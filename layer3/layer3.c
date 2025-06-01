@@ -1,5 +1,9 @@
 #include "layer3/layer3.h"
 #include "arpa/inet.h"
+#include <stdio.h>      // printf
+#include <stdlib.h>     // calloc, free
+#include <string.h>     // memset, strncpy, strncmp, strlen
+#include <assert.h>     // assert
 
 
 
@@ -11,11 +15,26 @@ init_rt_table(rt_table_t **rt_table) {
 }
 
 
+L3_route_t *
+rt_table_lookup(rt_table_t *rt_table, char *ip_addr, char mask){
+    
+    glthread_t *curr;
+    L3_route_t *l3_route;
+
+    ITERATE_GLTHREAD_BEGIN(&rt_table->route_list, curr){
+
+        l3_route = rt_glue_to_l3_route(curr);
+        if(strncmp(l3_route->dest, ip_addr, 16) == 0 && 
+                l3_route->mask == mask){
+            return l3_route;
+        }
+    } ITERATE_GLTHREAD_END(&rt_table->route_list, curr);
+}
 
 
 L3_route_t *l3rib_lookup_route(rt_table_t *rt_table, unsigned int dest_ip) {
 
-    L3_route_t *l3_route = NULL;
+   L3_route_t *l3_route = NULL;
    L3_route_t  *lpm_l3_route = NULL;
    L3_route_t  *default_l3_rt = NULL;
 
@@ -52,21 +71,22 @@ L3_route_t *l3rib_lookup_route(rt_table_t *rt_table, unsigned int dest_ip) {
 }
 
 
-L3_route_t *
-rt_table_lookup(rt_table_t *rt_table, char *ip_addr, char mask){
+void
+delete_rt_table_entry(rt_table_t *rt_table, 
+        char *ip_addr, char mask){
+
+    char dst_str_with_mask[16];
     
-    glthread_t *curr;
-    L3_route_t *l3_route;
+    apply_mask(ip_addr, mask, dst_str_with_mask); 
+    L3_route_t *l3_route = rt_table_lookup(rt_table, dst_str_with_mask, mask);
 
-    ITERATE_GLTHREAD_BEGIN(&rt_table->route_list, curr){
+    if(!l3_route)
+        return;
 
-        l3_route = rt_glue_to_l3_route(curr);
-        if(strncmp(l3_route->dest, ip_addr, 16) == 0 && 
-                l3_route->mask == mask){
-            return l3_route;
-        }
-    } ITERATE_GLTHREAD_END(&rt_table->route_list, curr);
+    //remove_glthread(&l3_route->route_glue);
+    //free(l3_route);
 }
+
 
 
 
@@ -82,8 +102,8 @@ static bool_t _rt_table_entry_add(rt_table_t *rt_table, L3_route_t *l3_route) {
 
     if (l3_route_old) {
         /* Remove the old route */
-        glthread_remove(&l3_route_old->route_glue);
-        free(l3_route_old);
+       delete_rt_table_entry(rt_table,l3_route_old->dest, l3_route_old->mask);
+        
     }
 
     init_glthread(&l3_route->route_glue);
@@ -93,40 +113,31 @@ static bool_t _rt_table_entry_add(rt_table_t *rt_table, L3_route_t *l3_route) {
 }
 
 
-void
-delete_rt_table_entry(rt_table_t *rt_table, 
-        char *ip_addr, char mask){
-
-    char dst_str_with_mask[16];
-    
-    apply_mask(ip_addr, mask, dst_str_with_mask); 
-    L3_route_t *l3_route = rt_table_lookup(rt_table, dst_str_with_mask, mask);
-
-    if(!l3_route)
-        return;
-
-    remove_glthread(&l3_route->route_glue);
-    free(l3_route);
-}
 
 
 void rt_table_add_route(rt_table_t *rt_table,
                           char *dst, char mask,
                           char *gw, char *oif) {
 
-unsigned int dst_int = 0 ; 
+unsigned int dst_int ; 
 char dst_str_with_mask[16];
 
-apply_mask(dst, mask, &dst_str_with_mask);
+apply_mask(dst, mask, dst_str_with_mask);
 
 inet_pton(AF_INET, dst_str_with_mask, &dst_int);
 
+printf("Debug: After mask applied: %s/%d\n", dst_str_with_mask, mask);
 
 L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int); 
 
 
 /*Trying to add duplicate route!!*/
-   assert(!l3_route);
+//    assert(!l3_route);
+
+    if (l3_route) {
+        printf("Route %s/%d already exists, skipping add.\n", dst_str_with_mask, mask);
+        return;
+    }
 
    l3_route = calloc(1, sizeof(L3_route_t));
    strncpy(l3_route->dest, dst_str_with_mask, 16);
@@ -166,20 +177,40 @@ void rt_table_add_direct_route(rt_table_t *rt_table,
 
 
 
-void
+// void
+// dump_rt_table(rt_table_t *rt_table) {
+//     glthread_t *curr = NULL ;
+//     L3_route_t *l3_route = NULL;    
+
+//     printf("Dumping L3 Routing Table\n");
+
+//     ITERATE_GLTHREAD_BEGIN(&rt_table->route_list,curr) {
+//         l3_route = rt_glue_to_l3_route(curr);
+//         printf("\t%-18s %-4d %-18s %s\n", 
+//                 l3_route->dest, l3_route->mask, 
+//                 l3_route->is_direct ? "NA" : l3_route->gw_ip, 
+//                 l3_route->is_direct ? "NA" : l3_route->if_name);
+//     } ITERATE_GLTHREAD_END(&rt_table->route_list,curr);
+// }
+
+ void
 dump_rt_table(rt_table_t *rt_table) {
-    glthread_t *curr = NULL ;
-    L3_route_t *l3_route = NULL;    
+printf("Dumping L3 Routing Table\n");
 
-    printf("Dumping L3 Routing Table\n");
+   glthread_t *curr = NULL ;
+  L3_route_t *l3_route = NULL;    
 
-    ITERATE_GLTHREAD_BEGIN(&rt_table->route_list,curr) {
-        l3_route = rt_glue_to_l3_route(curr);
-        printf("\t%-18s %-4d %-18s %s\n", 
-                l3_route->dest, l3_route->mask,
-                l3_route->is_direct ? "NA" : l3_route->gw_ip, 
-                l3_route->is_direct ? "NA" : l3_route->if_name);
-    } ITERATE_GLTHREAD_END(&rt_table->route_list,curr);
+ITERATE_GLTHREAD_BEGIN(&rt_table->route_list, curr){
+    l3_route = rt_glue_to_l3_route(curr);
+    printf("Debug: dest='%s' mask=%d is_direct=%d gw_ip='%s' oif='%s'\n",
+        l3_route->dest, l3_route->mask, l3_route->is_direct,
+        l3_route->gw_ip, l3_route->if_name);
+
+    printf("\t%-18s %-4d %-18s %s\n", 
+        l3_route->dest, l3_route->mask,
+        l3_route->is_direct ? "NA" : l3_route->gw_ip, 
+        l3_route->is_direct ? "NA" : l3_route->if_name);
+} ITERATE_GLTHREAD_END(&rt_table->route_list, curr);
+
+
 }
-
-

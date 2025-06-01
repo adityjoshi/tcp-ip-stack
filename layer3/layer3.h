@@ -1,10 +1,10 @@
+
 #ifndef __LAYER3__
 #define __LAYER3__
 
-
-#include <glthread.h>
+#include "gluethread/glthread.h"
 #include "utils.h"
-#include "graph.h"
+#define IF_NAME_SIZE 16
 
 typedef struct rt_table {
     glthread_t route_list; 
@@ -47,6 +47,8 @@ void
 dump_rt_table(rt_table_t *rt_table);
 
 
+void
+delete_rt_table_entry(rt_table_t *rt_table, char *ip_addr, char mask);
 
 
 

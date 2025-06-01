@@ -13,6 +13,7 @@ TRUE
  *
  * */
 void apply_mask(char *prefix, char mask, char *str_max) ;
+#define UNSET_BIT(n, pos)       (n = n & ((1 << pos) ^ 0xFFFFFFFF))
 
 
 void layer2_add_broadcast_address(char *mac_array);

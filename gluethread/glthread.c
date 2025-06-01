@@ -34,23 +34,43 @@ curr_glthread->left=new_glthread;
 
 }
 
-void remove_glthread(glthread_t *curr_glthread) {
-if (!curr_glthread->left) {
-curr_glthread->right->left = NULL;
-curr_glthread->right = 0 ; 
-return;
-}
-if(!curr_glthread->right) {
-curr_glthread->left->right = NULL;
-curr_glthread->left = 0 ; 
-return ; 
-}
-curr_glthread->left->right = curr_glthread->right;
-curr_glthread->right->left = curr_glthread->left;
-curr_glthread->left = 0 ; 
-curr_glthread->right = 0 ;
-}
+// void remove_glthread(glthread_t *curr_glthread) {
+//     if(!curr_glthread->left){
+//         if(curr_glthread->right){
+//             curr_glthread->right->left = NULL;
+//             curr_glthread->right = 0;
+//             return;
+//         }
+//         return;
+//     }
+//  if(!curr_glthread->right){
+//         curr_glthread->left->right = NULL;
+//         curr_glthread->left = NULL;
+//         return;
+//     }
+// curr_glthread->left->right = curr_glthread->right;
+// curr_glthread->right->left = curr_glthread->left;
+// curr_glthread->left = 0 ; 
+// curr_glthread->right = 0 ;
+// }
 
+void remove_glthread(glthread_t *curr_glthread) {
+    if (!curr_glthread) return;  // Safety check
+    
+    // Handle left neighbor
+    if (curr_glthread->left) {
+        curr_glthread->left->right = curr_glthread->right;
+    }
+    
+    // Handle right neighbor
+    if (curr_glthread->right) {
+        curr_glthread->right->left = curr_glthread->left;
+    }
+    
+    // Clear current node's pointers
+    curr_glthread->left = NULL;
+    curr_glthread->right = NULL;
+}
 
 void delete_glthread_list(glthread_t *base_glthread) {
 glthread_t *glthreadptr = NULL;
