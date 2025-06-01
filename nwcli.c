@@ -330,6 +330,94 @@ l3_config_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable
 
 
 
+extern void
+interface_set_l2_mode(node_t *node,
+                       interface_t *interface,
+                       char *l2_mode_option);
+
+extern void
+interface_unset_l2_mode(node_t *node,
+                         interface_t *interface,
+                         char *l2_mode_option);
+extern void
+interface_set_vlan(node_t *node,
+                    interface_t *interface,
+                    unsigned int vlan);
+extern void
+interface_unset_vlan(node_t *node,
+                      interface_t *interface,
+                      unsigned int vlan);
+
+static int
+intf_config_handler(param_t *param, ser_buff_t *tlv_buf, 
+                    op_mode enable_or_disable){
+
+   char *node_name;
+   char *intf_name;
+   unsigned int vlan_id;
+   char *l2_mode_option;
+   int CMDCODE;
+   tlv_struct_t *tlv = NULL;
+   node_t *node;
+   interface_t *interface;
+
+   CMDCODE = EXTRACT_CMD_CODE(tlv_buf);
+   
+    TLV_LOOP_BEGIN(tlv_buf, tlv){
+
+        if     (strncmp(tlv->leaf_id, "node-name", strlen("node-name")) ==0)
+            node_name = tlv->value;
+        else if(strncmp(tlv->leaf_id, "if-name", strlen("if-name")) ==0)
+            intf_name = tlv->value;
+        else if(strncmp(tlv->leaf_id, "vlan-id", strlen("vlan-d")) ==0)
+            vlan_id = atoi(tlv->value);
+        else if(strncmp(tlv->leaf_id, "l2-mode-val", strlen("l2-mode-val")) == 0)
+            l2_mode_option = tlv->value;
+        else
+            assert(0);
+    } TLV_LOOP_END;
+
+    node = get_node_by_node_name(topo, node_name);
+    interface = get_node_if_by_name(node, intf_name);
+
+    if(!interface){
+        printf("Error : Interface %s do not exist\n", interface->if_name);
+        return -1;
+    }
+    switch(CMDCODE){
+        case CMDCODE_INTF_CONFIG_L2_MODE:
+            switch(enable_or_disable){
+                case CONFIG_ENABLE:
+                    interface_set_l2_mode(node, interface, l2_mode_option);
+                    break;
+                case CONFIG_DISABLE:
+                    interface_unset_l2_mode(node, interface, l2_mode_option);
+                    break;
+                default:
+                    ;
+            }
+            break;
+        case CMDCODE_INTF_CONFIG_VLAN:
+            switch(enable_or_disable){
+                case CONFIG_ENABLE:
+                    interface_set_vlan(node, interface, vlan_id);
+                    break;
+                case CONFIG_DISABLE:
+                    interface_unset_vlan(node, interface, vlan_id);
+                    break;
+                default:
+                    ;
+            }
+            break;
+         default:
+            ;    
+    }
+    return 0;
+}
+
+
+
+
 void nw_init_cli() {
     init_libcli();
 
@@ -417,6 +505,96 @@ void nw_init_cli() {
 
         }
      }
+
+
+
+      /*config node*/
+    {
+      static param_t node;
+      init_param(&node, CMD, "node", 0, 0, INVALID, 0, "\"node\" keyword");
+      libcli_register_param(config, &node);  
+      libcli_register_display_callback(&node,dump_nw_node );
+      {
+        /*config node <node-name>*/
+        static param_t node_name;
+        init_param(&node_name, LEAF, 0, 0, validate_node_extistence, STRING, "node-name", "Node Name");
+        libcli_register_param(&node, &node_name);
+        {
+            /*config node <node-name> interface*/
+            static param_t interface;
+            init_param(&interface, CMD, "interface", 0, 0, INVALID, 0, "\"interface\" keyword");    
+            libcli_register_param(&node_name, &interface);
+            {
+                /*config node <node-name> interface <if-name>*/
+                static param_t if_name;
+                init_param(&if_name, LEAF, 0, 0, 0, STRING, "if-name", "Interface Name");
+                libcli_register_param(&interface, &if_name);
+                {
+                    /*config node <node-name> interface <if-name> l2mode*/
+                    static param_t l2_mode;
+                    init_param(&l2_mode, CMD, "l2mode", 0, 0, INVALID, 0, "\"l2mode\" keyword");
+                    libcli_register_param(&if_name, &l2_mode);
+                    {
+                        /*config node <node-name> interface <if-name> l2mode <access|trunk>*/
+                        static param_t l2_mode_val;
+                        init_param(&l2_mode_val, LEAF, 0, intf_config_handler, validate_l2_mode_value,  STRING, "l2-mode-val", "access|trunk");
+                        libcli_register_param(&l2_mode, &l2_mode_val);
+                        set_param_cmd_code(&l2_mode_val, CMDCODE_INTF_CONFIG_L2_MODE);
+                    } 
+                }
+                {
+                    /*config node <node-name> interface <if-name> vlan*/
+                    static param_t vlan;
+                    init_param(&vlan, CMD, "vlan", 0, 0, INVALID, 0, "\"vlan\" keyword");
+                    libcli_register_param(&if_name, &vlan);
+                    {
+                        /*config node <node-name> interface <if-name> vlan <vlan-id>*/
+                         static param_t vlan_id;
+                         init_param(&vlan_id, LEAF, 0, intf_config_handler, validate_vlan_id, INT, "vlan-id", "vlan id(1-4096)");
+                         libcli_register_param(&vlan, &vlan_id);
+                         set_param_cmd_code(&vlan_id, CMDCODE_INTF_CONFIG_VLAN);
+                    }   
+                }    
+            }
+            
+        }
+        
+        {
+            /*config node <node-name> route*/
+            static param_t route;
+            init_param(&route, CMD, "route", 0, 0, INVALID, 0, "L3 route");
+            libcli_register_param(&node_name, &route);
+            {
+                /*config node <node-name> route <ip-address>*/    
+                static param_t ip_addr;
+                init_param(&ip_addr, LEAF, 0, 0, 0, IPV4, "ip-address", "IPv4 Address");
+                libcli_register_param(&route, &ip_addr);
+                {
+                     /*config node <node-name> route <ip-address> <mask>*/
+                    static param_t mask;
+                    init_param(&mask, LEAF, 0, l3_config_handler, validate_mask_value, INT, "mask", "mask(0-32");
+                    libcli_register_param(&ip_addr, &mask);
+                    set_param_cmd_code(&mask, CMDCODE_CONF_NODE_L3ROUTE);
+                    {
+                        /*config node <node-name> route <ip-address> <mask> <gw-ip>*/
+                        static param_t gwip;
+                        init_param(&gwip, LEAF, 0, 0, 0, IPV4, "gw-ip", "IPv4 Address");
+                        libcli_register_param(&mask, &gwip);
+                        {
+                            /*config node <node-name> route <ip-address> <mask> <gw-ip> <oif>*/
+                            static param_t oif;
+                            init_param(&oif, LEAF, 0, l3_config_handler, 0, STRING, "oif", "Out-going intf Name");
+                            libcli_register_param(&gwip, &oif);
+                            set_param_cmd_code(&oif, CMDCODE_CONF_NODE_L3ROUTE);
+                        }
+                    }
+                }
+            }    
+        }    
+        support_cmd_negation(&node_name);
+      }
+    }
+        support_cmd_negation(config);
      
 }
 

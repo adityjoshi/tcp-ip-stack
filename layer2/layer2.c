@@ -392,6 +392,22 @@ void interface_set_vlan(node_t *node, interface_t *interface, unsigned int vlan_
         printf("Error : Interface %s : Max Vlan membership limit reached", interface->if_name);
     }
 }
+void
+interface_unset_l2_mode(node_t *node, 
+                      interface_t *interface, 
+                      char *l2_mode_option){
+
+    
+}
+
+
+void
+interface_unset_vlan(node_t *node,
+                   interface_t *interface,
+                   unsigned int vlan){
+
+}
+
 
 void interface_set_l2_mode(node_t *node , interface_t *interface, char *l2_mode) {
     intf_l2_mode_t intf_l2_mode;
