@@ -13,6 +13,45 @@ init_rt_table(rt_table_t **rt_table) {
 
 
 
+L3_route_t *l3rib_lookup_lpm(rt_table_t *rt_table, unsigned int dest_ip) {
+
+    L3_route_t *l3_route = NULL;
+   L3_route_t  *lpm_l3_route = NULL;
+   L3_route_t  *default_l3_rt = NULL;
+
+   glthread_t *curr = NULL;
+     char subnet[16];
+    char dest_ip_str[16];
+    char longest_mask = 0;
+
+    dest_ip = htonl(dest_ip);
+    inet_ntop(AF_INET,&dest_ip, dest_ip_str, 16);
+    dest_ip_str[15] = '\0';
+
+    ITERATE_GLTHREAD_BEGIN(&rt_table->route_list, curr) {
+        l3_route = rt_glue_to_l3_route(curr);
+        memset(subnet, 0, 16);
+        apply_mask(dest_ip_str, l3_route->mask, &subnet);
+
+         if(strncmp("0.0.0.0", l3_route->dest, 16) == 0 &&
+                l3_route->mask == 0){
+            default_l3_rt = l3_route;
+        }
+        else if(strncmp(subnet, l3_route->dest, strlen(subnet)) == 0){
+            if( l3_route->mask > longest_mask){
+                longest_mask = l3_route->mask;
+                lpm_l3_route = l3_route;
+            }
+        }
+
+    } ITERATE_GLTHREAD_END(&rt_table->route_list, curr);
+    return lpm_l3_route ? lpm_l3_route : default_l3_rt;
+                
+
+
+}
+
+
 
 
 void rt_table_add_route(rt_table_t *rt_table,
