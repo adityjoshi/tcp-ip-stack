@@ -52,6 +52,46 @@ L3_route_t *l3rib_lookup_route(rt_table_t *rt_table, unsigned int dest_ip) {
 }
 
 
+L3_route_t *
+rt_table_lookup(rt_table_t *rt_table, char *ip_addr, char mask){
+    
+    glthread_t *curr;
+    L3_route_t *l3_route;
+
+    ITERATE_GLTHREAD_BEGIN(&rt_table->route_list, curr){
+
+        l3_route = rt_glue_to_l3_route(curr);
+        if(strncmp(l3_route->dest, ip_addr, 16) == 0 && 
+                l3_route->mask == mask){
+            return l3_route;
+        }
+    } ITERATE_GLTHREAD_END(&rt_table->route_list, curr);
+}
+
+
+
+
+
+static bool_t _rt_table_entry_add(rt_table_t *rt_table, L3_route_t *l3_route) {
+    L3_route_t *l3_route_old = rt_table_lookup(rt_table, l3_route->dest, l3_route->mask) ;
+    
+    if (l3_route_old && IS_L3_ROUTE_EQUAL(l3_route_old, l3_route)) {
+        /* Route already exists */
+        return FALSE;
+    }
+
+    if (l3_route_old) {
+        /* Remove the old route */
+        glthread_remove(&l3_route_old->route_glue);
+        free(l3_route_old);
+    }
+
+    init_glthread(&l3_route->route_glue);
+    glthread_add_next(&rt_table->route_list, &l3_route->route_glue);
+    return TRUE ; 
+
+}
+
 
 
 void rt_table_add_route(rt_table_t *rt_table,
@@ -66,7 +106,7 @@ apply_mask(dst, mask, &dst_str_with_mask);
 inet_pton(AF_INET, dst_str_with_mask, &dst_int);
 
 
-L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int); /* TO DO */
+L3_route_t *l3_route = l3rib_lookup_route(rt_table, dst_int); 
 
 
 /*Trying to add duplicate route!!*/
