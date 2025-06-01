@@ -51,7 +51,12 @@ dump_rt_table(rt_table_t *rt_table);
 
 
 
-
+#define IS_L3_ROUTE_EQUAL(rt1, rt2) \
+    (strncmp((rt1)->dest, (rt2)->dest, 16) == 0 && \
+     (rt1)->mask == (rt2)->mask && \
+     (rt1)->is_direct == (rt2)->is_direct && \
+     strncmp((rt1)->gw_ip, (rt2)->gw_ip, 16) == 0 && \
+     strncmp((rt1)->if_name, (rt2)->if_name, IF_NAME_SIZE) == 0)
 
 
 
