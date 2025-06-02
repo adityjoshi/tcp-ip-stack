@@ -47,7 +47,10 @@ static inline void init_ip_hdr(ip_hdr_t *ip_hdr) {
 
 
     ip_hdr->ttl = 64 ;
-    
+    ip_hdr->protocol = 0 ; 
+    ip_hdr->checksum = 0 ;
+    ip_hdr->src_ip = 0 ; 
+    ip_hdr->dest_ip = 0 ; 
 
 }
 
