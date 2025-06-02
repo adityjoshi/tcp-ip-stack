@@ -8,6 +8,7 @@ OBJS=gluethread/glthread.o \
 		  net.o			   \
 		  layer2/layer2.o  \
 		  layer3/layer3.o \
+		  layer5/ping.o \
 		  nwcli.o		   \
 		  utils.o		   \
 		  layer2/l2switch.o \
@@ -52,6 +53,9 @@ layer3/layer3.o:layer3/layer3.c
 layer2/l2switch.o:layer2/l2switch.c
 	${CC} ${CFLAGS} -c -I . layer2/l2switch.c -o layer2/l2switch.o
 
+layer5/ping.o:layer5/ping.c
+	${CC} ${CFLAGS} -c -I . layer5/ping.c -o layer5/ping.o
+
 CommandParser/libcli.a:
 	(cd CommandParser; make)
 clean:
@@ -59,6 +63,7 @@ clean:
 	rm -f gluethread/glthread.o
 	rm -f layer2/*.o
 	rm -f layer3/*.o
+	rm -f layer5/*.o
 	rm -f *exe
 	
 all:

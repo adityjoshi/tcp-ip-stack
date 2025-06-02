@@ -11,4 +11,5 @@
 #define CMDCODE_SHOW_NODE_MAC_TABLE 8   /*show node <node-name> mac*/
 #define CMDCODE_SHOW_NODE_RT_TABLE  9   /*show node <node-name> rt*/
 #define CMDCODE_CONF_NODE_L3ROUTE   10  /*config node <node-name> route <ip-address> <mask> [<gw-ip> <oif>]*/
+#define CMDCODE_RUN_PING            11  /*run node <node-name> ping <ip-address>*/
 #endif /* __CMDCODES__ */

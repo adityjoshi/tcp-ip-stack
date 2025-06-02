@@ -304,7 +304,7 @@ static int ping_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_d
 
     TLV_LOOP_BEGIN(tlv_buf, tlv){
 
-        if     (strncmp(tlv->leaf_id, "node-name", strlen("node-name")) ==0)
+        if(strncmp(tlv->leaf_id, "node-name", strlen("node-name")) ==0)
             node_name = tlv->value;
         else if(strncmp(tlv->leaf_id, "ip-address", strlen("ip-address")) ==0)
             ip_addr = tlv->value;
@@ -317,7 +317,7 @@ static int ping_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_d
     switch(CMDCODE){
 
         case CMDCODE_PING:
-            layer5_ping_fn(node, ip_addr);
+            layer5_ping(node, ip_addr);
             break;
        
         default:
@@ -484,7 +484,30 @@ void nw_init_cli() {
              init_param(&node_name, LEAF, 0, 0,validate_node_extistence, STRING, "node-name", "Node Name");
              libcli_register_param(&node, &node_name);
 
-             {}
+             {
+                /*run node <node-name> ping */
+                static param_t ping;
+                init_param(&ping, CMD, "ping" , 0, 0, INVALID, 0, "Ping utility");
+                libcli_register_param(&node_name, &ping);
+                {
+                    /*run node <node-name> ping <ip-address>*/    
+                    static param_t ip_addr;
+                    init_param(&ip_addr, LEAF, 0, ping_handler, 0, IPV4, "ip-address", "Ipv4 Address");
+                    libcli_register_param(&ping, &ip_addr);
+                    set_param_cmd_code(&ip_addr, CMDCODE_PING);
+                    {
+                        static param_t ero;
+                        init_param(&ero, CMD, "ero", 0, 0, INVALID, 0, "ERO(Explicit Route Object)");
+                        libcli_register_param(&ip_addr, &ero);
+                        {
+                            static param_t ero_ip_addr;
+                            init_param(&ero_ip_addr, LEAF, 0, ping_handler, 0, IPV4, "ero-ip-address", "ERO Ipv4 Address");
+                            libcli_register_param(&ero, &ero_ip_addr);
+                            set_param_cmd_code(&ero_ip_addr, CMDCODE_RUN_PING);
+                        }
+                    }
+                }
+             }
 
              { 
               /*run node <node-name> resolve-arp*/    
@@ -499,6 +522,7 @@ void nw_init_cli() {
                   libcli_register_param(&resolve_arp, &ip_addr);
                   set_param_cmd_code(&ip_addr, CMDCODE_RUN_ARP);
               }
+
             }
 
         }
