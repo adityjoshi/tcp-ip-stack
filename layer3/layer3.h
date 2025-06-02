@@ -14,9 +14,9 @@ typedef struct ip_hdr {
     unsigned int version : 4 ; 
     unsigned int header_length :4 ; 
     char tos ; 
-    short total_length ; 
+    unsigned short total_length ; 
     
-    short identification ;
+    unsigned short identification ;
     unsigned int unused_flag : 1 ;
     unsigned int Dont_Fragment_flag : 1;   
     unsigned int MORE_flag : 1; 
@@ -24,7 +24,7 @@ typedef struct ip_hdr {
 
     char ttl ;
     char protocol ;
-    short checksum ;
+    unsigned short checksum ;
     unsigned int src_ip ;
     unsigned int dest_ip ; 
 
