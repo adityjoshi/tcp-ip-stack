@@ -6,6 +6,37 @@
 #include "utils.h"
 #define IF_NAME_SIZE 16
 
+
+
+#pragma pack(push, 1)
+
+typedef struct ip_hdr {
+    unsigned int version : 4 ; 
+    unsigned int header_length :4 ; 
+    char tos ; 
+    short total_length ; 
+    
+    short identification ;
+    unsigned int unused_flag : 1 ;
+    unsigned int DF_flag : 1;   
+    unsigned int MORE_flag : 1; 
+    unsigned int frag_offset : 13;
+
+    char ttl ;
+    char protocol ;
+    short checksum ;
+    unsigned int src_ip ;
+    unsigned int dest_ip ; 
+    
+}ip_hdr_t ; 
+
+
+
+
+
+
+#pragma pack(pop)
+
 typedef struct rt_table {
     glthread_t route_list; 
 } rt_table_t ; 
