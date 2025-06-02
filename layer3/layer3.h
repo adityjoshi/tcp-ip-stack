@@ -18,7 +18,7 @@ typedef struct ip_hdr {
     
     short identification ;
     unsigned int unused_flag : 1 ;
-    unsigned int DF_flag : 1;   
+    unsigned int Dont_Fragment_flag : 1;   
     unsigned int MORE_flag : 1; 
     unsigned int frag_offset : 13;
 
@@ -41,7 +41,7 @@ static inline void init_ip_hdr(ip_hdr_t *ip_hdr) {
 
     ip_hdr->identification = 0 ;
     ip_hdr->unused_flag = 0;
-    ip_hdr->DF_flag = 1 ; 
+    ip_hdr->Dont_Fragment_flag = 1 ; 
     ip_hdr->MORE_flag = 0 ;
     ip_hdr->frag_offset = 0 ;
 
