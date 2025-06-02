@@ -33,6 +33,26 @@ typedef struct ip_hdr {
 
 #pragma pack(pop)
 
+static inline void init_ip_hdr(ip_hdr_t *ip_hdr) {
+    ip_hdr->version = 4 ; 
+    ip_hdr->header_length = 5 ; /*no use of option field so it will remain only 5*4=20bytes*/
+    ip_hdr->tos = 0 ; 
+    ip_hdr->total_length = 0;
+
+    ip_hdr->identification = 0 ;
+    ip_hdr->unused_flag = 0;
+    ip_hdr->DF_flag = 1 ; 
+    ip_hdr->MORE_flag = 0 ;
+    ip_hdr->frag_offset = 0 ;
+
+
+    ip_hdr->ttl = 64 ;
+    
+
+}
+
+
+
 typedef struct rt_table {
     glthread_t route_list; 
 } rt_table_t ; 
