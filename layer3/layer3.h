@@ -128,7 +128,7 @@ MACROS
 
 
 
-
+#define IP_HDR_LEN_BYTES(ip_hdr_ptr) (ip_hdr_ptr->header_length * 4)
 
 
 
