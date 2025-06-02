@@ -27,12 +27,8 @@ typedef struct ip_hdr {
     short checksum ;
     unsigned int src_ip ;
     unsigned int dest_ip ; 
-    
+
 }ip_hdr_t ; 
-
-
-
-
 
 
 #pragma pack(pop)
