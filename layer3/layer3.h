@@ -119,8 +119,11 @@ delete_rt_table_entry(rt_table_t *rt_table, char *ip_addr, char mask);
 
 
 
+/*
 
+MACROS 
 
+*/
 
 
 
