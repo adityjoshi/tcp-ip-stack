@@ -21,7 +21,7 @@ graph_t *topo = NULL ;
 int main(int argc, char **argv) {
   
 nw_init_cli();
-topo = L2_loop_topo();
+topo = linear_3_node_topo();
 
 
 start_shell();
