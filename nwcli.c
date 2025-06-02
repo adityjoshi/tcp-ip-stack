@@ -79,46 +79,6 @@ show_mac_handler(param_t *param, ser_buff_t *tlv_buf,
 
 }
 
-// static int
-// show_arp_handler(param_t *param, ser_buff_t *tlv_buf, 
-//                  op_mode enable_or_disable) {
-
-//     node_t *node = NULL;
-//     char *node_name = NULL;
-//     tlv_struct_t *tlv = NULL;
-    
-//     // Extract node name from TLV buffer
-//     TLV_LOOP_BEGIN(tlv_buf, tlv) {
-//         if (strncmp(tlv->leaf_id, "node-name", strlen("node-name")) == 0) {
-//             node_name = strdup(tlv->value);  // Allocate a safe copy
-//         }
-//     } TLV_LOOP_END;
-
-//     if (!node_name) {
-//         printf("Error: 'node-name' parameter missing\n");
-//         return -1;
-//     }
-
-//     // Fetch node
-//     node = get_node_by_node_name(topo, node_name);
-//     free(node_name);  // Free the dynamically allocated node name copy
-
-//     if (!node) {
-//         printf("Error: Node not found\n");
-//         return -1;
-//     }
-
-//     // Ensure ARP table exists
-//     if (!NODE_ARP_TABLE(node)) {
-//         printf("Error: ARP table not initialized for node\n");
-//         return -1;
-//     }
-
-//     // Dump the ARP table
-//     dump_arp_table(NODE_ARP_TABLE(node));
-//     return 0;
-// }
-
 
 
 /*General validations and checks */
@@ -327,6 +287,44 @@ l3_config_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable
     return 0;
 }
 
+
+
+extern void layer5_ping(node_t *node,char *dst_ip_addr);
+
+static int ping_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable) {
+     int CMDCODE;
+    node_t *node;
+    char *ip_addr = NULL, 
+         *ero_ip_addr = NULL;
+    char *node_name;
+
+    CMDCODE = EXTRACT_CMD_CODE(tlv_buf);
+
+    tlv_struct_t *tlv = NULL;
+
+    TLV_LOOP_BEGIN(tlv_buf, tlv){
+
+        if     (strncmp(tlv->leaf_id, "node-name", strlen("node-name")) ==0)
+            node_name = tlv->value;
+        else if(strncmp(tlv->leaf_id, "ip-address", strlen("ip-address")) ==0)
+            ip_addr = tlv->value;
+        else
+            assert(0);
+    }TLV_LOOP_END;
+
+    node = get_node_by_node_name(topo, node_name);
+
+    switch(CMDCODE){
+
+        case CMDCODE_PING:
+            layer5_ping_fn(node, ip_addr);
+            break;
+       
+        default:
+            ;
+    }
+    return 0;
+}
 
 
 
