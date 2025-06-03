@@ -205,6 +205,10 @@ ITERATE_GLTHREAD_BEGIN(&rt_table->route_list, curr){
 
 
 void demote_pkt_to_layer3(node_t *node, char *pkt, unsigned int size, int protocol_num, unsigned int dest_ip) {
-    
+
 }
 
+
+void promote_pkt_to_layer3(node_t *ndoe, char *pkt, unsigned int size, int protocol_name, unsigned int dest_ip) {
+    
+}
