@@ -12,6 +12,7 @@ OBJS=gluethread/glthread.o \
 		  nwcli.o		   \
 		  utils.o		   \
 		  layer2/l2switch.o \
+		  layer5/layer5.o \
 		  communication.o
 		  
 
@@ -55,6 +56,9 @@ layer2/l2switch.o:layer2/l2switch.c
 
 layer5/ping.o:layer5/ping.c
 	${CC} ${CFLAGS} -c -I . layer5/ping.c -o layer5/ping.o
+
+layer5/layer5.o:layer5/layer5.c
+	${CC} ${CFLAGS} -c -I . layer5/layer5.c -o layer5/layer5.o
 
 CommandParser/libcli.a:
 	(cd CommandParser; make)
