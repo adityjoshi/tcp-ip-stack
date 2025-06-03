@@ -253,7 +253,7 @@ void demote_pkt_layer2(node_t *node, unsigned int next_hop_ip, char *outgoing_in
 
 
 
-void promote_pkt_layer2(node_t *node, interface_t *recv_intf, ethernetHeader_t *ethernetHdr, uint32_t pkt_size) ;
+void promote_pkt_to_layer2(node_t *node, interface_t *recv_intf, ethernetHeader_t *ethernetHdr, uint32_t pkt_size) ;
 
 
 
