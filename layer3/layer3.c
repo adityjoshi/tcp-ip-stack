@@ -209,6 +209,6 @@ void demote_pkt_to_layer3(node_t *node, char *pkt, unsigned int size, int protoc
 }
 
 
-void promote_pkt_to_layer3(node_t *ndoe, char *pkt, unsigned int size, int protocol_name, unsigned int dest_ip) {
-    
+void promote_pkt_to_layer3(node_t *ndoe, interface_t *interface ,char *pkt, unsigned int size, int protocol_number) {
+
 }
