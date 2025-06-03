@@ -3,9 +3,9 @@ CFLAGS=-g -I. -Igluethread
 TARGET:test.exe CommandParser/libcli.a 
 LIBS=-lpthread -L ./CommandParser -lcli
 OBJS=gluethread/glthread.o \
+ 		  net.o			   \
 		  graph.o 		   \
 		  topologies.o	   \
-		  net.o			   \
 		  layer2/layer2.o  \
 		  layer3/layer3.o \
 		  layer5/ping.o \
@@ -25,14 +25,16 @@ testapp.o:testapp.c
 gluethread/glthread.o:gluethread/glthread.c
 	${CC} ${CFLAGS} -c -I gluethread gluethread/glthread.c -o gluethread/glthread.o
 
+net.o:net.c
+	${CC} ${CFLAGS} -c -I . net.c -o net.o
+
 graph.o:graph.c
 	${CC} ${CFLAGS} -c -I . graph.c -o graph.o
 
 topologies.o:topologies.c
 	${CC} ${CFLAGS} -c -I . topologies.c -o topologies.o
 
-net.o:net.c
-	${CC} ${CFLAGS} -c -I . net.c -o net.o
+
 
 
 

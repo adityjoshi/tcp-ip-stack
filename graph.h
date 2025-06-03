@@ -14,6 +14,7 @@
 // forwarad declaration 
 typedef struct node_ node_t ;
 typedef struct link_ link_t;
+typedef struct interface_ interface_t ;
 
 typedef struct interface_ {
   char if_name[IF_NAME_SIZE];

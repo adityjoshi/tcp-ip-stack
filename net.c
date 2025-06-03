@@ -2,8 +2,9 @@
 #include <stdint.h>
 #include <string.h>
 #include "gluethread/glthread.h"
-#include "graph.h"
+
 #include "net.h"
+#include "graph.h"
 #include "utils.h"
 #include <stdio.h>
 #include <arpa/inet.h> 

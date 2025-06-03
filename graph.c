@@ -1,10 +1,11 @@
+#include "net.h"
 #include "graph.h"
 #include <malloc/_malloc.h>
 #include <stdio.h>
 #include <string.h>
 #include "gluethread/glthread.h"
 #include "communication.h"
-#include "net.h"
+
 
 extern void init_udp_socket(node_t *node);  
 graph_t *create_new_graph(char *topology_name) {

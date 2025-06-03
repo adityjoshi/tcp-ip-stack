@@ -27,9 +27,8 @@ typedef struct mac_address_ {
 //forward declaration
 typedef struct arp_table_ arp_table_t;
 typedef struct mac_table_ mac_table_t; 
+typedef struct rt_table rt_table_t;
 
-extern void init_arp_table(arp_table_t **arp_table);
-extern void init_mac_table(mac_table_t **mac_table);
 
 typedef struct node_nw_properties_ {
 
@@ -42,6 +41,9 @@ typedef struct node_nw_properties_ {
   ip_address_t loopback_addr;
 } node_nw_properties_t;
 
+extern void init_arp_table(arp_table_t **arp_table);
+extern void init_mac_table(mac_table_t **mac_table);
+extern void init_rt_table(rt_table_t **rt_table);
 
 static inline void 
 init_node_nw_properties_(node_nw_properties_t *node_nw_prop) {
