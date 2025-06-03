@@ -1,9 +1,10 @@
 #include "layer3/layer3.h"
 #include "arpa/inet.h"
-#include <stdio.h>      // printf
-#include <stdlib.h>     // calloc, free
-#include <string.h>     // memset, strncpy, strncmp, strlen
-#include <assert.h>     // assert
+#include <stdio.h>      
+#include <stdlib.h>     
+#include <string.h>     
+#include <assert.h>    
+#include "graph.h"
 
 
 
@@ -177,21 +178,7 @@ void rt_table_add_direct_route(rt_table_t *rt_table,
 
 
 
-// void
-// dump_rt_table(rt_table_t *rt_table) {
-//     glthread_t *curr = NULL ;
-//     L3_route_t *l3_route = NULL;    
 
-//     printf("Dumping L3 Routing Table\n");
-
-//     ITERATE_GLTHREAD_BEGIN(&rt_table->route_list,curr) {
-//         l3_route = rt_glue_to_l3_route(curr);
-//         printf("\t%-18s %-4d %-18s %s\n", 
-//                 l3_route->dest, l3_route->mask, 
-//                 l3_route->is_direct ? "NA" : l3_route->gw_ip, 
-//                 l3_route->is_direct ? "NA" : l3_route->if_name);
-//     } ITERATE_GLTHREAD_END(&rt_table->route_list,curr);
-// }
 
  void
 dump_rt_table(rt_table_t *rt_table) {
@@ -214,3 +201,10 @@ ITERATE_GLTHREAD_BEGIN(&rt_table->route_list, curr){
 
 
 }
+
+
+
+void demote_pkt_to_layer3(node_t *node, char *pkt, unsigned int size, int protocol_num, unsigned int dest_ip) {
+    
+}
+
