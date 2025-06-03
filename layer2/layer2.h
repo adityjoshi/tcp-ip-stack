@@ -249,6 +249,18 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
 
 
 
+void demote_pkt_layer2(node_t *node, unsigned int next_hop_ip, char *outgoing_intf, char *pkt, unsigned int pkt_size, int protocol_number);
+
+
+
+void promote_pkt_layer2(node_t *node, interface_t *recv_intf, ethernetHeader_t *ethernetHdr, uint32_t pkt_size) ;
+
+
+
+
+
+
+
 /*
 *
 *

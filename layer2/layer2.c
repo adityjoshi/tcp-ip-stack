@@ -614,4 +614,15 @@ ethernetHeader_t *untag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigne
     return ethernet_hdr;
 }
                      
-                   
+
+
+
+void demote_pkt_layer2(node_t *node, unsigned int next_hop_ip, char *outgoing_intf, char *pkt, unsigned int pkt_size, int protocol_number){ 
+
+}
+
+
+
+void promote_pkt_layer2(node_t *node, interface_t *recv_intf, ethernetHeader_t *ethernetHdr, uint32_t pkt_size) {
+    
+}
