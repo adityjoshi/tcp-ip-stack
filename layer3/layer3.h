@@ -71,7 +71,7 @@ typedef struct L3_route {
     char mask ;
     bool_t is_direct ; /* for local route and direct route*/
     char gw_ip[16]; /* next gateway ip */
-     char if_name[IF_NAME_SIZE]; /* outgoing interface name */
+    char if_name[IF_NAME_SIZE]; /* outgoing interface name */
     glthread_t route_glue;
 } L3_route_t;
 
