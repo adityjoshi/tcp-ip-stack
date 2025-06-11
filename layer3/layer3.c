@@ -98,6 +98,13 @@ if (l3_is_direct_route(l3_route)) {
 
     if (is_layer3_local_delivery(node,ip_hdr->dest_ip)) {
 
+        switch(ip_hdr->protocol) {
+            case ICMP_PRO:
+            printf("IP Address : %s, ping success\n", dest_ip_addr);
+                    break;
+            default:
+            ;
+        }
 
     }
 
