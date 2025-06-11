@@ -89,7 +89,34 @@ static void layer3_ip_pkt_recv_from_bottom(node_t *node, interface_t *interface,
 
 
 
+/*
+CASE 1 and CASE 2 are possible 
+*/
 
+
+if (l3_is_direct_route(l3_route)) {
+
+    if (is_layer3_local_delivery(node,ip_hdr->dest_ip)) {
+
+
+    }
+
+
+     /* case 2 : It means, the dst ip address lies in direct connected
+         * subnet of this router, time for l2 routing*/
+
+    demote_pkt_to_layer2 (
+        node,0,NULL,(char *)ip_hdr,pkt_size,ETH_IP
+    );
+    return ; 
+
+}
+
+
+ /*case 3 : L3 forwarding case*/
+
+ ip_hdr->ttl-- ; 
+ 
 
 
 
