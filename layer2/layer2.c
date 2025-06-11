@@ -1,4 +1,5 @@
 #include "layer2.h"
+#include "layer3/layer3.h"
 #include "tcpconst.h"
 #include <arpa/inet.h>
 #include <stdio.h>
@@ -262,7 +263,11 @@ free(arp_entry);
 //         }
 
 
- void
+extern void promote_pkt_to_layer3(node_t *node, interface_t *interface,
+                         char *pkt, unsigned int pkt_size,
+                         int L3_protocol_type) ; 
+
+void
 promote_pkt_to_layer2(node_t *node, interface_t *iif,
         ethernetHeader_t *ethernet_hdr,
         uint32_t pkt_size){
@@ -283,13 +288,13 @@ promote_pkt_to_layer2(node_t *node, interface_t *iif,
                         }
                         break;
                          case ETH_IP:
-            // promote_pkt_to_layer3(node, iif,
-            //         GET_ETHERNET_HDR_PAYLOAD(ethernet_hdr),
-            //         pkt_size - GET_ETH_HDR_SIZE_EXCL_PAYLOAD(ethernet_hdr),
-            //         ethernet_hdr->type);
-            //         break;
-            //             default:
-                        
+                    promote_pkt_to_layer3(node, iif,
+                    GET_ETHERNET_HDR_PAYLOAD(ethernet_hdr),
+                    pkt_size - GET_ETH_HDR_SIZE_EXCL_PAYLOAD(ethernet_hdr),
+                    ethernet_hdr->type);
+                    break;
+                        default:
+                        ;
                     }
 
 
