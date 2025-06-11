@@ -54,6 +54,22 @@ is_layer3_local_delivery(node_t *node, unsigned int dst_ip) {
 static void layer3_ip_pkt_recv_from_bottom(node_t *node, interface_t *interface,
         ip_hdr_t *pkt, unsigned int pkt_size) {
 
+            char *l4_hdr, *l5_hdr ; 
+            char dest_ip_addr[16];
+
+            ip_hdr_t *ip_hdr = pkt ; 
+
+            unsigned int dest_ip = htonl(ip_hdr->dest_ip);
+            inet_ntop(AF_INET, &dest_ip, dest_ip_addr,16);
+
+            L3_route_t *l3_route = l3rib_lookup_route(Node_RT_TABLE(node),ip_hdr->dest_ip);
+
+            if (!l3_route) {
+
+                printf("Router %s : Cannot route IP : %s \n",node->node_name, dest_ip_addr);
+
+                return ; 
+            }
 
 
 
@@ -65,7 +81,6 @@ static void layer3_ip_pkt_recv_from_bottom(node_t *node, interface_t *interface,
 
 
 
-            
         }
 
 
