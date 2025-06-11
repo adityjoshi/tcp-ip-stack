@@ -204,6 +204,13 @@ ITERATE_GLTHREAD_BEGIN(&rt_table->route_list, curr){
 }
 
 void layer3_pkt_recv_from_bottom(node_t *node, interface_t *interface ,char *pkt, unsigned int pkt_size, int protocol_number) {
+    switch(protocol_number) {
+        case ETH_IP :
+          layer3_ip_pkt_recv_from_bottom(node, interface, (ip_hdr_t *)pkt, pkt_size);
+            break;
+        default:
+            ;
+    }
 
 }
 
