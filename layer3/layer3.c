@@ -49,6 +49,26 @@ is_layer3_local_delivery(node_t *node, unsigned int dst_ip) {
 }
 
 
+
+
+static void layer3_ip_pkt_recv_from_bottom(node_t *node, interface_t *interface,
+        ip_hdr_t *pkt, unsigned int pkt_size) {
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        }
+
+
 void
 init_rt_table(rt_table_t **rt_table) {
     *rt_table = calloc(1, sizeof(rt_table_t));
