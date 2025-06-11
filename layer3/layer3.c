@@ -116,15 +116,30 @@ if (l3_is_direct_route(l3_route)) {
  /*case 3 : L3 forwarding case*/
 
  ip_hdr->ttl-- ; 
- 
+
+
+if (ip_hdr->ttl == 0 ) {
+    /*
+    drop the packet 
+    */
+   return;
+}
+
+unsigned int nextHopIP ;
+
+inet_pton(AF_INET, l3_route->gw_ip, &nextHopIP);
+
+nextHopIP = htonl(nextHopIP);
 
 
 
+demote_pkt_to_layer2(
+
+    node,nextHopIP,l3_route->if_name,(char *)ip_hdr,pkt_size, ETH_IP
+);
 
 
-
-
-        }
+   }
 
 
 void
