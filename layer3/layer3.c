@@ -14,6 +14,41 @@ static bool_t l3_is_direct_route(L3_route_t *l3_route) {
 }
 
 
+
+static bool_t
+is_layer3_local_delivery(node_t *node, unsigned int dst_ip) {
+
+    char dest_ip_str[16] ;
+    dest_ip_str[15] = '\0';
+    char *intf_addr = NULL ; 
+
+    dst_ip = htonl(dst_ip);
+    inet_ntop(AF_INET, &dst_ip, dest_ip_str, 16);
+
+    if (strncmp(NODE_LOOPBACKADDRESS(node),dest_ip_str,16) == 0 ) return TRUE ; 
+
+
+    /* check with the interface */
+
+    unsigned int i = 0 ; 
+
+    interface_t *intf ; 
+    for ( ; i<MAX_INTF_PER_NODE; i++) {
+        intf = node->intf[i];
+
+        if (!intf) return FALSE ; 
+
+        if (intf->interface_nw_props.is_ip_address_config == FALSE) continue;
+
+        intf_addr = INTERFACE_IP(intf);
+
+        if (strncmp(intf_addr,dest_ip_str,16) == 0) return TRUE ; 
+    }
+    return FALSE ; 
+    
+}
+
+
 void
 init_rt_table(rt_table_t **rt_table) {
     *rt_table = calloc(1, sizeof(rt_table_t));
@@ -233,36 +268,3 @@ void promote_pkt_to_layer3(node_t *node, interface_t *interface ,char *pkt, unsi
 
 
 
-
-static bool_t
-is_layer3_local_delivery(node_t *node, unsigned int dst_ip) {
-
-    char dest_ip_str[16] ;
-    dest_ip_str[15] = '\0';
-    char *intf_addr = NULL ; 
-
-    dst_ip = htonl(dst_ip);
-    inet_ntop(AF_INET, &dst_ip, dest_ip_str, 16);
-
-    if (strncmp(NODE_LOOPBACKADDRESS(node),dest_ip_str,16) == 0 ) return TRUE ; 
-
-
-    /* check with the interface */
-
-    unsigned int i = 0 ; 
-
-    interface_t *intf ; 
-    for ( ; i<MAX_INTF_PER_NODE; i++) {
-        intf = node->intf[i];
-
-        if (!intf) return FALSE ; 
-
-        if (intf->interface_nw_props.is_ip_address_config == FALSE) continue;
-
-        intf_addr = INTERFACE_IP(intf);
-
-        if (strncmp(intf_addr,dest_ip_str,16) == 0) return TRUE ; 
-    }
-    return FALSE ; 
-    
-}
