@@ -73,6 +73,22 @@ static void layer3_ip_pkt_recv_from_bottom(node_t *node, interface_t *interface,
 
 
 
+        /*
+        
+        
+        L3 ROUTE EXIST 
+
+        CASE 1 : Pkt is destined to the self (for this router only)
+        CASE 2 : Pkt is destined for the  host machine connected to directly attached subnet
+        CASE 3 : Pkt is to be forwaded to the next router 
+        
+        
+
+        
+        */
+
+
+
 
 
 
