@@ -202,6 +202,9 @@ ITERATE_GLTHREAD_BEGIN(&rt_table->route_list, curr){
 
 
 }
+static bool_t l3_is_direct_route(L3_route_t *l3_route) {
+    return l3_route->is_direct ;
+}
 
 void layer3_pkt_recv_from_bottom(node_t *node, interface_t *interface ,char *pkt, unsigned int pkt_size, int protocol_number) {
     switch(protocol_number) {
