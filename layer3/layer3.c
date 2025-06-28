@@ -355,7 +355,18 @@ void layer3_pkt_recv_from_bottom(node_t *node, interface_t *interface ,char *pkt
 
 }
 
-void demote_pkt_to_layer3(node_t *node, char *pkt, unsigned int size, int protocol_num, unsigned int dest_ip) {
+static void
+layer3_pkt_receieve_from_top(node_t *node, char *pkt,
+        unsigned int size, int protocol_number,
+        unsigned int dest_ip_address) {
+
+        }
+
+
+void demote_pkt_to_layer3(node_t *node, char *pkt, unsigned int size, 
+    int protocol_num, // l4 or l5 protocol number
+    unsigned int dest_ip) {
+    layer3_pkt_recv_from_top(node, pkt, size, protocol_num, dest_ip);
 
 }
 
