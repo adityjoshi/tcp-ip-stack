@@ -360,6 +360,16 @@ layer3_pkt_receieve_from_top(node_t *node, char *pkt,
         unsigned int size, int protocol_number,
         unsigned int dest_ip_address) {
 
+            ip_hdr_t *ip_hdr; 
+            init_ip_hdr(&ip_hdr);
+
+            ip_hdr->protocol = protocol_number;
+            ip_hdr->dest_ip = dest_ip_address;
+
+            unsigned int addr_int = 0 ; 
+            inet_pton(AF_INET, NODE_LOOPBACKADDRESS(node), &addr_int);
+
+        
         }
 
 
