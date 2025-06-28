@@ -368,8 +368,17 @@ layer3_pkt_receieve_from_top(node_t *node, char *pkt,
 
             unsigned int addr_int = 0 ; 
             inet_pton(AF_INET, NODE_LOOPBACKADDRESS(node), &addr_int);
+            addr_int = htonl(addr_int);
+            ip_hdr->src_ip = addr_int; 
 
-        
+            ip_hdr->total_length = (short) ip_hdr->header_length + (short) (size/4) +  (short)((size % 4) ? 1 : 0);
+
+            L3_route_t * l3_route = l3rib_lookup_route(Node_RT_TABLE(node), ip_hdr->dest_ip);
+
+             if(!l3_route){
+        printf("Node : %s : No L3 route\n",  node->node_name); 
+        return;
+    }
         }
 
 
