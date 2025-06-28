@@ -66,7 +66,7 @@ static void layer3_ip_pkt_recv_from_bottom(node_t *node, interface_t *interface,
 
             if (!l3_route) {
 
-                printf("Router %s : Cannot route IP : %s \n",node->node_name, dest_ip_addr);
+                printf("Router %s : Cannot route IP : %s  because no entry is not present in the routing table\n",node->node_name, dest_ip_addr);
 
                 return ; 
             }
