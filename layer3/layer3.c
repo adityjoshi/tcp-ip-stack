@@ -392,7 +392,7 @@ layer3_pkt_receieve_from_top(node_t *node, char *pkt,
                if (pkt && size) {
                 memcpy(new_pkt + (ip_hdr.header_length * 4), pkt, size);
                }
-               
+            
 
 
         }
