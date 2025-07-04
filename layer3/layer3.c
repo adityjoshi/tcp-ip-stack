@@ -393,6 +393,26 @@ layer3_pkt_receieve_from_top(node_t *node, char *pkt,
                 memcpy(new_pkt + (ip_hdr.header_length * 4), pkt, size);
                }
             
+               bool_t is_direct_route = l3_is_direct_route(l3_route);
+
+               unsigned int next_hop_ip = 0 ; 
+
+               if(!is_direct_route) {
+                     inet_pton(AF_INET, l3_route->gw_ip, &next_hop_ip);
+                     next_hop_ip = htonl(next_hop_ip);
+               } else {
+                 /*Case 2 : Direct Host Delivery Case*/
+                 /*Case 4 : Self-Ping Case*/
+                /* The Data link layer will differentiate between case 2 
+                  * and case 4 and take appropriate action*/
+                        next_hop_ip = 0 ; 
+               }
+
+               char *shifted_pkt_buffer = pkt_buffer_shift_right(new_pkt,new_pkt_size, MAX_PACKET_BUFFER_SIZE);
+
+               demote_pkt_to_layer2(node,next_hop_ip,is_direct_route ? 0 :l3_route->if_name,shifted_pkt_buffer,new_pkt_size,ETH_IP);
+
+               free(new_pkt);
 
 
         }
