@@ -6,6 +6,7 @@
 #include <assert.h> 
 #include "net.h"   
 #include "graph.h"
+#include "communication.h":
 
 
 
@@ -360,25 +361,40 @@ layer3_pkt_receieve_from_top(node_t *node, char *pkt,
         unsigned int size, int protocol_number,
         unsigned int dest_ip_address) {
 
-            ip_hdr_t *ip_hdr; 
+            ip_hdr_t ip_hdr; 
             init_ip_hdr(&ip_hdr);
 
-            ip_hdr->protocol = protocol_number;
-            ip_hdr->dest_ip = dest_ip_address;
+            ip_hdr.protocol = protocol_number;
+            ip_hdr.dest_ip = dest_ip_address;
 
             unsigned int addr_int = 0 ; 
             inet_pton(AF_INET, NODE_LOOPBACKADDRESS(node), &addr_int);
             addr_int = htonl(addr_int);
-            ip_hdr->src_ip = addr_int; 
+            ip_hdr.src_ip = addr_int; 
 
-            ip_hdr->total_length = (short) ip_hdr->header_length + (short) (size/4) +  (short)((size % 4) ? 1 : 0);
+            ip_hdr.total_length = (short) ip_hdr.header_length + (short) (size/4) +  (short)((size % 4) ? 1 : 0);
 
-            L3_route_t * l3_route = l3rib_lookup_route(Node_RT_TABLE(node), ip_hdr->dest_ip);
+            L3_route_t * l3_route = l3rib_lookup_route(Node_RT_TABLE(node), ip_hdr.dest_ip);
 
              if(!l3_route){
-        printf("Node : %s : No L3 route\n",  node->node_name); 
-        return;
-    }
+               printf("Node : %s : No L3 route\n",  node->node_name); 
+                return;
+               }
+            
+               char *new_pkt = NULL ; 
+               unsigned int new_pkt_size = 0 ;
+
+               new_pkt_size = ip_hdr.total_length*4 ; 
+               new_pkt = calloc(1, MAX_PACKET_BUFFER_SIZE);
+
+               memcpy(new_pkt, (char*)&ip_hdr, ip_hdr.header_length * 4);
+               
+               if (pkt && size) {
+                memcpy(new_pkt + (ip_hdr.header_length * 4), pkt, size);
+               }
+               
+
+
         }
 
 
