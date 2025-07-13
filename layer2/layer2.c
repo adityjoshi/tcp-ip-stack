@@ -341,6 +341,111 @@ promote_pkt_to_layer2(node_t *node, interface_t *iif,
             }
         
 
+
+
+
+
+static void l2_forward_ip_packet(node_t *node, unsigned int next_hop_ip, char *outgoing_if, ethernetHeader_t *pkt, unsigned int pkt_size)  {
+    interface_t *oif = NULL ; 
+    char next_hop_ip_str[16];
+    arp_entries_t *arp_entry = NULL;
+    ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
+    unsigned int ethernet_payload_size = pkt_size - ETH_HDR_SIZE_EXCL_PAYLOAD;
+
+    next_hop_ip  = htonl(next_hop_ip);
+    inet_ntop(AF_INET, &next_hop_ip, next_hop_ip_str, 16);
+
+    next_hop_ip = htonl(next_hop_ip);
+
+    if (outgoing_if) {
+
+        /*
+        
+        case 1 : it means we have a next hop and l2 will forward the packet to the next hops
+        
+        */
+
+        oif = node_get_interface_by_name(node, outgoing_if);
+        assert(oif);
+
+        arp_entry = arp_table_entry_lookup(NODE_ARP_TABLE(node), next_hop_ip_str);
+
+
+        if (!arp_entry)  {
+            /*
+            if the entry is not present in the arp table then it means its the time for the arp broadcast request 
+            */
+           assert(0);
+           send_arp_broadcast_request(node, oif, next_hop_ip_str);
+           return ; 
+        }
+        goto l2_frame_prepare;
+    }
+
+    /*
+    case 4 : self ping 
+    */
+
+    if (is_layer3_local_delivery(node, next_hop_ip)) {
+        promote_pkt_to_layer3(node,0, GET_ETHERNET_HDR_PAYLOAD(ethernet_header), pkt_size - GET_ETH_HDR_SIZE_EXCL_PAYLOAD(ethernet_header), ethernet_header->type);
+        return;
+    }
+
+    /*
+    
+    case 2: if it is the direct route basically it is present in 
+    the local subnet so we can send the packet to the interface
+
+    */
+
+    oif = node_get_matching_subnet_interface(node, next_hop_ip_str);
+    if (!oif) {
+        printf("Error : %s : No eligible subnet for L2 forwarding for Ip-address : %s\n", node->node_name, next_hop_ip_str);
+        return;
+    }
+
+    arp_entry = arp_table_entry_lookup(NODE_ARP_TABLE(node), next_hop_ip_str);
+
+    if (!arp_entry)  {
+        /*
+        if the entry is not present in the arp table then it means its the time for the arp broadcast request 
+        */
+       assert(0);
+       send_arp_broadcast_request(node, oif, next_hop_ip_str);
+       return ; 
+    }
+
+    l2_frame_prepare:
+    memcpy(ethernet_header->dest.mac_address, arp_entry->mac_address.mac_address, sizeof(mac_address_t));
+    memcpy(ethernet_header->src.mac_address, INTERFACE_MAC(oif), sizeof(mac_address_t));
+    SET_COMMON_ETH_FCS(ethernet_header, ethernet_payload_size, 0);
+    send_packet_out((char *)ethernet_header, pkt_size, oif);
+
+
+
+}
+
+static void layer2_pkt_recv_from_top(node_t *node, unsigned int next_hop_ip, char *outgoing_if, char *pkt, unsigned int pkt_size, int protocol_number)  {
+
+    assert(pkt_size < sizeof(((ethernetHeader_t *)0)->payload)) ;
+
+    if (protocol_number == ETH_IP) {
+        ethernetHeader_t *ethernet_hdr_empty = ALLOC_ETH_HDR_WITH_PAYLOAD(pkt,pkt_size);
+        ethernet_hdr_empty->type = ETH_IP;
+
+        l2_forward_ip_packet(node,next_hop_ip,outgoing_if,ethernet_hdr_empty, pkt_size+ETH_HDR_SIZE_EXCL_PAYLOAD);
+    }
+
+}
+
+
+
+void demote_pkt_layer2(node_t *node, unsigned int next_hop_ip, char *outgoing_intf, char *pkt, unsigned int pkt_size, int protocol_number){ 
+ layer2_pkt_recv_from_top(node, next_hop_ip, outgoing_intf, pkt, pkt_size, protocol_number);
+}
+
+
+
 void interface_set_vlan(node_t *node, interface_t *interface, unsigned int vlan_id) {
     
     /*
@@ -621,25 +726,5 @@ ethernetHeader_t *untag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigne
     return ethernet_hdr;
 }
                      
-
-
-
-void demote_pkt_layer2(node_t *node, unsigned int next_hop_ip, char *outgoing_intf, char *pkt, unsigned int pkt_size, int protocol_number){ 
- layer2_pkt_recv_from_top(node, next_hop_ip, outgoing_intf, pkt, pkt_size, protocol_number);
-}
-
-
-static void layer2_pkt_recv_from_top(node_t *node, unsigned int next_hop_ip, char *outgoing_if, char *pkt, unsigned int pkt_size, int protocol_number)  {
-
-    assert(pkt_size < sizeof(((ethernetHeader_t *)0)->payload)) ;
-
-    if (protocol_number == ETH_IP) {
-        ethernetHeader_t *ethernet_hdr_empty = ALLOC_ETH_HDR_WITH_PAYLOAD(pkt,pkt_size);
-        ethernet_hdr_empty->type = ETH_IP;
-
-        l2_forward_ip_packet(node,next_hop_ip,outgoing_if,ethernet_hdr_empty, pkt_size+ETH_HDR_SIZE_EXCL_PAYLOAD);
-    }
-
-}
 
 
