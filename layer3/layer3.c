@@ -395,7 +395,7 @@ layer3_pkt_receieve_from_top(node_t *node, char *pkt,
             
                bool_t is_direct_route = l3_is_direct_route(l3_route);
 
-               unsigned int next_hop_ip = 0 ; 
+               unsigned int next_hop_ip  ; 
 
                if(!is_direct_route) {
                      inet_pton(AF_INET, l3_route->gw_ip, &next_hop_ip);
@@ -405,7 +405,7 @@ layer3_pkt_receieve_from_top(node_t *node, char *pkt,
                  /*Case 4 : Self-Ping Case*/
                 /* The Data link layer will differentiate between case 2 
                   * and case 4 and take appropriate action*/
-                        next_hop_ip = 0 ; 
+                        next_hop_ip = dest_ip_address ; 
                }
 
                char *shifted_pkt_buffer = pkt_buffer_shift_right(new_pkt,new_pkt_size, MAX_PACKET_BUFFER_SIZE);
