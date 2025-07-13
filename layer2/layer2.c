@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "communication.h"  
 #include "net.h"
+#include <assert.h>
+#include <Kernel/kern/assert.h>
 
 
 
@@ -623,11 +625,21 @@ ethernetHeader_t *untag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigne
 
 
 void demote_pkt_layer2(node_t *node, unsigned int next_hop_ip, char *outgoing_intf, char *pkt, unsigned int pkt_size, int protocol_number){ 
+ layer2_pkt_recv_from_top(node, next_hop_ip, outgoing_intf, pkt, pkt_size, protocol_number);
+}
+
+
+static void layer2_pkt_recv_from_top(node_t *node, unsigned int next_hop_ip, char *outgoing_if, char *pkt, unsigned int pkt_size, int protocol_number)  {
+
+    assert(pkt_size < sizeof(((ethernetHeader_t *)0)->payload)) ;
+
+    if (protocol_number == ETH_IP) {
+        ethernetHeader_t *ethernet_hdr_empty = ALLOC_ETH_HDR_WITH_PAYLOAD(pkt,pkt_size);
+        ethernet_hdr_empty->type = ETH_IP;
+
+        l2_forward_ip_packet(node,next_hop_ip,outgoing_if,ethernet_hdr_empty, pkt_size+ETH_HDR_SIZE_EXCL_PAYLOAD);
+    }
 
 }
 
 
-
-void promote_pkt_layer2(node_t *node, interface_t *recv_intf, ethernetHeader_t *ethernetHdr, uint32_t pkt_size) {
-
-}

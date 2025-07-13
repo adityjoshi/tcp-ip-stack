@@ -7,6 +7,7 @@
 #include "net.h"   
 #include "graph.h"
 #include "communication.h":
+#include <Kernel/kern/assert.h>
 
 
 
