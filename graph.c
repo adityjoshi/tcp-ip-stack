@@ -54,8 +54,8 @@ interface_assign_mac_address(&link->intf2);
 }
 
 
- node_t *create_new_node(graph_t * graph, char *node_name) {
- node_t *node = calloc(1, sizeof(node_t));
+node_t *create_new_node(graph_t * graph, char *node_name) {
+node_t *node = calloc(1, sizeof(node_t));
 strncpy(node->node_name,node_name,NODE_NAME_SIZE);
 node->node_name[NODE_NAME_SIZE-1]='\0';
 init_udp_socket(node);
