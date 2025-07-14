@@ -183,7 +183,7 @@ L3_route_t *l3rib_lookup_route(rt_table_t *rt_table, unsigned int dest_ip) {
    L3_route_t  *default_l3_rt = NULL;
 
    glthread_t *curr = NULL;
-     char subnet[16];
+    char subnet[16];
     char dest_ip_str[16];
     char longest_mask = 0;
 
