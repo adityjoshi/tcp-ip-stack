@@ -8,8 +8,7 @@
 
 
 
-void
-apply_mask(char *prefix, char mask, char *str_prefix){
+void apply_mask(char *prefix, char mask, char *str_prefix){
 
     unsigned int binary_prefix = 0, i = 0;
     inet_pton(AF_INET, prefix, &binary_prefix);
@@ -19,6 +18,7 @@ apply_mask(char *prefix, char mask, char *str_prefix){
     binary_prefix = htonl(binary_prefix);
     inet_ntop(AF_INET, &binary_prefix, str_prefix, 16);
     str_prefix[15] = '\0';
+    
 }
 
 
