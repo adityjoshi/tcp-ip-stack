@@ -6,9 +6,11 @@
 #include "communication.h"  
 #include "net.h"
 #include <assert.h>
-#include <Kernel/kern/assert.h>
 
 
+extern bool_t
+is_layer3_local_delivery(node_t *node, 
+                         uint32_t dst_ip);
 
 void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)      {
     unsigned int payload_size = sizeof(arpheader_t);
@@ -365,7 +367,7 @@ static void l2_forward_ip_packet(node_t *node, unsigned int next_hop_ip, char *o
         
         */
 
-        oif = node_get_interface_by_name(node, outgoing_if);
+        oif = get_node_if_by_name(node, outgoing_if);
         assert(oif);
 
         arp_entry = arp_table_entry_lookup(NODE_ARP_TABLE(node), next_hop_ip_str);
@@ -728,3 +730,14 @@ ethernetHeader_t *untag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigne
                      
 
 
+void
+demote_pkt_to_layer2(node_t *node, /*Currenot node*/ 
+        unsigned int next_hop_ip,  /*If pkt is forwarded to next router, then this is Nexthop IP address (gateway) provided by L3 layer. L2 need to resolve ARP for this IP address*/
+        char *outgoing_intf,       /*The oif obtained from L3 lookup if L3 has decided to forward the pkt. If NULL, then L2 will find the appropriate interface*/
+        char *pkt, unsigned int pkt_size,   /*Higher Layers payload*/
+        int protocol_number){               /*Higher Layer need to tell L2 what value need to be feed in eth_hdr->type field*/
+
+    layer2_pkt_recv_from_top(node, next_hop_ip,
+        outgoing_intf, pkt, pkt_size,
+        protocol_number);
+}

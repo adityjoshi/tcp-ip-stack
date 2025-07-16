@@ -1,4 +1,5 @@
 #include "layer3/layer3.h"
+
 #include "arpa/inet.h"
 #include <stdio.h>      
 #include <stdlib.h>     
@@ -7,8 +8,15 @@
 #include "net.h"   
 #include "graph.h"
 #include "communication.h":
-#include <Kernel/kern/assert.h>
+#include <assert.h>
 
+
+extern void
+demote_pkt_to_layer2(node_t *node,
+                     unsigned int next_hop_ip,
+                     char *outgoing_intf, 
+                     char *pkt, unsigned int pkt_size,
+                     int protocol_number);
 
 
 static bool_t l3_is_direct_route(L3_route_t *l3_route) {
@@ -16,8 +24,70 @@ static bool_t l3_is_direct_route(L3_route_t *l3_route) {
 }
 
 
+static void
+layer3_pkt_receieve_from_top(node_t *node, char *pkt,
+        unsigned int size, int protocol_number,
+        unsigned int dest_ip_address) {
 
-static bool_t
+            ip_hdr_t ip_hdr; 
+            init_ip_hdr(&ip_hdr);
+
+            ip_hdr.protocol = protocol_number;
+            ip_hdr.dest_ip = dest_ip_address;
+
+            unsigned int addr_int = 0 ; 
+            inet_pton(AF_INET, NODE_LOOPBACKADDRESS(node), &addr_int);
+            addr_int = htonl(addr_int);
+            ip_hdr.src_ip = addr_int; 
+
+            ip_hdr.total_length = (short) ip_hdr.header_length + (short) (size/4) +  (short)((size % 4) ? 1 : 0);
+
+            L3_route_t * l3_route = l3rib_lookup_route(Node_RT_TABLE(node), ip_hdr.dest_ip);
+
+             if(!l3_route){
+               printf("Node : %s : No L3 route\n",  node->node_name); 
+                return;
+               }
+            
+               char *new_pkt = NULL ; 
+               unsigned int new_pkt_size = 0 ;
+
+               new_pkt_size = ip_hdr.total_length*4 ; 
+               new_pkt = calloc(1, MAX_PACKET_BUFFER_SIZE);
+
+               memcpy(new_pkt, (char*)&ip_hdr, ip_hdr.header_length * 4);
+               
+               if (pkt && size) {
+                memcpy(new_pkt + (ip_hdr.header_length * 4), pkt, size);
+               }
+            
+               bool_t is_direct_route = l3_is_direct_route(l3_route);
+
+               unsigned int next_hop_ip  ; 
+
+               if(!is_direct_route) {
+                     inet_pton(AF_INET, l3_route->gw_ip, &next_hop_ip);
+                     next_hop_ip = htonl(next_hop_ip);
+               } else {
+                 /*Case 2 : Direct Host Delivery Case*/
+                 /*Case 4 : Self-Ping Case*/
+                /* The Data link layer will differentiate between case 2 
+                  * and case 4 and take appropriate action*/
+                        next_hop_ip = dest_ip_address ; 
+               }
+
+               char *shifted_pkt_buffer = pkt_buffer_shift_right(new_pkt,new_pkt_size, MAX_PACKET_BUFFER_SIZE);
+
+               demote_pkt_to_layer2(node,next_hop_ip,is_direct_route ? 0 :l3_route->if_name,shifted_pkt_buffer,new_pkt_size,ETH_IP);
+
+               free(new_pkt);
+
+
+        }
+
+
+
+ bool_t
 is_layer3_local_delivery(node_t *node, unsigned int dst_ip) {
 
     char dest_ip_str[16] ;
@@ -183,6 +253,7 @@ L3_route_t *l3rib_lookup_route(rt_table_t *rt_table, unsigned int dest_ip) {
    L3_route_t  *default_l3_rt = NULL;
 
    glthread_t *curr = NULL;
+
     char subnet[16];
     char dest_ip_str[16];
     char longest_mask = 0;
@@ -210,13 +281,11 @@ L3_route_t *l3rib_lookup_route(rt_table_t *rt_table, unsigned int dest_ip) {
     } ITERATE_GLTHREAD_END(&rt_table->route_list, curr);
     return lpm_l3_route ? lpm_l3_route : default_l3_rt;
                 
-
-
 }
 
 
-void
-delete_rt_table_entry(rt_table_t *rt_table, 
+
+void delete_rt_table_entry(rt_table_t *rt_table, 
         char *ip_addr, char mask){
 
     char dst_str_with_mask[16];
@@ -357,72 +426,13 @@ void layer3_pkt_recv_from_bottom(node_t *node, interface_t *interface ,char *pkt
 
 }
 
-static void
-layer3_pkt_receieve_from_top(node_t *node, char *pkt,
-        unsigned int size, int protocol_number,
-        unsigned int dest_ip_address) {
 
-            ip_hdr_t ip_hdr; 
-            init_ip_hdr(&ip_hdr);
-
-            ip_hdr.protocol = protocol_number;
-            ip_hdr.dest_ip = dest_ip_address;
-
-            unsigned int addr_int = 0 ; 
-            inet_pton(AF_INET, NODE_LOOPBACKADDRESS(node), &addr_int);
-            addr_int = htonl(addr_int);
-            ip_hdr.src_ip = addr_int; 
-
-            ip_hdr.total_length = (short) ip_hdr.header_length + (short) (size/4) +  (short)((size % 4) ? 1 : 0);
-
-            L3_route_t * l3_route = l3rib_lookup_route(Node_RT_TABLE(node), ip_hdr.dest_ip);
-
-             if(!l3_route){
-               printf("Node : %s : No L3 route\n",  node->node_name); 
-                return;
-               }
-            
-               char *new_pkt = NULL ; 
-               unsigned int new_pkt_size = 0 ;
-
-               new_pkt_size = ip_hdr.total_length*4 ; 
-               new_pkt = calloc(1, MAX_PACKET_BUFFER_SIZE);
-
-               memcpy(new_pkt, (char*)&ip_hdr, ip_hdr.header_length * 4);
-               
-               if (pkt && size) {
-                memcpy(new_pkt + (ip_hdr.header_length * 4), pkt, size);
-               }
-            
-               bool_t is_direct_route = l3_is_direct_route(l3_route);
-
-               unsigned int next_hop_ip  ; 
-
-               if(!is_direct_route) {
-                     inet_pton(AF_INET, l3_route->gw_ip, &next_hop_ip);
-                     next_hop_ip = htonl(next_hop_ip);
-               } else {
-                 /*Case 2 : Direct Host Delivery Case*/
-                 /*Case 4 : Self-Ping Case*/
-                /* The Data link layer will differentiate between case 2 
-                  * and case 4 and take appropriate action*/
-                        next_hop_ip = dest_ip_address ; 
-               }
-
-               char *shifted_pkt_buffer = pkt_buffer_shift_right(new_pkt,new_pkt_size, MAX_PACKET_BUFFER_SIZE);
-
-               demote_pkt_to_layer2(node,next_hop_ip,is_direct_route ? 0 :l3_route->if_name,shifted_pkt_buffer,new_pkt_size,ETH_IP);
-
-               free(new_pkt);
-
-
-        }
 
 
 void demote_pkt_to_layer3(node_t *node, char *pkt, unsigned int size, 
     int protocol_num, // l4 or l5 protocol number
     unsigned int dest_ip) {
-    layer3_pkt_recv_from_top(node, pkt, size, protocol_num, dest_ip);
+    layer3_pkt_receieve_from_top(node, pkt, size, protocol_num, dest_ip);
 
 }
 
