@@ -356,7 +356,6 @@ static void l2_forward_ip_packet(node_t *node, unsigned int next_hop_ip, char *o
 
     next_hop_ip  = htonl(next_hop_ip);
     inet_ntop(AF_INET, &next_hop_ip, next_hop_ip_str, 16);
-
     next_hop_ip = htonl(next_hop_ip);
 
     if (outgoing_if) {
@@ -402,7 +401,8 @@ static void l2_forward_ip_packet(node_t *node, unsigned int next_hop_ip, char *o
 
     oif = node_get_matching_subnet_interface(node, next_hop_ip_str);
     if (!oif) {
-        printf("Error : %s : No eligible subnet for L2 forwarding for Ip-address : %s\n", node->node_name, next_hop_ip_str);
+       printf("%s : Error : Local matching subnet for IP : %s could not be found\n",
+                    node->node_name, next_hop_ip_str);
         return;
     }
 

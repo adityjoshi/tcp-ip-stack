@@ -93,9 +93,11 @@ char mask ;
 char intf_subnet[16];
 char subnet2[16];
 
-for ( ; MAX_INTF_PER_NODE; i++) {
+for ( ;i< MAX_INTF_PER_NODE; i++) {
 int_f = node->intf[i];
-
+if(!int_f) {
+continue ; 
+}
 if (int_f->interface_nw_props.is_ip_address_config == FALSE) {
 continue ; 
 }
