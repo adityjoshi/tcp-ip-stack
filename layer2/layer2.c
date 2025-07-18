@@ -8,6 +8,7 @@
 #include <assert.h>
 
 
+
 extern bool_t
 is_layer3_local_delivery(node_t *node, 
                          uint32_t dst_ip);
