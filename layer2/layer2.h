@@ -93,18 +93,36 @@ static inline unsigned int GET_802_1Q_VLAN_ID(vlan_8021q_hdr_t *vlan_8021q_hdr) 
 
 // ARP table 
 
+
+
+
+
+
 typedef struct arp_table_{
     glthread_t arp_entries; 
 } arp_table_t ; 
 
-
 typedef struct arp_entries_ arp_entries_t;
- struct arp_entries_ {
+
+typedef struct arp_pending_entry_ arp_pending_entry_t;
+typedef void (*arp_proceesing_func)(node_t *, 
+                                  interface_t *oif,
+                                  arp_entries_t *, 
+                                  arp_pending_entry_t *);
+
+struct arp_pending_entry_ {
+glthread_t arp_pending_glue;
+arp_proceesing_func cb;
+unsigned int pkt_size; /*include the ethernet header*/
+char pkt[0];
+};
+
+struct arp_entries_ {
 ip_address_t ip_address;
 mac_address_t mac_address;
 char oif_name[IF_NAME_SIZE];
 glthread_t arp_glue;
-}  ;
+};
 
 GLTHREAD_TO_STRUCT(arp_glue_to_arp_entry, arp_entries_t, arp_glue);
 
