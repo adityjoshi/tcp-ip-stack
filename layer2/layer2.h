@@ -122,6 +122,18 @@ ip_address_t ip_address;
 mac_address_t mac_address;
 char oif_name[IF_NAME_SIZE];
 glthread_t arp_glue;
+bool_t is_sane ; 
+
+/*
+
+List of the packet which are pending for the arp resoltuion
+
+*/
+
+glthread_t arp_pending_list ; 
+
+
+
 };
 
 GLTHREAD_TO_STRUCT(arp_glue_to_arp_entry, arp_entries_t, arp_glue);

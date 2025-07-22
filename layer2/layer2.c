@@ -229,8 +229,6 @@ memcpy(ethernetHeader->src.mac_address, INTERFACE_MAC(oif), sizeof(mac_address_t
 SET_COMMON_ETH_FCS(ethernetHeader, pkt_size - GET_ETH_HDR_SIZE_EXCL_PAYLOAD(ethernetHeader), 0);
 send_packet_out((char *)ethernetHeader,pkt_size,oif);
 
-
-
 };
     
 
@@ -395,9 +393,19 @@ static void l2_forward_ip_packet(node_t *node, unsigned int next_hop_ip, char *o
             /*
             if the entry is not present in the arp table then it means its the time for the arp broadcast request 
             */
-           assert(0);
-           send_arp_broadcast_request(node, oif, next_hop_ip_str);
-           return ; 
+        //    assert(0);
+        //    send_arp_broadcast_request(node, oif, next_hop_ip_str);
+        //    return ; 
+
+        create_arp_sane_entry(NODE_ARP_TABLE(node),next_hop_ip_str);
+        add_arp_pending_entry(arp_entry, pending_arp_processing_callback_function,(char *)pkt,pkt_size);
+        send_arp_broadcast_request(node, oif, next_hop_ip_str);
+        return ;
+
+
+        } else if (arp_enty_sane(arp_entry)) {
+             add_arp_pending_entry(arp_entry, pending_arp_processing_callback_function,(char *)pkt,pkt_size);
+             return;
         }
         goto l2_frame_prepare;
     }
