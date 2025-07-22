@@ -222,8 +222,12 @@ pending_arp_processing_callback_function(node_t *node,
                                          arp_entries_t *arp_entry,
                                          arp_pending_entry_t *arp_pending_entry) {
 
-ethernetHeader_t *ethernetHeader = (ethernetHeader_t *)arp_pending_entry>pkt; 
-
+ethernetHeader_t *ethernetHeader = (ethernetHeader_t *)arp_pending_entry->pkt; 
+unsigned int pkt_size = arp_pending_entry->pkt_size;
+memcpy(ethernetHeader->dest.mac_address, arp_entry->mac_address.mac_address, sizeof(mac_address_t));
+memcpy(ethernetHeader->src.mac_address, INTERFACE_MAC(oif), sizeof(mac_address_t));
+SET_COMMON_ETH_FCS(ethernetHeader, pkt_size - GET_ETH_HDR_SIZE_EXCL_PAYLOAD(ethernetHeader), 0);
+send_packet_out((char *)ethernetHeader,pkt_size,oif);
 
 
 
