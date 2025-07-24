@@ -157,7 +157,21 @@ arp_table_update_from_arp_reply(arp_table_t *arp_table,
 
 void dump_arp_table(arp_table_t *arp_table);
 
+void
+add_arp_pending_entry(arp_entries_t *arp_entry, 
+                        arp_proceesing_func, 
+                        char *pkt, 
+                        unsigned int pkt_size); 
 
+void
+create_arp_sane_entry(arp_table_t *arp_table, char *ip_addr,
+                      char *pkt, unsigned int pkt_size);
+
+static bool_t 
+arp_entry_sane(arp_entries_t *arp_entry){
+
+    return arp_entry->is_sane;
+}
 
 
 
@@ -388,6 +402,7 @@ node_set_intf_vlan_membership(node_t *node, char *intf_name, unsigned int vlan_i
 ethernetHeader_t *tag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned int total_pkt_size, int vlan_id,  unsigned int *new_pkt_size);
 ethernetHeader_t *untag_pkt_with_vlan_id(ethernetHeader_t *ethernet_hdr, unsigned int total_pkt_size,  unsigned int *new_pkt_size);
                     
+
 
 
                      
