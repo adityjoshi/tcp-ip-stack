@@ -361,7 +361,18 @@ promote_pkt_to_layer2(node_t *node, interface_t *iif,
         
 
 
+void add_arp_pending_entry(arp_entries_t *arp_entry, arp_proceesing_func cb, char *pkt, unsigned int pkt_size) {
+      arp_pending_entry_t *arp_pending_entry = 
+        calloc(1, sizeof(arp_pending_entry_t) + pkt_size);
 
+    init_glthread(&arp_pending_entry->arp_pending_glue);
+    arp_pending_entry->cb = cb;
+    arp_pending_entry->pkt_size = pkt_size;
+    memcpy(arp_pending_entry->pkt, pkt, pkt_size);
+
+    glthread_add_next(&arp_entry->arp_pending_list, 
+                    &arp_pending_entry->arp_pending_glue);
+}
 
 
 static void l2_forward_ip_packet(node_t *node, unsigned int next_hop_ip, char *outgoing_if, ethernetHeader_t *pkt, unsigned int pkt_size)  {
