@@ -375,6 +375,38 @@ void add_arp_pending_entry(arp_entries_t *arp_entry, arp_proceesing_func cb, cha
 }
 
 
+void
+create_arp_sane_entry(arp_table_t *arp_table, char *ip_addr){
+
+    /*case 1 : If full entry already exist - assert. The L2 must have
+     * not create ARP sane entry if the already was already existing*/
+
+    arp_entries_t *arp_entry = arp_table_entry_lookup(arp_table, ip_addr);
+    
+    if(arp_entry){
+    
+        if(!arp_entry_sane(arp_entry)){
+            assert(0);
+        }
+
+       
+        return arp_entry;
+    }
+
+    /*if ARP entry do not exist, create a new sane entry*/
+    arp_entry = calloc(1, sizeof(arp_entries_t));
+    stpncpy(arp_entry->ip_address.ip_address, ip_addr, 16);
+    arp_entry->ip_address.ip_address[15] = '\0';
+    init_glthread(&arp_entry->arp_pending_list);
+    arp_entry->is_sane = TRUE;
+    bool_t rc = arp_table_entry_add(arp_table, arp_entry, 0);
+    if(rc == FALSE){
+        assert(0);
+    }
+}
+
+
+
 static void l2_forward_ip_packet(node_t *node, unsigned int next_hop_ip, char *outgoing_if, ethernetHeader_t *pkt, unsigned int pkt_size)  {
     interface_t *oif = NULL ; 
     char next_hop_ip_str[16];

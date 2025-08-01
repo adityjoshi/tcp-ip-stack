@@ -9,7 +9,7 @@ extern void node_set_intf_l2_mode(node_t *node, char *intf_name, intf_l2_mode_t 
 
 graph_t * build_first_topo() {
 
-    // add switch in layer 2 for communication 
+   
 #if 0
 
                           +----------+

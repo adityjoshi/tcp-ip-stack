@@ -103,30 +103,7 @@ static void l2_switch_perform_mac_learning(node_t *node, char *src_mac, char *if
     }
 }
 
-// static void l2_switch_forward_frame(node_t *node, interface_t *interface, char *pkt, unsigned int pkt_size) {
 
-//     /*if dst add is broadcast add then flood the frame*/
-//     ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
-//     if (IS_MAC_BROADCAST_ADDR(ethernet_header->dest.mac_address)) {
-//         send_pkt_flood(node, interface, pkt, pkt_size);
-//         return ;
-//     }
-
-//     /*check mac table to forward the frame*/
-//     mac_table_entries_t *mac_table_entry = 
-//     mac_table_entries_lookup(NODE_MAC_TABLE(node), ethernet_header->dest.mac_address);
-
-//     if (!mac_table_entry) {
-//         send_pkt_flood(node, interface, pkt, pkt_size);
-//         return ;
-//     }
-//     char *oif_name = mac_table_entry->oif_name;
-//     interface_t *oif = get_node_if_by_name(node, oif_name);
-//     if (!oif) {
-//         return ;
-//     }
-//     send_packet_out(pkt, pkt_size, oif);
-// }
 
 
 
@@ -134,7 +111,7 @@ static bool_t
 l2_switch_send_pkt_out(char *pkt, unsigned int pkt_size,  interface_t *oif) {
     
 
-    /* CASE 1 : If the interface is working int L3 mode then it should assert*/\
+    /* CASE 1 : If the interface is working int L3 mode then it should assert*/
 
    assert(!IS_INTF_L3_MODE(oif));
 
