@@ -12,8 +12,10 @@ OBJS=gluethread/glthread.o \
 		  nwcli.o		   \
 		  utils.o		   \
 		  layer2/l2switch.o \
+		  layer2/stp.o \
 		  layer5/layer5.o \
-		  communication.o
+		  communication.o \
+		  pathfinder.o
 		  
 
 test.exe:testapp.o ${OBJS} CommandParser/libcli.a
@@ -55,6 +57,12 @@ layer3/layer3.o:layer3/layer3.c
 
 layer2/l2switch.o:layer2/l2switch.c
 	${CC} ${CFLAGS} -c -I . layer2/l2switch.c -o layer2/l2switch.o
+
+layer2/stp.o:layer2/stp.c
+	${CC} ${CFLAGS} -c -I . layer2/stp.c -o layer2/stp.o
+
+pathfinder.o:pathfinder.c
+	${CC} ${CFLAGS} -c -I . pathfinder.c -o pathfinder.o
 
 layer5/ping.o:layer5/ping.c
 	${CC} ${CFLAGS} -c -I . layer5/ping.c -o layer5/ping.o

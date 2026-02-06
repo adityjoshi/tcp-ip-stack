@@ -46,7 +46,7 @@ extern void rt_table_add_direct_route(rt_table_t *rt_table, char *ip_addr, char 
 bool_t node_set_loopback_address(node_t *node, char*ip_addr ) {
 assert(ip_addr);
 node->node_network_prop.is_loopback_address_config = TRUE;
-strncpy(NODE_LOOPBACKADDRESS(node),ip_addr,16);
+strncpy((char *)NODE_LOOPBACKADDRESS(node),ip_addr,16);
 NODE_LOOPBACKADDRESS(node)[15] = '\0';
 
 rt_table_add_direct_route(Node_RT_TABLE(node), ip_addr, 32);
@@ -59,7 +59,7 @@ bool_t node_set_interface_ip_address(node_t *node,char *local_if, char *ip_addr,
     interface_t *interface = get_node_if_by_name(node, local_if);
     if(!interface) assert(0);
 
-    strncpy(INTERFACE_IP(interface), ip_addr, 16);
+    strncpy((char *)INTERFACE_IP(interface), ip_addr, 16);
     INTERFACE_IP(interface)[15] = '\0';
     interface->interface_nw_props.mask = mask; 
     interface->interface_nw_props.is_ip_address_config = TRUE;
@@ -101,7 +101,7 @@ continue ;
 if (int_f->interface_nw_props.is_ip_address_config == FALSE) {
 continue ; 
 }
-intf_addr = INTERFACE_IP(int_f);
+intf_addr = (char *)INTERFACE_IP(int_f);
 mask = int_f->interface_nw_props.mask ; 
 
 memset(intf_subnet, 0, 16);

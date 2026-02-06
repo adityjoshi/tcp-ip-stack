@@ -97,7 +97,7 @@ is_layer3_local_delivery(node_t *node, unsigned int dst_ip) {
     dst_ip = htonl(dst_ip);
     inet_ntop(AF_INET, &dst_ip, dest_ip_str, 16);
 
-    if (strncmp(NODE_LOOPBACKADDRESS(node),dest_ip_str,16) == 0 ) return TRUE ; 
+    if (strncmp((char *)NODE_LOOPBACKADDRESS(node),dest_ip_str,16) == 0 ) return TRUE ; 
 
 
     /* check with the interface */
@@ -112,7 +112,7 @@ is_layer3_local_delivery(node_t *node, unsigned int dst_ip) {
 
         if (intf->interface_nw_props.is_ip_address_config == FALSE) continue;
 
-        intf_addr = INTERFACE_IP(intf);
+        intf_addr = (char *)INTERFACE_IP(intf);
 
         if (strncmp(intf_addr,dest_ip_str,16) == 0) return TRUE ; 
     }
@@ -134,6 +134,18 @@ static void layer3_ip_pkt_recv_from_bottom(node_t *node, interface_t *interface,
             unsigned int dest_ip = htonl(ip_hdr->dest_ip);
             inet_ntop(AF_INET, &dest_ip, dest_ip_addr,16);
 
+            /* First check if this is local delivery - if so, handle it and return */
+            if (is_layer3_local_delivery(node, ip_hdr->dest_ip)) {
+                switch(ip_hdr->protocol) {
+                    case ICMP_PRO:
+                        printf("IP Address : %s, ping success\n", dest_ip_addr);
+                        break;
+                    default:
+                        ;
+                }
+                return; /* Packet is for this router, don't forward */
+            }
+
             L3_route_t *l3_route = l3rib_lookup_route(Node_RT_TABLE(node),ip_hdr->dest_ip);
 
             if (!l3_route) {
@@ -150,7 +162,7 @@ static void layer3_ip_pkt_recv_from_bottom(node_t *node, interface_t *interface,
         
         L3 ROUTE EXIST 
 
-        CASE 1 : Pkt is destined to the self (for this router only)
+        CASE 1 : Pkt is destined to the self (for this router only) - ALREADY HANDLED ABOVE
         CASE 2 : Pkt is destined for the  host machine connected to directly attached subnet
         CASE 3 : Pkt is to be forwaded to the next router 
         
@@ -162,30 +174,17 @@ static void layer3_ip_pkt_recv_from_bottom(node_t *node, interface_t *interface,
 
 
 /*
-CASE 1 and CASE 2 are possible 
+CASE 2: Direct route to a host on directly connected subnet
 */
 
 
 if (l3_is_direct_route(l3_route)) {
 
-    if (is_layer3_local_delivery(node,ip_hdr->dest_ip)) {
-
-        switch(ip_hdr->protocol) {
-            case ICMP_PRO:
-            printf("IP Address : %s, ping success\n", dest_ip_addr);
-                    break;
-            default:
-            ;
-        }
-
-    }
-
-
      /* case 2 : It means, the dst ip address lies in direct connected
          * subnet of this router, time for l2 routing*/
 
     demote_pkt_to_layer2 (
-        node,0,NULL,(char *)ip_hdr,pkt_size,ETH_IP
+        node,ip_hdr->dest_ip,NULL,(char *)ip_hdr,pkt_size,ETH_IP
     );
     return ; 
 

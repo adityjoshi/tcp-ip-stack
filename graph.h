@@ -30,6 +30,9 @@ struct link_ {
   unsigned int cost; 
 };
  
+// Forward declaration for STP
+typedef struct stp_ stp_t;
+
 struct node_ {
   char node_name[NODE_NAME_SIZE];
   interface_t *intf[MAX_INTF_PER_NODE];
@@ -38,6 +41,7 @@ struct node_ {
   int udp_socket_fd;
 
   node_nw_properties_t node_network_prop ; 
+  stp_t *stp;  // Spanning Tree Protocol instance
 
 };
 

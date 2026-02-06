@@ -10,6 +10,11 @@
 #define CMDCODE_INTF_CONFIG_VLAN    7   /*config node <node-name> interface <intf-name> vlan <vlan-id>*/
 #define CMDCODE_SHOW_NODE_MAC_TABLE 8   /*show node <node-name> mac*/
 #define CMDCODE_SHOW_NODE_RT_TABLE  9   /*show node <node-name> rt*/
+#define CMDCODE_SHOW_NODE_STP       13  /*show node <node-name> stp*/
 #define CMDCODE_CONF_NODE_L3ROUTE   10  /*config node <node-name> route <ip-address> <mask> [<gw-ip> <oif>]*/
 #define CMDCODE_RUN_PING            11  /*run node <node-name> ping <ip-address>*/
+#define CMDCODE_RUN_ARP_RESOLVE_ALL 12  /*run arp-resolve-all*/
+#define CMDCODE_FIND_PATHS          14  /*run find-paths <node-name>*/
+#define CMDCODE_MAN                 15  /*man [command-name]*/
+#define CMDCODE_ROUTE_CONFIGURE_ALL 16  /*run route-configure-all*/
 #endif /* __CMDCODES__ */

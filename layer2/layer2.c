@@ -24,14 +24,14 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
                     node->node_name, ip_addr);
             return;
         }
-        if(strncmp(INTERFACE_IP(oif),ip_addr,16)==0) {
+        if(strncmp((char *)INTERFACE_IP(oif),ip_addr,16)==0) {
             printf("Error : %s : Attemp to resolve ARP for local Ip-address : %s",
                 node->node_name, ip_addr);
         return;
         }
     }
     /* Prep of ethernet header*/
-    layer2_add_broadcast_address(ethernet_header->dest.mac_address);
+    layer2_add_broadcast_address((char *)ethernet_header->dest.mac_address);
     memcpy(ethernet_header->src.mac_address, INTERFACE_MAC(oif), sizeof(mac_address_t));
     ethernet_header->type = ARP_MESSAGE;
 
@@ -44,7 +44,7 @@ void send_arp_broadcast_request(node_t *node, interface_t *oif, char *ip_addr)  
     arp_hdr->op_code = ARP_BROAD_REQ;
 
     memcpy(arp_hdr->sender_mac.mac_address,INTERFACE_MAC(oif),sizeof(mac_address_t));
-    inet_pton(AF_INET, INTERFACE_IP(oif), &arp_hdr->src_ip);
+    inet_pton(AF_INET, (char *)INTERFACE_IP(oif), &arp_hdr->src_ip);
     arp_hdr->src_ip = htonl(arp_hdr->src_ip);  
 
     memset(arp_hdr->destination_mac.mac_address,0,sizeof(mac_address_t));
@@ -81,7 +81,7 @@ static void send_arp_reply_msg(ethernetHeader_t *ethernet_header, interface_t *o
     arp_header_reply->op_code = ARP_REPLY;  
     memcpy(arp_header_reply->sender_mac.mac_address, INTERFACE_MAC(oif), sizeof(mac_address_t));    
 
-    inet_pton(AF_INET, INTERFACE_IP(oif), &arp_header_reply->src_ip);   
+    inet_pton(AF_INET, (char *)INTERFACE_IP(oif), &arp_header_reply->src_ip);   
     arp_header_reply->src_ip = htonl(arp_header_reply->src_ip);
 
     memcpy(arp_header_reply->destination_mac.mac_address, arpheader->sender_mac.mac_address, sizeof(mac_address_t));     
@@ -116,7 +116,7 @@ static void process_arp_broadcast_message_req(node_t *node, interface_t *iif, et
     ip_addr[15] = '\0';
 
      
-    if(strncmp(INTERFACE_IP(iif), ip_addr, 16) != 0){
+        if(strncmp((char *)INTERFACE_IP(iif), ip_addr, 16) != 0){
         
         printf("%s : ARP Broadcast req msg dropped, Dst IP address %s did not match with interface ip : %s\n", 
                 node->node_name, ip_addr , INTERFACE_IP(iif));
@@ -153,7 +153,7 @@ arp_entries_t * arp_table_entry_lookup(arp_table_t *arp_table, char *ip_addr) {
 
     ITERATE_GLTHREAD_BEGIN(&arp_table->arp_entries,curr) {
         arp_entry = arp_glue_to_arp_entry(curr);
-        if (strcmp(arp_entry->ip_address.ip_address, ip_addr) == 0) {
+        if (strcmp((char *)arp_entry->ip_address.ip_address, ip_addr) == 0) {
             return arp_entry;
         }
     } ITERATE_GLTHREAD_END(&arp_table->arp_entries,curr);
@@ -170,14 +170,14 @@ void delete_arp_entry(arp_table_t *arp_table, char *ip_addr) {
 
 
 bool_t arp_table_entry_addition(arp_table_t *arp_table, arp_entries_t *arp_entry) {
-    arp_entries_t *arp_entry_old = arp_table_entry_lookup(arp_table,arp_entry->ip_address.ip_address);
+    arp_entries_t *arp_entry_old = arp_table_entry_lookup(arp_table,(char *)arp_entry->ip_address.ip_address);
 
     if (arp_entry_old && memcmp(arp_entry_old, arp_entry, sizeof(arp_entries_t)) == 0) {
         return FALSE;
     }
 
     if (arp_entry_old) {
-        delete_arp_entry(arp_table, arp_entry->ip_address.ip_address);
+        delete_arp_entry(arp_table, (char *)arp_entry->ip_address.ip_address);
     }
     init_glthread(&arp_entry->arp_glue);
     glthread_add_next(&arp_table->arp_entries, &arp_entry->arp_glue);
@@ -197,7 +197,7 @@ arp_entries_t *arp_entry = calloc(1, sizeof(arp_entries_t));
 
 // Fix: Convert network byte order to host byte order
 src_ip = ntohl(arp_hdr->src_ip);
-inet_ntop(AF_INET, &src_ip, arp_entry->ip_address.ip_address, 16);
+inet_ntop(AF_INET, &src_ip, (char *)arp_entry->ip_address.ip_address, 16);
 arp_entry->ip_address.ip_address[15] = '\0';
 
 memcpy(arp_entry->mac_address.mac_address, 
@@ -329,7 +329,7 @@ promote_pkt_to_layer2(node_t *node, interface_t *iif,
 
                 unsigned int vlan_id_to_tag = 0 ; 
                 ethernetHeader_t *ethernet_header = (ethernetHeader_t *)pkt;
-                printf(interface, ethernet_header);
+                printf("Processing frame on interface %s\n", interface->if_name);
                 if (l2_frame_recv_qualify_on_interface(interface,ethernet_header,&vlan_id_to_tag) == FALSE) {
                     printf("L2 frame has been rejected");
                     return ;
@@ -351,6 +351,16 @@ promote_pkt_to_layer2(node_t *node, interface_t *iif,
                                                 &new_pkt_size);
             assert(new_pkt_size != pkt_size);
         }
+                    
+                    // Check if this is an STP BPDU
+                    extern void stp_process_bpdu(interface_t *intf, void *bpdu);
+                    if (ethernet_header->type == 0x0000 && 
+                        memcmp(ethernet_header->dest.mac_address, 
+                               (unsigned char[]){0x01, 0x80, 0xC2, 0x00, 0x00, 0x00}, 6) == 0) {
+                        stp_process_bpdu(interface, ethernet_header->payload);
+                        return;
+                    }
+                    
                     layer2_switch_recv_frame(interface, pkt, vlan_id_to_tag ? new_pkt_size : pkt_size);
                 } else {
                     return ; /*do nothing, drop the packet*/
@@ -376,7 +386,8 @@ void add_arp_pending_entry(arp_entries_t *arp_entry, arp_proceesing_func cb, cha
 
 
 void
-create_arp_sane_entry(arp_table_t *arp_table, char *ip_addr){
+create_arp_sane_entry(arp_table_t *arp_table, char *ip_addr,
+                      char *pkt, unsigned int pkt_size){
 
     /*case 1 : If full entry already exist - assert. The L2 must have
      * not create ARP sane entry if the already was already existing*/
@@ -389,17 +400,16 @@ create_arp_sane_entry(arp_table_t *arp_table, char *ip_addr){
             assert(0);
         }
 
-       
-        return arp_entry;
+        return;
     }
 
     /*if ARP entry do not exist, create a new sane entry*/
     arp_entry = calloc(1, sizeof(arp_entries_t));
-    stpncpy(arp_entry->ip_address.ip_address, ip_addr, 16);
+    stpncpy((char *)arp_entry->ip_address.ip_address, ip_addr, 16);
     arp_entry->ip_address.ip_address[15] = '\0';
     init_glthread(&arp_entry->arp_pending_list);
     arp_entry->is_sane = TRUE;
-    bool_t rc = arp_table_entry_add(arp_table, arp_entry, 0);
+    bool_t rc = arp_table_entry_addition(arp_table, arp_entry);
     if(rc == FALSE){
         assert(0);
     }
@@ -440,13 +450,13 @@ static void l2_forward_ip_packet(node_t *node, unsigned int next_hop_ip, char *o
         //    send_arp_broadcast_request(node, oif, next_hop_ip_str);
         //    return ; 
 
-        create_arp_sane_entry(NODE_ARP_TABLE(node),next_hop_ip_str);
+        create_arp_sane_entry(NODE_ARP_TABLE(node),next_hop_ip_str, (char *)pkt, pkt_size);
         add_arp_pending_entry(arp_entry, pending_arp_processing_callback_function,(char *)pkt,pkt_size);
         send_arp_broadcast_request(node, oif, next_hop_ip_str);
         return ;
 
 
-        } else if (arp_enty_sane(arp_entry)) {
+        } else if (arp_entry_sane(arp_entry)) {
              add_arp_pending_entry(arp_entry, pending_arp_processing_callback_function,(char *)pkt,pkt_size);
              return;
         }
@@ -482,9 +492,13 @@ static void l2_forward_ip_packet(node_t *node, unsigned int next_hop_ip, char *o
         /*
         if the entry is not present in the arp table then it means its the time for the arp broadcast request 
         */
-       assert(0);
-       send_arp_broadcast_request(node, oif, next_hop_ip_str);
-       return ; 
+        create_arp_sane_entry(NODE_ARP_TABLE(node), next_hop_ip_str, (char *)pkt, pkt_size);
+        arp_entry = arp_table_entry_lookup(NODE_ARP_TABLE(node), next_hop_ip_str);
+        if (arp_entry) {
+            add_arp_pending_entry(arp_entry, pending_arp_processing_callback_function, (char *)pkt, pkt_size);
+        }
+        send_arp_broadcast_request(node, oif, next_hop_ip_str);
+        return ; 
     }
 
     l2_frame_prepare:
@@ -652,7 +666,7 @@ if (IF_L2_Mode(interface) == TRUNK && intf_l2_mode == ACCESS) {
     IF_L2_Mode(interface) = ACCESS; 
    
     unsigned int i = 0 ; 
-    for (i ; i<MAX_VLAN_MEMBERSHIP; i++) {
+    for (; i<MAX_VLAN_MEMBERSHIP; i++) {
         interface->interface_nw_props.vlans[i] = 0 ;  
     }
 }

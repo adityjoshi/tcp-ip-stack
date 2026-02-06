@@ -12,10 +12,6 @@ extern graph_t *build_simple_l2_switch_topo();
 extern graph_t *build_dualswitch_topo();
 extern graph_t *L2_loop_topo();
 extern graph_t *linear_3_node_topo();
-extern graph_t *build_loop_topo();
-extern graph_t *build_stp_loop_topo();
-extern graph_t *build_loop_demo_topo();
-extern graph_t *build_route_test_topo();
 extern void nw_init_cli();
 
 
@@ -25,7 +21,7 @@ graph_t *topo = NULL ;
 int main(int argc, char **argv) {
   
 nw_init_cli();
-topo = build_loop_demo_topo();
+topo = linear_3_node_topo();
 
 
 start_shell();

@@ -211,6 +211,13 @@ static bool_t l2_switch_flood_pkt_out(node_t *node, interface_t *exempted_intf, 
         if (oif == exempted_intf || IS_INTF_L3_MODE(oif)){
             continue; /* skip the interface */
         }
+        
+        // Check STP port state - only forward on forwarding ports
+        extern bool_t stp_is_port_forwarding(interface_t *intf);
+        if (!stp_is_port_forwarding(oif)) {
+            continue; /* STP blocked port */
+        }
+        
         memcpy(pkt_copy, pkt, pkt_size);
       
         l2_switch_send_pkt_out(pkt_copy, pkt_size, oif);

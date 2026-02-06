@@ -184,6 +184,14 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
 
     *output_vlan_id = 0 ; 
 
+    // Special handling for STP BPDUs - always accept them on L2 interfaces
+    if ((IF_L2_Mode(interface) == ACCESS || IF_L2_Mode(interface) == TRUNK) &&
+        ethernetHeader->type == 0x0000 &&
+        memcmp(ethernetHeader->dest.mac_address, 
+               (unsigned char[]){0x01, 0x80, 0xC2, 0x00, 0x00, 0x00}, 6) == 0) {
+        return TRUE; // Always accept STP BPDUs
+    }
+
     vlan_8021q_hdr_t *vlan_hdr = is_pkt_vlan_tagged(ethernetHeader) ;
 
     /*
@@ -236,7 +244,7 @@ static inline bool_t l2_frame_recv_qualify_on_interface(interface_t *interface, 
      }
 
      /* if interface is operating in a TRUNK mode, then it must discard all untagged
-     * frames*/
+     * frames (STP BPDUs already handled above)*/
     
     if(IF_L2_Mode(interface) == TRUNK){
        

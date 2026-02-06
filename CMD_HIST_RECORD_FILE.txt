@@ -279,3 +279,402 @@ show node R2 rt
 run node R1 ping 122.1.1.3
 conf node R1 route 122.1.1.3 32 10.1.1.2 eth0/1
 conf node R2 route 122.1.1.3 32 11.1.1.1 eth0/3
+run node H1 ping 11.1.1.2
+run node H1 ping 11.1.1.2
+show node H1 arp
+show node SW1 mac
+show node H1 rt
+run node R1 ping 11.1.1.1
+run node R1 ping 11.1.1.1
+show node R1 arp
+show node H1 rt
+show node H1 mac
+show node H1 arp
+show node H2 arp
+show node SW1 arp
+show node H1 rt
+show node H1 mac
+show node H2 mac
+show node H2 arp
+show .
+show topology
+show help
+cls
+show .
+show node R1 arp
+show .
+show .
+show topology
+run arp-resolve-all
+show topology
+show .
+show node R1 arp
+show node R1 rt
+run node R1 ping 10.1.1.2
+run node R1 ping 11.1.12
+run node R1 ping 11.1.1.2
+run node R1 ping 11.1.1.1
+config node R1 route 11.1.1.1 24 10.1.1.2 eth0/1
+run node R1 ping 11.1.1.1
+show .
+show node R1 rt
+show .
+show topology
+run node R1 ping 30.1.1.1
+   run arp-resolve-all
+   config node R1 route 20.1.1.0 24 10.1.1.2 eth0/1
+ config node R2 route 10.1.1.0 24 20.1.1.2 eth0/2
+   config node R3 route 20.1.1.0 24 30.1.1.2 eth0/2
+   run node R1 ping 20.1.1.2
+run arp-resolve-all
+run node R1 ping 122.1.1.3
+   run node R1 ping 20.1.1.2
+   config node R1 route 20.1.1.0 24 10.1.1.2 eth0/1
+   config node R2 route 10.1.1.0 24 20.1.1.2 eth0/2
+run node R1 ping 20.1.1.2
+show topology
+   show node SW1 stp
+show node SW2 stp
+   show node SW3 stp
+   run arp-resolve-all
+  run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+show .
+show topology
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+show node SW1 stp
+show help
+show help
+show topology
+ show node SW1 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show topology
+show node SW1 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+run find-paths H2
+cd
+cd
+run find-paths H2
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+show .
+show topology
+run find-paths H2
+ run arp-resolve-all
+ run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cls
+show topology
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+cd
+cd
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run find-paths H2
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+cd
+cd
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+man
+man ping
+man find-paths
+cd
+cd
+man arp
+man stp
+man route
+cd
+cd
+man ping
+man route
+man find-path
+man find-paths
+man arp
+man
+show node H1 rt
+show node H2 rt
+man route-configure-all
+cd
+cd
+show node H1 rt
+show node H2 rt
+man route-configure-all
+cd
+cd
+run route-configure-all
+show node H1 rt
+show node H2 rt
+cd
+cd
+man route-configure-all
+cd
+cd
+man
+cd
+cd
+man route-configure-all
+cd
+cd
+man rt
+man interface
+man l2mode
+man route-configure-all
+cd
+cd
+run route-configure-all
+man
+man rt
+show node H1 rt
+show node H1 rt
+man
+man route-configure-all
+show topology
+run route-configure-all
+show node R1 rt
+show node R3 rt
+show node R4 rt
+cd
+cd
+show topology
+run route-configure-all
+show node R3 rt
+cd
+cd
+show topology
+show .
+show node R3 arp
+show node R3 stp
+show registered commands
+run arp-resolve-all
+show .
+show topology
+show node R1 arp
+show node R3 arp
+show .
+show node R3 mac
+show node R3 rt
+show node R3 stp
+show .
+show registered commands
+run route-configure-all
+run find-paths R1
+run find-paths R2
+run find-paths R3
+show topology
+show .
+show node R1 stp
+show node R2 stp
+show node R3 stp
+show topology
+man ping
+run node R1 ping 20.1.1.1
+run node R1 ping 10.1.1.1
+run node R1 ping 30.1.1.2
+run arp-resolve-all
+show topology
+run node H1 ping 10.1.1.2
+run arp-resolve-all
+run find-paths H2
+run node H1 ping 10.1.1.2
+man
+man ping

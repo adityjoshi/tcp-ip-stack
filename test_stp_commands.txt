@@ -1,0 +1,8 @@
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp
+run arp-resolve-all
+run node H1 ping 10.1.1.2
+show node SW1 stp
+show node SW2 stp
+show node SW3 stp

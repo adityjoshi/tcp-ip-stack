@@ -30,4 +30,3 @@ The data link layer is implemented with support for Ethernet framing and ARP. MA
 - MAC and IP forwarding logic is implemented independently to mirror real-world decoupling of L2 and L3.
 
 ---
-
