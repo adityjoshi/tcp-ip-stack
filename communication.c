@@ -2,9 +2,13 @@
 #include "graph.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
+#ifdef __linux__
+#include <pthread.h>
+#else
 #include <pthread/pthread.h>
+#endif
 #include <errno.h>
-#include <Kernel/string.h>
+#include <string.h>
 #include <netdb.h>
 #include <stdio.h>
 #include <sys/select.h> 

@@ -8,7 +8,11 @@
 #include "utils.h"
 #include <stdio.h>
 #include <arpa/inet.h> 
+#ifdef __linux__
+#include <endian.h>
+#else
 #include <sys/_endian.h>
+#endif
 #include <sys/socket.h>
 #include <stdlib.h>
 

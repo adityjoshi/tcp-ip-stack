@@ -1,7 +1,11 @@
 #include "utils.h"
 #include <stdint.h>
 #include <string.h>
+#ifdef __linux__
+#include <endian.h>
+#else
 #include <sys/_endian.h>
+#endif
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
